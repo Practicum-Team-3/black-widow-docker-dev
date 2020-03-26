@@ -1,0 +1,13 @@
+Vagrant.configure("2") do |config|
+	config.vm.define "defender" do |defender|
+		defender.vm.hostname = "defender"
+		defender.vm.box = "laravel/homestead"
+		defender.vm.network "private_network", ip: "192.168.50.5", virtualbox__intnet: true
+		defender.vm.synced_folder "./attackerfiles", "/sharedfolder"
+	end
+	config.vm.provider "virtualbox" do |vb|
+		vb.name = "defender"
+		vb.gui = false
+		vb.memory = "1024"
+	end
+end

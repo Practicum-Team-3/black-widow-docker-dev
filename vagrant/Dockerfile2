@@ -1,0 +1,57 @@
+FROM centos:8.1.1911
+
+LABEL Joshua Dagda jedagda@miners.utep.edu
+
+#RUN echo "*** Installing Bash ***" && \
+#    apk update && \
+#    apk add bash --no-cache --upgrade bash \
+#    bash-doc \
+#    bash-completion
+
+#COPY ./passwd /etc/passwd 
+
+RUN yum update -y && \
+    yum install -y \
+    wget \
+    tar \
+    gzip  \
+    dnf \
+    dnf-plugins-core
+
+RUN echo "**** Enable VirtualBox and EPEL Repository ****" && \ 
+    dnf config-manager --add-repo=https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo && \
+    rpm --import https://www.virtualbox.org/download/oracle_vbox.asc && \
+    dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y 
+
+RUN echo "Install VirtualBox 6.0 on CentOS 8 / RHEL 8" && \
+    dnf install \ 
+    binutils \
+    kernel-devel \
+    kernel-headers \
+    libgomp \
+    make \
+    patch \
+    gcc \
+    glibc-headers \
+    glibc-devel \
+    dkms -y
+
+RUN echo "Install VirtualBox 6.0 on CentOS 8" && \
+    dnf install VirtualBox-6.1.x86_64 -y
+
+
+
+RUN dnf install -y https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.rpm
+
+
+#RUN tar -xzvf vagrant_2.2.7_linux_amd64.zip
+RUN vagrant --version && \
+    vagrant plugin install vagrant-vbguest
+
+COPY ./vagrant_server /vagrant_server
+
+    
+
+
+
+CMD ["/bin/bash"]

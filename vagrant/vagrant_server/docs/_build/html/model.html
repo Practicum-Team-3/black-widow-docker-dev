@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>model package &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="server module" href="server.html" />
+    <link rel="prev" title="src" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.ExploitInfo">model.ExploitInfo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.FileManager">model.FileManager module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.NetworkSettings">model.NetworkSettings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.Provision">model.Provision module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.Scenario">model.Scenario module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.ScenarioManager">model.ScenarioManager module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.VagrantFile">model.VagrantFile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.VagrantManager">model.VagrantManager module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.VirtualMachine">model.VirtualMachine module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model.VulnerabilityInfo">model.VulnerabilityInfo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-model">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html">server module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Automated Malware and Exploit Data Collection Tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+      <li>model package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="model-package">
+<h1>model package<a class="headerlink" href="#model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-model.ExploitInfo">
+<span id="model-exploitinfo-module"></span><h2>model.ExploitInfo module<a class="headerlink" href="#module-model.ExploitInfo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.ExploitInfo.ExploitInfo">
+<em class="property">class </em><code class="sig-prename descclassname">model.ExploitInfo.</code><code class="sig-name descname">ExploitInfo</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">v_type</em>, <em class="sig-param">download_link</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ExploitInfo.html#ExploitInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ExploitInfo.ExploitInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.ExploitInfo.ExploitInfo.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ExploitInfo.html#ExploitInfo.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ExploitInfo.ExploitInfo.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the ExploitInfo object
+:return: A dictionary with ExploitInfo data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.FileManager">
+<span id="model-filemanager-module"></span><h2>model.FileManager module<a class="headerlink" href="#module-model.FileManager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.FileManager.FileManager">
+<em class="property">class </em><code class="sig-prename descclassname">model.FileManager.</code><code class="sig-name descname">FileManager</code><a class="reference internal" href="_modules/model/FileManager.html#FileManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.FileManager.FileManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.FileManager.FileManager.createMachineFolders">
+<code class="sig-name descname">createMachineFolders</code><span class="sig-paren">(</span><em class="sig-param">scenario_json</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/FileManager.html#FileManager.createMachineFolders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.FileManager.FileManager.createMachineFolders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a folder for each machine in the scenario
+:param scenario_json: String with the scenario name
+:return: True if machine folders are created successfully</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.FileManager.FileManager.createScenarioFolders">
+<code class="sig-name descname">createScenarioFolders</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/FileManager.html#FileManager.createScenarioFolders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.FileManager.FileManager.createScenarioFolders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a scenario folder with the JSON, Exploit, Vulnerability and Machines subfolders
+:param scenario_name: String with the scenario name
+:return: True if the scenario is created successfully</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.FileManager.FileManager.getCurrentPath">
+<code class="sig-name descname">getCurrentPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/FileManager.html#FileManager.getCurrentPath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.FileManager.FileManager.getCurrentPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the project folder path
+:return: String with the project path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.FileManager.FileManager.getScenariosPath">
+<code class="sig-name descname">getScenariosPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/FileManager.html#FileManager.getScenariosPath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.FileManager.FileManager.getScenariosPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the scenarios folder path
+:return: String with the scenarios project path</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.NetworkSettings">
+<span id="model-networksettings-module"></span><h2>model.NetworkSettings module<a class="headerlink" href="#module-model.NetworkSettings" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.NetworkSettings.NetworkSettings">
+<em class="property">class </em><code class="sig-prename descclassname">model.NetworkSettings.</code><code class="sig-name descname">NetworkSettings</code><span class="sig-paren">(</span><em class="sig-param">network_name</em>, <em class="sig-param">network_type</em>, <em class="sig-param">ip_address</em>, <em class="sig-param">auto_config=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/NetworkSettings.html#NetworkSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.NetworkSettings.NetworkSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.NetworkSettings.NetworkSettings.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/NetworkSettings.html#NetworkSettings.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.NetworkSettings.NetworkSettings.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the NetworkSettings object
+:return: A dictionary with NetworkSettings data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.Provision">
+<span id="model-provision-module"></span><h2>model.Provision module<a class="headerlink" href="#module-model.Provision" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.Provision.Provision">
+<em class="property">class </em><code class="sig-prename descclassname">model.Provision.</code><code class="sig-name descname">Provision</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">provision_type='shell'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Provision.html#Provision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Provision.Provision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.Provision.Provision.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Provision.html#Provision.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Provision.Provision.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Provision object
+:return: A dictionary with Provision data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Provision.Provision.setShellCommand">
+<code class="sig-name descname">setShellCommand</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Provision.html#Provision.setShellCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Provision.Provision.setShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a new command to be executed as part of the provisioning
+:param command: Bash command intended for provisioning a virtual machine</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.Scenario">
+<span id="model-scenario-module"></span><h2>model.Scenario module<a class="headerlink" href="#module-model.Scenario" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.Scenario.Scenario">
+<em class="property">class </em><code class="sig-prename descclassname">model.Scenario.</code><code class="sig-name descname">Scenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Scenario.html#Scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Scenario.Scenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.Scenario.Scenario.addVM">
+<code class="sig-name descname">addVM</code><span class="sig-paren">(</span><em class="sig-param">vm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Scenario.html#Scenario.addVM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Scenario.Scenario.addVM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new virtual machine to this scenario
+:param vm: Object which carries the virtual machine data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Scenario.Scenario.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Scenario.html#Scenario.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Scenario.Scenario.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Scenario object
+:return: A dictionary with Scenario data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Scenario.Scenario.generateScenario">
+<code class="sig-name descname">generateScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Scenario.html#Scenario.generateScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Scenario.Scenario.generateScenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a scenario JSON file
+:param scenario_name: String with the scenario name
+:return: JSON file containing all the scenario data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Scenario.Scenario.setExploitInfo">
+<code class="sig-name descname">setExploitInfo</code><span class="sig-paren">(</span><em class="sig-param">exploit_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Scenario.html#Scenario.setExploitInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Scenario.Scenario.setExploitInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the exploit info for this scenario
+:param exploit_info: Object which carries the exploit info</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Scenario.Scenario.setVulnerabilityInfo">
+<code class="sig-name descname">setVulnerabilityInfo</code><span class="sig-paren">(</span><em class="sig-param">vulnerability_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/Scenario.html#Scenario.setVulnerabilityInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Scenario.Scenario.setVulnerabilityInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the vulnerability info for this scenario
+:param vulnerability_info: Object which carries the vulnerability info</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.ScenarioManager">
+<span id="model-scenariomanager-module"></span><h2>model.ScenarioManager module<a class="headerlink" href="#module-model.ScenarioManager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.ScenarioManager.ScenarioManager">
+<em class="property">class </em><code class="sig-prename descclassname">model.ScenarioManager.</code><code class="sig-name descname">ScenarioManager</code><a class="reference internal" href="_modules/model/ScenarioManager.html#ScenarioManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ScenarioManager.ScenarioManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.ScenarioManager.ScenarioManager.createScenario">
+<code class="sig-name descname">createScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ScenarioManager.html#ScenarioManager.createScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ScenarioManager.ScenarioManager.createScenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new scenario which includes the folders and the scenario JSON file
+:param scenario_name: String with the scenario name
+:return: True if the new scenario was successfully created</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.ScenarioManager.ScenarioManager.editScenario">
+<code class="sig-name descname">editScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em>, <em class="sig-param">new_scenario</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ScenarioManager.html#ScenarioManager.editScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ScenarioManager.ScenarioManager.editScenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits a current scenario with a JSON file
+:param scenario_name: String with the scenario name
+:param new_scenario: JSON file with the new scenario
+:return: True if the scenario has been successfully edited, otherwise False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.ScenarioManager.ScenarioManager.getScenario">
+<code class="sig-name descname">getScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ScenarioManager.html#ScenarioManager.getScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ScenarioManager.ScenarioManager.getScenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the scenario as a JSON file
+:param scenario_name: String with the scenario name
+:return: JSON file with the scenario info</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.ScenarioManager.ScenarioManager.getScenarios">
+<code class="sig-name descname">getScenarios</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ScenarioManager.html#ScenarioManager.getScenarios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ScenarioManager.ScenarioManager.getScenarios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the available scenarios
+:return: A list of strings with the available scenarios</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.ScenarioManager.ScenarioManager.scenarioExists">
+<code class="sig-name descname">scenarioExists</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/ScenarioManager.html#ScenarioManager.scenarioExists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ScenarioManager.ScenarioManager.scenarioExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a scenario exists
+:param scenario_name: String with the scenario name
+:return: False if the scenario JSON file does not exist and the path to the JSON file if it exist</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.VagrantFile">
+<span id="model-vagrantfile-module"></span><h2>model.VagrantFile module<a class="headerlink" href="#module-model.VagrantFile" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.VagrantFile.VagrantFile">
+<em class="property">class </em><code class="sig-prename descclassname">model.VagrantFile.</code><code class="sig-name descname">VagrantFile</code><a class="reference internal" href="_modules/model/VagrantFile.html#VagrantFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VagrantFile.VagrantFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.VagrantFile.VagrantFile.vagrantFilePerMachine">
+<code class="sig-name descname">vagrantFilePerMachine</code><span class="sig-paren">(</span><em class="sig-param">machine</em>, <em class="sig-param">machine_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VagrantFile.html#VagrantFile.vagrantFilePerMachine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VagrantFile.VagrantFile.vagrantFilePerMachine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a vagrant file for this machine
+:param machine: Object which carries the virtual machine data
+:param machine_path: Folder path to this machine
+:return: String used to write the vagrant file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.VagrantManager">
+<span id="model-vagrantmanager-module"></span><h2>model.VagrantManager module<a class="headerlink" href="#module-model.VagrantManager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.VagrantManager.VagrantManager">
+<em class="property">class </em><code class="sig-prename descclassname">model.VagrantManager.</code><code class="sig-name descname">VagrantManager</code><a class="reference internal" href="_modules/model/VagrantManager.html#VagrantManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VagrantManager.VagrantManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.VagrantManager.VagrantManager.createVagrantFiles">
+<code class="sig-name descname">createVagrantFiles</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VagrantManager.html#VagrantManager.createVagrantFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VagrantManager.VagrantManager.createVagrantFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a vagrant file per machine in a scenario
+:param scenario_name: String with the scenario name
+:return: True if vagrant files were successfully created</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VagrantManager.VagrantManager.getAvailableBoxes">
+<code class="sig-name descname">getAvailableBoxes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VagrantManager.html#VagrantManager.getAvailableBoxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VagrantManager.VagrantManager.getAvailableBoxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the available boxes in the Vagrant context
+:return: A list of string with the available boxes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VagrantManager.VagrantManager.runVagrantUp">
+<code class="sig-name descname">runVagrantUp</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VagrantManager.html#VagrantManager.runVagrantUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VagrantManager.VagrantManager.runVagrantUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the vagrant up command for each machine in the scenario
+:param scenario_name: String with the scenario name
+:return: True if the vagrant up commands were successfully executed</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.VirtualMachine">
+<span id="model-virtualmachine-module"></span><h2>model.VirtualMachine module<a class="headerlink" href="#module-model.VirtualMachine" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.VirtualMachine.VirtualMachine">
+<em class="property">class </em><code class="sig-prename descclassname">model.VirtualMachine.</code><code class="sig-name descname">VirtualMachine</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">os</em>, <em class="sig-param">is_attacker=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.addSharedFolder">
+<code class="sig-name descname">addSharedFolder</code><span class="sig-paren">(</span><em class="sig-param">hostPath</em>, <em class="sig-param">guestPath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.addSharedFolder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.addSharedFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the shared folder between the host and the guest
+:param hostPath: String with the host path
+:param guestPath: String with the guest path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Virtual Machine object
+:return: A dictionary with Virtual Machine data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.enableGUI">
+<code class="sig-name descname">enableGUI</code><span class="sig-paren">(</span><em class="sig-param">isVisible</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.enableGUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.enableGUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the GUI for this virtual machine
+:param isVisible: Boolean to enable or disable the GUI in a virtual machine</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.setName">
+<code class="sig-name descname">setName</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.setName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.setName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the name for this virtual machine
+:param name: String with the virtual machine name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.setNetworkSettings">
+<code class="sig-name descname">setNetworkSettings</code><span class="sig-paren">(</span><em class="sig-param">network_settings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.setNetworkSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.setNetworkSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the network settings for this virtual machine
+:param network_settings: Object which carries the network settings data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.setOS">
+<code class="sig-name descname">setOS</code><span class="sig-paren">(</span><em class="sig-param">os</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.setOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.setOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the OS for this virtual machine
+:param os: String with the virtual machine OS</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.VirtualMachine.VirtualMachine.setProvision">
+<code class="sig-name descname">setProvision</code><span class="sig-paren">(</span><em class="sig-param">provision</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VirtualMachine.html#VirtualMachine.setProvision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VirtualMachine.VirtualMachine.setProvision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the provision for this virtual machine
+:param provision: Object which carries the provision data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.VulnerabilityInfo">
+<span id="model-vulnerabilityinfo-module"></span><h2>model.VulnerabilityInfo module<a class="headerlink" href="#module-model.VulnerabilityInfo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.VulnerabilityInfo.VulnerabilityInfo">
+<em class="property">class </em><code class="sig-prename descclassname">model.VulnerabilityInfo.</code><code class="sig-name descname">VulnerabilityInfo</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">v_type</em>, <em class="sig-param">cve_link</em>, <em class="sig-param">download_link</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VulnerabilityInfo.html#VulnerabilityInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VulnerabilityInfo.VulnerabilityInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.VulnerabilityInfo.VulnerabilityInfo.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/VulnerabilityInfo.html#VulnerabilityInfo.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.VulnerabilityInfo.VulnerabilityInfo.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the VulnerabilityInfo object
+:return: A dictionary with VulnerabilityInfo data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="server.html" class="btn btn-neutral float-right" title="server module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="src" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Software Practicum Team 3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

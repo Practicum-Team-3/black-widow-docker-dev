@@ -1,0 +1,16 @@
+Vagrant.configure("2") do |config|
+	config.vm.define "attacker" do |attacker|
+		attacker.vm.hostname = "attacker"
+		attacker.vm.box = "laravel/homestead"
+		attacker.vm.network "private_network", ip: "192.168.50.5", virtualbox__intnet: true
+		attacker.vm.synced_folder "./attackerfiles", "/sharedfolder"
+		attacker.vm.provision "shell", inline: <<-SHELL
+			pip install unique-id
+		SHELL
+	end
+	config.vm.provider "virtualbox" do |vb|
+		vb.name = "attacker"
+		vb.gui = false
+		vb.memory = "1024"
+	end
+end

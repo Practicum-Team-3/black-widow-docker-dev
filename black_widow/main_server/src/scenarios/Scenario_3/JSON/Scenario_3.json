@@ -1,0 +1,51 @@
+{
+  "scenario_name": "Scenario_3",
+  "scenario_id": "F#DE#Dy)",
+  "creation_date": "01/03/2020 17:36:13",
+  "last_accessed": "01/03/2020 17:36:13",
+  "exploit_info": {
+    "name": "",
+    "type": "",
+    "download_link": ""
+  },
+  "vulnerability_info": {
+    "name": "",
+    "type": "",
+    "cve_link": "",
+    "download_link": ""
+  },
+  "machines": {
+    "attacker": {
+      "os": "laravel/homestead",
+      "name": "attacker",
+      "isAttacker": true,
+      "shared_folders": [
+        "./attackerfiles",
+        "/sharedfolder"
+      ],
+      "network_settings": {
+        "ip_address": "192.168.50.5",
+        "network_type": "type",
+        "network_name": "Name",
+        "auto_config": "True"
+      },
+      "gui": false
+    },
+    "defender": {
+      "os": "laravel/homestead",
+      "name": "defender",
+      "isAttacker": false,
+      "shared_folders": [
+        "./attackerfiles",
+        "/sharedfolder"
+      ],
+      "network_settings": {
+        "ip_address": "192.168.50.5",
+        "network_type": "type",
+        "network_name": "Name",
+        "auto_config": "True"
+      },
+      "gui": false
+    }
+  }
+}
