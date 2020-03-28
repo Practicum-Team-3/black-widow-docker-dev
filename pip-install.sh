@@ -1,6 +1,6 @@
-VAGRANT_FILE_PATH=./vagrant/src/
+VAGRANT_FILE_PATH=./vagrant/vagrant_server/src/
 cd $VAGRANT_FILE_PATH
-pip3 t- $VAGRANT_FILE_PATH install \
+pip3 install \
     flask \
     requests \
     request \
