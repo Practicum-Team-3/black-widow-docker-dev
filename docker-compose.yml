@@ -4,20 +4,39 @@ services:
     
     black_widow:
         build: './black_widow/'
+        container_name: black_widow_dev
+        hostname: black_widow_dev
         volumes:
             - type: volume
               source: black_widow_vol
               target: ${DESTINATION_APP}
         working_dir: ${DESTINATION_APP}
         command: /bin/bash -c "python3 MainServer.py"
-        hostname: black_widow_dev
-        container_name: black_widow_dev
+        environment: 
+            APP_ENV: "dev"
+            APP_DEBUG: "False"
+            APP_PORT: ${BW_APP_PORT}
+            MONGODB_DATABASE: ${MONGODB_DATABASE}
+            MONGODB_USERNAME: ${MONGODB_USERNAME}
+            MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+            MONGODB_HOSTNAME: ${MONGODB_HOSTNAME}
         ports:
             - "${BW_CON_PORT}:${BW_APP_PORT}"
         networks: 
             - widow_dev
         stdin_open: true
         tty: true
+    
+    mongodb:
+        build: './mongodb/'
+        hostname: black_widowDB
+        container_name: black_widowDB
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+        networks: 
+            - widow_dev
 
            
 volumes:
