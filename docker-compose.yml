@@ -29,12 +29,19 @@ services:
     
     mongodb:
         build: './mongodb/'
-        hostname: black_widowDB
+        hostname: ${MONGODB_HOSTNAME}
         container_name: black_widowDB
         restart: always
+
         environment:
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: example
+            MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+            MONGODB_DATA_DIR: /data/db
+            MONGODB_LOG_DIR: /dev/null
+        volumes: 
+            - mongodbdata: /data/db
+        
         networks: 
             - widow_dev
 
@@ -46,6 +53,8 @@ volumes:
             type: none
             device: ${LOCAL_APP_PATH}
             o: 'bind'
+    mongodbdata:
+        driver: local
 
         
 networks:
