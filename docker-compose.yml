@@ -40,7 +40,9 @@ services:
             MONGODB_DATA_DIR: /data/db
             MONGODB_LOG_DIR: /dev/null
         volumes: 
-            - mongodbdata: /data/db
+            - type: volume
+              source: mongodbdata
+              target: /data/db
         
         networks: 
             - widow_dev
@@ -55,6 +57,7 @@ volumes:
             o: 'bind'
     mongodbdata:
         driver: local
+       
 
         
 networks:
