@@ -23,6 +23,47 @@ touch $BW_DOCKERFILE_PATH/black_widow.env
 numReg='^[+]?[0-9]{0,5}$'
 alphaNumReg='^[a-zA-Z0-9][-a-zA-Z0-9]{0,15}[a-zA-Z0-9]$'
 passwordReg='(?=(.*[A-Z]){4,})'
+ipRegex= '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$'
+
+read -p 'Enter the IP address subnet that will be used by the Widow Network, else press enter [Default=172.18.128.0]: '  SUBNET_WIDOW
+until [[  $SUBNET_WIDOW =~ $ipRegex || $SUBNET_WIDOW == "" ]] ; do 
+    echo 'Oops! Use input was not in the IP format as it should be as it should be'
+    echo 
+    read -p 'Enter the Black Widow Gateway once again' SUBNET_WIDOW
+done
+if [[ $SUBNET_WIDOW = "" ]]; then 
+    echo SUBNET_WIDOW=172.18.128.0 | tee -a .env $LOCAL_APP_PATH/.env
+else 
+    echo SUBNET_WIDOW=$SUBNET_WIDOW  | tee -a .env $LOCAL_APP_PATH/.env
+fi 
+
+read -p 'Enter the IP address subnet that will be used by the Widow Server, else press enter [Default=172.18.128.2]: '  WIDOW_IP
+until [[  $WIDOW_IP =~ $ipRegex || $WIDOW_IP == "" ]] ; do 
+    echo 'Oops! Use input was not in the IP format as it should be as it should be'
+    echo 
+    read -p 'Enter the Black Widow Gateway once again' WIDOW_IP
+done
+if [[ $WIDOW_IP = "" ]]; then 
+    echo WIDOW_IP=172.18.128.2 | tee -a .env $LOCAL_APP_PATH/.env
+else 
+    echo WIDOW_IP=$WIDOW_IP | tee -a .env $LOCAL_APP_PATH/.env
+fi 
+
+
+read -p 'Enter the IP address for the Mongo Database, else press enter [Default=172.18.128.3]: '  MONGODB_IP
+until [[  $MONGODB_IP =~ $ipRegex || $MONGODB_IP == "" ]] ; do 
+    echo 'Oops! Use input was not in the IP format as it should be as it should be'
+    echo 
+    read -p 'Enter the Black Widow Gateway once again' MONGODB_IP
+done
+if [[ $MONGODB_IP = "" ]]; then 
+    echo MONGODB_IP=172.18.128.3 | tee -a .env $LOCAL_APP_PATH/.env
+else 
+    echo MONGODB_IP=$MONGODB_IP  | tee -a .env $LOCAL_APP_PATH/.env
+fi 
+
+
+
 
 read -p 'Enter the port number that will be used by the Black Widow container, else press enter [Default=8080]: '  BW_CON_PORT
 until [[  $BW_CON_PORT =~ $numReg || $BW_CON_PORT == "" ]] ; do 
@@ -46,6 +87,19 @@ if [[ $BW_APP_PORT = "" ]]; then
     echo BW_APP_PORT=5000  | tee -a .env $LOCAL_APP_PATH/.env
 else 
     echo BW_APP_PORT=$BW_APP_PORT  | tee -a .env $LOCAL_APP_PATH/.env
+fi 
+
+
+read -p 'Enter the port number that will be used by MongoDB for the app [Default=27017] '  MONGODB_PORT
+until [[  $MONGODB_PORT =~ $numReg || $MONGODB_PORT == "" ]] ; do 
+    echo 'Oops! the name of the mongo database port. Numbers haracters'
+    echo 
+    read -p 'Enter the name of the database once again' MONGODB_PORT
+done
+if [[ $MONGODB_PORT = "" ]]; then 
+    echo MONGODB_PORT=27017  | tee -a .env #$LOCAL_APP_PATH/.env
+else 
+    echo MONGODB_PORT=$MONGODB_PORT | tee -a .env #$LOCAL_APP_PATH/.env
 fi 
 
 read -p 'Enter the name of the database that will be set up for the app [Default=softpract] '  MONGODB_DATABASE

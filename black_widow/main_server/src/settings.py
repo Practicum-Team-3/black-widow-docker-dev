@@ -7,3 +7,7 @@ load_dotenv()
 vagrant_host_ip = os.getenv("DOCKER_HOST")
 #THIS SHOULD CHANGE TO VAGR_APP_PORT TO BE DONE LATER
 vagrant_app_port = os.getenv("BW_APP_PORT")
+
+mongourl = os.getenv("MONGODB_IP")
+mongoport = os.getenv("MONGODB_PORT")
+db_name = os.getenv("MONGODB_DATABASE")
