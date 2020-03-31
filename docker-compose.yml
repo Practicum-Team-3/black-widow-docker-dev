@@ -23,7 +23,8 @@ services:
         ports:
             - "${BW_CON_PORT}:${BW_APP_PORT}"
         networks: 
-            - widow_dev
+            widow_dev:
+                ipv4_address: ${WIDOW_IP}
         stdin_open: true
         tty: true
     
@@ -45,7 +46,8 @@ services:
               target: /data/db
         
         networks: 
-            - widow_dev
+            widow_dev:
+                ipv4_address: ${MONGODB_IP}
 
            
 volumes:
@@ -66,7 +68,7 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet: "172.18.238.0/24"
+                - subnet: ${SUBNET_WIDOW}/24
 
 
             
