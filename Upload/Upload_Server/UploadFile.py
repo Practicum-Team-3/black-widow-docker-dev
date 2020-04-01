@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 from werkzeug import secure_filename
 import os
 
@@ -11,14 +11,11 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_F = os.path.abspath(os.path.join(APP_ROOT, os.pardir))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_PATH)
 
-#TODO: Handle VagrantFiles, VMs, exploits (zip, 7z, etc.) or just everything?
 #TODO: get existing files??
-#TODO: Set appropiate paths to files. 
-#TODO: See what the scope of what I need to do is.
-#TODO: Vulnerable programs
+#TODO: Set appropiate paths to files.
 
 #TODO: POST parameter for the type of file 
-#TODO: Return file list in 
+#TODO: Return file list in JSON
 #TODO: MAke a different folder to  add the stuff
 
 #TODO: DELETRION OF FILES
@@ -57,9 +54,9 @@ def isVulnerabilityFormat(link):
 def filePath(link):
     return UPLOAD_FOLDER + isVMFormat(link) + isExploitFormat(link) + isVulnerabilityFormat(link);
 
-#curl -X POST -F "file=@ts.png" http://localhost:5000/upload
-@uploadfiles.route('/upload', methods=['GET', 'POST'])
-def upload():
+# curl -X POST -F "file=@ts.png" http://localhost:5000/uploadFile
+@uploadfiles.route('/uploadFile', methods=['GET', 'POST'])
+def uploadFile():
     if request.method == 'POST':
         file = request.files['file']
         upload_path = '{}/{}'.format(UPLOAD_FOLDER, secure_filename(file.filename))
@@ -67,6 +64,35 @@ def upload():
         file.save(upload_path)
         return 'ok'
     
+@uploadfiles.route('/deleteFile/<filename>')
+def deleteFile(file_name):
+    if os.path.isfile(file_name):
+        os.remove(file_name)
+        return 'File Successfully Deleted'
+    else:    ## Show an error ##
+        return 'File not found, could not delete'
 
+@uploadfiles.route('/fileList/')
+def fileList():
+    all_VMs = []
+    all_exploits = []
+    all_vulnerable_software = []
+    for filename in os.listdir(UPLOAD_FOLDER):
+        ## Check for VMs
+        if (isVMFormat(filename)):
+            all_VMs.append(filename)
+        ## Exploits
+        if (isExploitFormat(filename)):
+            all_exploits.append(filename)
+        ## Vulnerable Software
+        if (isVulnerabilityFormat(filename)):
+            all_vulnerable_software.append(filename)
+    files_dict = dict()
+    files_dict = {"virtual machines": all_VMs,
+                  "exploits": all_exploits,
+                  "vulnerable software": all_vulnerable_software}
+    return jsonify(files_dict)
+        
+        
 if __name__ == '__main__':
     uploadfiles.run(debug=False)
