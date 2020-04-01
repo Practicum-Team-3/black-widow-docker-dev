@@ -12,7 +12,6 @@ UPLOAD_F = os.path.abspath(os.path.join(APP_ROOT, os.pardir))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_PATH)
 files_dict = dict()
 
-#TODO: get existing files??
 #TODO: Set appropiate paths to files.
 
 #TODO: POST parameter for the type of file 
@@ -53,15 +52,18 @@ def isVulnerabilityFormat(link):
 def filePath(link):
     return UPLOAD_FOLDER + isVMFormat(link) + isExploitFormat(link) + isVulnerabilityFormat(link);
 
-# curl -X POST -F "file=@ts.png" http://localhost:5000/uploadFile
+# curl -X POST -F "file=@/path/to/file.ext" http://localhost:5000/uploadFile
 @uploadfiles.route('/uploadFile', methods=['GET', 'POST'])
 def uploadFile():
     if request.method == 'POST':
         file = request.files['file']
+        
+        if os.path.isfile(UPLOAD_PATH + file.filename):
+            return 'File already exists'
         upload_path = '{}/{}'.format(UPLOAD_FOLDER, secure_filename(file.filename))
 
         file.save(upload_path)
-        return 'ok'
+        return 'File Successfully Uploaded'
     
 @uploadfiles.route('/deleteFile/<file_name>')
 def deleteFile(file_name):
