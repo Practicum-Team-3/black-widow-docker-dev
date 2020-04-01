@@ -29,6 +29,15 @@ scenario_manager = ScenarioManager()
 
 
 
+@application.route('/scenarios/newEmpty/<scenario_name>')
+def createScenario(scenario_name):
+  """
+  Creates a new scenario which includes the folders and the scenario JSON file
+  :param scenario_name: String with the scenario name
+  :return: True if the new scenario was successfully created
+  """
+  return jsonify(scenario_manager.newEmptyScenario(scenario_name))
+
 @application.route('/scenarios/all')
 def getScenarios():
   """
@@ -55,6 +64,14 @@ def editScenario():
   """
   return jsonify(scenario_manager.editScenario(request.get_json()))
 
+@application.route('/scenarios/delete/<scenario_name>')
+def deleteScenario(scenario_name):
+  """
+  Edits a current scenario with a JSON file
+  :param scenario_name: String with the scenario name
+  :return: True if the scenario has been successfully edited, otherwise False
+  """
+  return jsonify(scenario_manager.deleteScenario(scenario_name))
 
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():
@@ -94,5 +111,5 @@ def testPing(scenario_name, source, destination):
   return requests.get('/'.join([VSERVER_URL, "vagrant", scenario_name,"ping", source, destination])).content
 
 if __name__=="__main__":
-  
+
   application.run(host='0.0.0.0', port=WIDOW_PORT)
