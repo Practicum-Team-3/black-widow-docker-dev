@@ -29,6 +29,7 @@ scenario_manager = ScenarioManager()
 
 
 
+
 @application.route('/scenarios/all')
 def getScenarios():
   """
