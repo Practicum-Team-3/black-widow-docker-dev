@@ -8,7 +8,7 @@ scenario_manager = ScenarioManager()
 vserver_url = 'http://'+ settings.vagrant_host_ip + ':' + settings.vagrant_app_port
 app_port = settings.vagrant_app_port
 
-@app.route('/scenarios/newEmpty/<scenario_name>')
+@application.route('/scenarios/newEmpty/<scenario_name>')
 def createScenario(scenario_name):
   """
   Creates a new scenario which includes the folders and the scenario JSON file
@@ -17,7 +17,7 @@ def createScenario(scenario_name):
   """
   return jsonify(scenario_manager.newEmptyScenario(scenario_name))
 
-@app.route('/scenarios/all')
+@application.route('/scenarios/all')
 def getScenarios():
   """
   Gets the available scenarios
@@ -43,7 +43,7 @@ def editScenario():
   """
   return jsonify(scenario_manager.editScenario(request.get_json()))
 
-@app.route('/scenarios/delete/<scenario_name>')
+@application.route('/scenarios/delete/<scenario_name>')
 def deleteScenario(scenario_name):
   """
   Edits a current scenario with a JSON file

@@ -1,5 +1,6 @@
 import os
 import json
+import shutil
 from Managers.FileManager import FileManager
 from Entities.Scenario import Scenario
 
@@ -64,6 +65,7 @@ class ScenarioManager(object):
         :param scenario_json: JSON file with the new scenario
         :return: True if the scenario has been successfully edited, otherwise False
         """
+        print(new_scenario)
         scenario_name = new_scenario["scenario_name"]
         if scenario_name in self.scenarios_dict:
             new_scenario = Scenario(scenario_name).objectFromDictionary(new_scenario)
