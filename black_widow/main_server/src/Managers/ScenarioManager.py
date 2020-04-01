@@ -8,28 +8,6 @@ class ScenarioManager(object):
     def __init__(self):
         self.file_manager = FileManager()
 
-    def createScenario(self, scenario_name):
-        """
-        Creates a new scenario which includes the folders and the scenario JSON file
-        :param scenario_name: String with the scenario name
-        :return: True if the new scenario was successfully created
-        """
-        #Folder creation moved to FileManager
-        self.file_manager.createScenarioFolders(scenario_name)
-        scenario = Scenario(scenario_name)
-        scenario.generateScenario(scenario_name)
-        result = {"result": True}
-        return result
-
-    def getScenarios(self):
-        """
-        Gets the available scenarios
-        :return: A list of strings with the available scenarios
-        """
-        # Variables
-        scenarios = os.listdir(self.file_manager.getScenariosPath())
-        scenarios_dict = {"scenarios": scenarios}
-        return scenarios_dict
 
     def scenarioExists(self, scenario_name):
         """
@@ -48,6 +26,18 @@ class ScenarioManager(object):
                 return None
             else:
                 return scenario_json_path
+
+
+    def getScenarios(self):
+        """
+        Gets the available scenarios
+        :return: A list of strings with the available scenarios
+        """
+        # Variables
+        scenarios = os.listdir(self.file_manager.getScenariosPath())
+        scenarios_dict = {"scenarios": scenarios}
+        return scenarios_dict
+        
 
     def getScenario(self, scenario_name):
         """
@@ -83,4 +73,3 @@ class ScenarioManager(object):
             return True
         else:
             return False
-

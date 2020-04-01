@@ -8,4 +8,5 @@ python-dotenv
 requests
 unique-id
 python-dotenv
+flask_pymongo
 pymongo

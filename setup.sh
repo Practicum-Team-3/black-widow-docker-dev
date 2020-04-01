@@ -172,12 +172,16 @@ else
     echo MONGODB_HOSTNAME=$MONGODB_HOSTNAME | tee -a .env $LOCAL_APP_PATH/.env
 fi 
 
+ENVIRONMENT_DEBUG=false
+
 
 DOCKER_HOST=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
-echo DOCKER_HOST=$DOCKER_HOST >> $LOCAL_APP_PATH/.env
+
+echo DOCKER_HOST=$DOCKER_HOST >> $LOCAL_APP_PATH/.env 
 
 echo LOCAL_APP_PATH=$LOCAL_APP_PATH >> .env
 echo DESTINATION_APP=$DESTINATION_APP | tee -a .env 
+echo ENVIRONMENT_DEBUG=$ENVIRONMENT_DEBUG | tee -a .env $LOCAL_APP_PATH/.env
 
 
 

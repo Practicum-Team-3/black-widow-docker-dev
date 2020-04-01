@@ -10,12 +10,21 @@
     - db.createCollection('scenarios')
 '''
 import pymongo
+import settings
+
+mongodb_ip = settings.mongodb_ip
+mongodb_port = settings.mongodb_port
+db_name = settings.db_name
+mongodb_username = settings.mongodb_username
+mongdb_password = settings.mongdb_password
+mongodb_url = "mongodb://" + mongodb_ip + ":" + mongodb_port
+
 
 class DatabaseManager():
 
     def __init__(self):
-        self.url = "mongodb://localhost:27017/"
-        self.db_name = 'soft_prac'
+        self.url = mongodb_url
+        self.db_name = db_name
         self.scenarios_col_name = 'scenarios'
         self.client = pymongo.MongoClient(self.url)
         self.db = self.client[self.db_name]
