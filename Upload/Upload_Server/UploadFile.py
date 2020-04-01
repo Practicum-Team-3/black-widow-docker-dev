@@ -35,9 +35,7 @@ def index():
         ## Exploits
         if (isExploitFormat(filename)):
             all_exploits.append(filename)
-            
-
-            
+   
     return render_template('index.html', **locals());
 
 
@@ -59,17 +57,16 @@ def isVulnerabilityFormat(link):
 def filePath(link):
     return UPLOAD_FOLDER + isVMFormat(link) + isExploitFormat(link) + isVulnerabilityFormat(link);
 
+#curl -X POST -F "file=@ts.png" http://localhost:5000/upload
 @uploadfiles.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         file = request.files['file']
         upload_path = '{}/{}'.format(UPLOAD_FOLDER, secure_filename(file.filename))
-        print(UPLOAD_F)
-        print()
-        print(UPLOAD_FOLDER)
+
         file.save(upload_path)
         return 'ok'
-
+    
 
 if __name__ == '__main__':
     uploadfiles.run(debug=False)
