@@ -10,15 +10,14 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 #UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_PATH)
 UPLOAD_F = os.path.abspath(os.path.join(APP_ROOT, os.pardir))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_PATH)
+files_dict = dict()
 
 #TODO: get existing files??
 #TODO: Set appropiate paths to files.
 
 #TODO: POST parameter for the type of file 
-#TODO: Return file list in JSON
 #TODO: MAke a different folder to  add the stuff
 
-#TODO: DELETRION OF FILES
 @uploadfiles.route('/')
 def index():
     all_VMs = []
@@ -64,16 +63,28 @@ def uploadFile():
         file.save(upload_path)
         return 'ok'
     
-@uploadfiles.route('/deleteFile/<filename>')
+@uploadfiles.route('/deleteFile/<file_name>')
 def deleteFile(file_name):
-    if os.path.isfile(file_name):
-        os.remove(file_name)
+    file = UPLOAD_PATH + file_name
+    if os.path.isfile(file):
+        os.remove(file)
         return 'File Successfully Deleted'
     else:    ## Show an error ##
         return 'File not found, could not delete'
+    
+#    if file_name in files_dict:
+#        deleted_scenario = files_dict.pop(file_name)
+#        scenario_path = self.file_manager.getScenariosPath() / file_name
+#        try:
+#            shutil.rmtree(scenario_path)
+#        except OSError as e:
+#            print("Error: %s : %s" % (scenario_path, e.strerror))
+#        return {"Response": True, "Note": "Operation successful",
+#                "Body": deleted_scenario.dictionary()}
+#    else:
+#        return {"Response": False, "Note": "Scenario doesn't exist" , "Body": dict()}
 
-@uploadfiles.route('/fileList/')
-def fileList():
+def getFileList():
     all_VMs = []
     all_exploits = []
     all_vulnerable_software = []
@@ -87,7 +98,11 @@ def fileList():
         ## Vulnerable Software
         if (isVulnerabilityFormat(filename)):
             all_vulnerable_software.append(filename)
-    files_dict = dict()
+    return all_VMs, all_exploits, all_vulnerable_software
+
+@uploadfiles.route('/fileList/')
+def fileList():
+    all_VMs, all_exploits, all_vulnerable_software = getFileList()
     files_dict = {"virtual machines": all_VMs,
                   "exploits": all_exploits,
                   "vulnerable software": all_vulnerable_software}
