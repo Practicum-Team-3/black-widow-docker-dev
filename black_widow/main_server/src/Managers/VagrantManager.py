@@ -36,7 +36,7 @@ class VagrantManager(object):
             print("[ " + str(boxNum) + " ]" + boxName)
         response.setResponse(True)
         response.setBody(boxes)
-        return response
+        return response.dictionary()
 
     def createVagrantFiles(self, scenario_name):
         """
@@ -52,7 +52,7 @@ class VagrantManager(object):
             machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
             print(self.vagrant_file.vagrantFilePerMachine(machine, machine_path))
         response.setResponse(True)
-        return response
+        return response.dictionary()
 
     def runVagrantUp(self, scenario_name):
         """
@@ -77,7 +77,7 @@ class VagrantManager(object):
                 if output:
                     print(output.strip())
         response.setResponse(True)
-        return response
+        return response.dictionary()
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout=5, show_output=True):
         # First we need to move to the directory of the given machine
@@ -146,4 +146,4 @@ class VagrantManager(object):
             print("Scenario %s not found" % scenario_name)
             response.setResponse(False)
             response.setCode("Scenario %s not found" % scenario_name)
-        return response
+        return response.dictionary()

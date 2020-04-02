@@ -35,7 +35,7 @@ class VagrantManager(object):
             print("[ " + str(boxNum) + " ]" + boxName)
         response.setResponse(True)
         response.setBody(boxes)
-        return response
+        return response.dictionary()
 
     def createVagrantFiles(self, scenario_name):
         """
@@ -45,13 +45,13 @@ class VagrantManager(object):
         """
         response = Response()
         self.file_manager.createMachineFolders(scenario_name)
-        scenario_json = self.scenario_manager.getScenario(scenario_name)
+        scenario_json = self.scenario_manager.getScenario(scenario_name)["body"]
         for machine_name in scenario_json["machines"]:
             machine = scenario_json["machines"][machine_name]
             machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
             print(self.vagrant_file.vagrantFilePerMachine(machine , machine_path))
         response.setResponse(True)
-        return response
+        return response.dictionary()
 
     def runVagrantUp(self, scenario_name):
         """
@@ -76,7 +76,7 @@ class VagrantManager(object):
                 if output:
                     print(output.strip())
         response.setResponse(True)
-        return response
+        return response.dictionary()
 
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
@@ -146,4 +146,4 @@ class VagrantManager(object):
             print("Scenario %s not found" % scenario_name)
             response.setResponse(False)
             response.setCode("Scenario %s not found" % scenario_name)
-        return response
+        return response.dictionary()

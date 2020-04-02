@@ -37,12 +37,12 @@ class ScenarioManager(object):
             self.scenarios_dict[scenario_name] = scenario
             self._saveScenarioAsJSON(scenario)
             response.setResponse(True)
-            respose.setBody(scenario_dict)
+            response.setBody(scenario_dict)
         else:
             response.setResponse(False)
             response.setCode('Scenario already exist')
             response.setBody(dict())
-        return response
+        return response.dictionary()
 
     def getScenarios(self):
         """
@@ -53,8 +53,9 @@ class ScenarioManager(object):
         scenarios_dict = {"scenarios": [self.scenarios_dict[s].scenario_name for s in self.scenarios_dict]}
         response = Response()
         response.setResponse(True)
-        respose.setBody(scenarios_dict)
-        return response
+        response.setBody(scenarios_dict)
+        return response.dictionary()
+
 
     def getScenario(self, scenario_name):
         """
@@ -70,7 +71,7 @@ class ScenarioManager(object):
             response.setResponse(False)
             response.setCode('Scenario doesn\'t already exist')
             response.setBody(dict())
-        return response
+        return response.dictionary()
 
     def editScenario(self, new_scenario):
         """
@@ -93,7 +94,7 @@ class ScenarioManager(object):
             response.setResponse(False)
 
             response.setBody(dict())
-        return response
+        return response.dictionary()
 
     def deleteScenario(self, scenario_name):
         response = Response()
@@ -110,7 +111,7 @@ class ScenarioManager(object):
             response.setResponse(False)
             response.setCode('Scenario doesn\'t already exist')
             response.setBody(dict())
-        return response
+        return response.dictionary()
 
     def scenarioExists(self, scenario_name):
         """

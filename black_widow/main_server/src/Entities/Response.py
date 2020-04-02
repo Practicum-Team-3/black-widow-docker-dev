@@ -9,6 +9,7 @@ class Response(Entity):
         self.task_id = task_id
         self.body = body
 
+    
     def setCode(self, code):
         self.code =code
     
