@@ -45,7 +45,7 @@ class VagrantManager(object):
         """
         response = Response()
         self.file_manager.createMachineFolders(scenario_name)
-        scenario_manager_response = self.scenario_manager.getScenario(scenario_name)
+        scenario_manager_response = self.scenario_manager.getScenario(scenario_name) #Line was added
         if scenario_manager_response["response"]:
             scenario_json = scenario_manager_response["body"]
 
