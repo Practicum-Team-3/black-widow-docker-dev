@@ -1,6 +1,6 @@
 from Entities.Entity import Entity
 
-class Wrapper(Entity):
+class Response(Entity):
     def __init__(self, response = "", code = "", status = "", task_id = "", body = ""):
 
         self.response = response

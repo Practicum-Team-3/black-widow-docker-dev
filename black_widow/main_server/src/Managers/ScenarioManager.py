@@ -4,6 +4,8 @@ import shutil
 from Managers.FileManager import FileManager
 from Entities.Scenario import Scenario
 
+
+
 class ScenarioManager(object):
 
     def __init__(self):

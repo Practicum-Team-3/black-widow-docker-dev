@@ -51,16 +51,41 @@ services:
             widow_dev:
                 ipv4_address: ${MONGODB_IP}
 
+    upload:
+        build: './upload'
+        hostname: upload-server
+        container_name: upload
+        ports: 
+            - 8081:5000
+        volumes:
+            - type: volume
+              source: uploaddata
+              target: /opt/Upload_Server
+        working_dir: /opt/Upload_Server
+        command: /bin/bash -c "python3 UploadFile.py"
+        networks: 
+            widow_dev:
+                ipv4_address: "172.18.128.4"
            
 volumes:
     black_widow_vol:
+
         driver: local
         driver_opts: 
             type: none
             device: ${LOCAL_APP_PATH}
             o: 'bind'
+
     mongodbdata:
         driver: local
+
+    uploaddata:
+        driver: local
+        driver_opts: 
+            type: none
+            device: /home/vagrant/Desktop/practicum/upload/Upload_Server
+            o: 'bind'
+
        
 
         
@@ -70,7 +95,7 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet: ${SUBNET_WIDOW}/16
+                - subnet: ${SUBNET_WIDOW}/24
 
 
             

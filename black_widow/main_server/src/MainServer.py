@@ -25,10 +25,30 @@ application.config["MONGO_URI"] = "mongodb://" + MONGODB_USERNAME + ":" + MONGOD
 mongo = PyMongo(application)
 db = mongo.db
 
+
+UPLOAD_IP = '172.18.128.4'
+UPLOAD_PORT = '5000'
+UPLOAD_URL = 'http://' + UPLOAD_IP + ':' + UPLOAD_PORT
+
 scenario_manager = ScenarioManager()
 
 
 
+@application.route('/upload/filelist')
+def getFileList():
+  return requests.get('/'.join([UPLOAD_URL, "fileList"])).content
+
+@application.route('/upload/deletefile/<file_name>')
+def deleteFile(file_name):
+  return requests.get('/'.join([UPLOAD_URL, "deleteFile", file_name])).content
+
+@application.route('/upload/uploadFile', methods=['GET','POST'])
+def uploadFile():
+    print("Posted file: {}".format(request.files['file']))
+    file = request.files['file']
+    files = {'file': file.read()}
+    r = requests.post('/'.join([UPLOAD_URL, "uploadFile"]), files=files).content
+    return "upload success!"
 
 @application.route('/scenarios/all')
 def getScenarios():
