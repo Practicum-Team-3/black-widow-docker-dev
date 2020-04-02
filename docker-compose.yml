@@ -4,29 +4,89 @@ services:
     
     black_widow:
         build: './black_widow/'
+        container_name: black_widow_dev
+        hostname: black_widow_dev
         volumes:
             - type: volume
               source: black_widow_vol
               target: ${DESTINATION_APP}
         working_dir: ${DESTINATION_APP}
         command: /bin/bash -c "python3 MainServer.py"
-        hostname: black_widow_dev
-        container_name: black_widow_dev
+        environment: 
+            APP_ENV: "dev"
+            APP_DEBUG: "False"
+            APP_PORT: ${BW_APP_PORT}
+            MONGODB_DATABASE: ${MONGODB_DATABASE}
+            MONGODB_USERNAME: ${MONGODB_USERNAME}
+            MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+            MONGODB_HOSTNAME: ${MONGODB_HOSTNAME}
         ports:
             - "${BW_CON_PORT}:${BW_APP_PORT}"
         networks: 
-            - widow_dev
+            widow_dev:
+                ipv4_address: ${WIDOW_IP}
         stdin_open: true
         tty: true
+    
+    mongodb:
+        build: './mongodb/'
+        hostname: ${MONGODB_HOSTNAME}
+        container_name: black_widowDB
+        restart: always
+        ports: 
+            - ${MONGODB_PORT}-27019:${MONGODB_PORT}-27019
 
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+            MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+            MONGODB_DATA_DIR: /data/db
+            MONGODB_LOG_DIR: /dev/null
+        volumes: 
+            - type: volume
+              source: mongodbdata
+              target: /data/db
+        
+        networks: 
+            widow_dev:
+                ipv4_address: ${MONGODB_IP}
+
+    upload:
+        build: './upload'
+        hostname: upload-server
+        container_name: upload
+        ports: 
+            - 8081:5000
+        volumes:
+            - type: volume
+              source: uploaddata
+              target: /opt/Upload_Server
+        working_dir: /opt/Upload_Server
+        command: /bin/bash -c "python3 UploadFile.py"
+        networks: 
+            widow_dev:
+                ipv4_address: "172.18.128.4"
            
 volumes:
     black_widow_vol:
+
         driver: local
         driver_opts: 
             type: none
             device: ${LOCAL_APP_PATH}
             o: 'bind'
+
+    mongodbdata:
+        driver: local
+
+    uploaddata:
+        driver: local
+        driver_opts: 
+            type: none
+            device: /home/vagrant/Desktop/practicum/upload/Upload_Server
+            o: 'bind'
+
+       
 
         
 networks:
@@ -35,7 +95,7 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet: "172.18.238.0/24"
+                - subnet: ${SUBNET_WIDOW}/24
 
 
             

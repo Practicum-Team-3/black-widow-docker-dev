@@ -7,12 +7,9 @@ COPY ./passwd /etc/passwd
 
 RUN mkdir ${DESTINATION_APP}
 WORKDIR ${DESTINATION_APP}
+ADD ./requirements.txt ./requirements.txt
 
-RUN pip3 install \ 
-    flask \
-    python-dotenv \
-    requests \
-    unique-id 
+RUN pip3 install -r ./requirements.txt
 
 
 

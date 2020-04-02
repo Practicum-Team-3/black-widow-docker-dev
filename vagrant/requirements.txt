@@ -1,0 +1,12 @@
+#
+######### Pip3 Requirements for the Black Widow Server #########
+#
+######### May have to add versions specifiers
+
+flask
+python-dotenv
+requests
+unique-id
+python-dotenv
+flask_pymongo
+pymongo

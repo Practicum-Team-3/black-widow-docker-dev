@@ -1,3 +1,4 @@
 #!/bin/bash
 docker-compose up -d
-python3 ./vagrant/vagrant_server/src/VagrantServer.py
+cd ./vagrant/vagrant_server/src/
+python3 VagrantServer.py

@@ -18,32 +18,46 @@
     "attacker": {
       "os": "laravel/homestead",
       "name": "attacker",
-      "isAttacker": true,
+      "is_attacker": true,
       "shared_folders": [
         "./attackerfiles",
         "/sharedfolder"
       ],
       "network_settings": {
-        "ip_address": "192.168.50.5",
+        "network_name": "My Net",
         "network_type": "type",
-        "network_name": "Name",
+        "ip_address": "192.168.50.5",
         "auto_config": "True"
+      },
+      "provisions": {
+        "name": "pingVictim",
+        "provision_type": "shell",
+        "commands": [
+          "pip install unique-id"
+        ]
       },
       "gui": false
     },
     "defender": {
       "os": "laravel/homestead",
       "name": "defender",
-      "isAttacker": false,
+      "is_attacker": false,
       "shared_folders": [
         "./attackerfiles",
         "/sharedfolder"
       ],
       "network_settings": {
-        "ip_address": "192.168.50.5",
-        "network_type": "type",
         "network_name": "Name",
+        "network_type": "type",
+        "ip_address": "192.168.50.5",
         "auto_config": "True"
+      },
+      "provisions": {
+        "name": "pingVictim",
+        "provision_type": "shell",
+        "commands": [
+          "pip install unique-id"
+        ]
       },
       "gui": false
     }

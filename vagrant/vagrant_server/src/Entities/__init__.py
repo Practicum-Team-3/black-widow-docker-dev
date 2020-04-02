@@ -4,4 +4,5 @@ from Entities import ExploitInfo, \
     Scenario, \
     VagrantFile, \
     VirtualMachine, \
-    VulnerabilityInfo 
+    VulnerabilityInfo, \
+    Entity

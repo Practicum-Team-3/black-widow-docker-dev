@@ -1,3 +1,4 @@
 from Managers import FileManager, \
     ScenarioManager, \
-    VagrantManager
+    VagrantManager, \
+    DatabaseManager

@@ -1,12 +1,53 @@
 from flask import Flask, jsonify, request
+from flask_pymongo import PyMongo
 import requests
 import settings
 from Managers.ScenarioManager import ScenarioManager
 
+ENVIRONMENT_DEBUG = settings.env_debug
+VAGRANT_PORT = settings.vagrant_app_port
+WIDOW_PORT = settings.widow_app_port
+VSERVER_URL = "http://"+ settings.vagrant_host_ip + ":" + VAGRANT_PORT
+
+MONGOD_IP = settings.mongodb_ip
+MONGOD_PORT = settings.mongodb_port
+
+DB_NAME = settings.db_name
+MONGODB_USERNAME = settings.mongodb_username
+MONGODB_PASSWORD = settings.mongdb_password
+MONGODB_URL = "mongodb://" + MONGOD_IP + ":" + MONGOD_PORT
+MONGODB_HOSTNAME = settings.mongodb_hostname
+
+
 application = Flask(__name__)
+application.config["MONGO_URI"] = "mongodb://" + MONGODB_USERNAME + ":" + MONGODB_PASSWORD + "@" + MONGODB_HOSTNAME + ":" + MONGOD_PORT + "/" + DB_NAME
+
+mongo = PyMongo(application)
+db = mongo.db
+
+
+UPLOAD_IP = '172.18.128.4'
+UPLOAD_PORT = '5000'
+UPLOAD_URL = 'http://' + UPLOAD_IP + ':' + UPLOAD_PORT
+
 scenario_manager = ScenarioManager()
-vserver_url = 'http://'+ settings.vagrant_host_ip + ':' + settings.vagrant_app_port
-app_port = settings.vagrant_app_port
+
+
+
+@application.route('/upload/filelist')
+def getFileList():
+  return requests.get('/'.join([UPLOAD_URL, "fileList"])).json()
+
+@application.route('/upload/deletefile/<file_name>')
+def deleteFile(file_name):
+  return requests.get('/'.join([UPLOAD_URL, "deleteFile", file_name])).json()
+
+@application.route('/upload/uploadFile', methods=['GET','POST'])
+def uploadFile():
+    print("Posted file: {}".format(request.files['file']))
+    file = request.files['file']
+    files = {'file': file.read()}
+    return requests.post('/'.join([UPLOAD_URL, "uploadFile"]), files=files).json()
 
 @application.route('/scenarios/all')
 def getScenarios():
@@ -34,14 +75,6 @@ def editScenario():
   """
   return jsonify(scenario_manager.editScenario(request.get_json()))
 
-@application.route('/scenarios/new/<scenario_name>')
-def createScenario(scenario_name):
-  """
-  Creates a new scenario which includes the folders and the scenario JSON file
-  :param scenario_name: String with the scenario name
-  :return: True if the new scenario was successfully created
-  """
-  return jsonify(scenario_manager.createScenario(scenario_name))
 
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():
@@ -49,7 +82,7 @@ def getAvailableBoxes():
   Gets the available boxes in the Vagrant context
   :return: A list of string with the available boxes
   """
-  return requests.get('/'.join([vserver_url, "vagrant", "boxes", "all"])).content
+  return requests.get('/'.join([VSERVER_URL, "vagrant", "boxes", "all"])).json()
 
 @application.route('/vagrant/<scenario_name>/all')
 def createVagrantFiles(scenario_name):
@@ -58,7 +91,7 @@ def createVagrantFiles(scenario_name):
   :param scenario_name: String with the scenario name
   :return: True if the files were successfully created
   """
-  return requests.get('/'.join([vserver_url, "vagrant", scenario_name,"all"])).content
+  return requests.get('/'.join([VSERVER_URL, "vagrant", scenario_name,"all"])).json()
 
 @application.route('/vagrant/<scenario_name>/run')
 def runVagrantUp(scenario_name):
@@ -67,7 +100,7 @@ def runVagrantUp(scenario_name):
   :param scenario_name: String with the scenario name
   :return: True if the vagrant up commands were successfully executed
   """
-  return requests.get('/'.join([vserver_url, "vagrant", scenario_name,"run"])).content
+  return requests.get('/'.join([VSERVER_URL, "vagrant", scenario_name,"run"])).json()
 
 @application.route('/vagrant/<scenario_name>/ping/<source>/<destination>')
 def testPing(scenario_name, source, destination):
@@ -78,7 +111,8 @@ def testPing(scenario_name, source, destination):
   :param destination: Destination virtual machine
   :return:
   """
-  return requests.get('/'.join([vserver_url, "vagrant", scenario_name,"ping", source, destination])).content
+  return requests.get('/'.join([VSERVER_URL, "vagrant", scenario_name,"ping", source, destination])).json()
 
 if __name__=="__main__":
-  application.run('0.0.0.0', app_port)
+  
+  application.run(host='0.0.0.0', port=WIDOW_PORT)

@@ -1,8 +1,4 @@
-VAGRANT_FILE_PATH=./vagrant/vagrant_server/src/
-cd $VAGRANT_FILE_PATH
-pip3 install \
-    flask \
-    requests \
-    request \
-    requests \
-    unique_id 
+VAGRANT_SERVER=./vagrant/vagrant_server/src/
+VAGRANT_REQUIREMENTS=../../requirements.txt
+cd $VAGRANT_SERVER
+pip3 install -r $VAGRANT_REQUIREMENTS
