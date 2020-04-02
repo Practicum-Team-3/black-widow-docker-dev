@@ -45,12 +45,18 @@ class VagrantManager(object):
         """
         response = Response()
         self.file_manager.createMachineFolders(scenario_name)
-        scenario_json = self.scenario_manager.getScenario(scenario_name)["body"]
-        for machine_name in scenario_json["machines"]:
-            machine = scenario_json["machines"][machine_name]
-            machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-            print(self.vagrant_file.vagrantFilePerMachine(machine , machine_path))
-        response.setResponse(True)
+        scenario_manager_response = self.scenario_manager.getScenario(scenario_name)
+        if scenario_manager_response["response"]:
+            scenario_json = scenario_manager_response["body"]
+
+            for machine_name in scenario_json["machines"]:
+                machine = scenario_json["machines"][machine_name]
+                machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                print(self.vagrant_file.vagrantFilePerMachine(machine , machine_path))
+                response.setResponse(True)
+        else:
+            response.setResponse(False)
+            response.setCode(scenario_manager_response["code"])
         return response.dictionary()
 
     def runVagrantUp(self, scenario_name):

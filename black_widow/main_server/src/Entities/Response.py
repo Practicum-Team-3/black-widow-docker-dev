@@ -9,7 +9,6 @@ class Response(Entity):
         self.task_id = task_id
         self.body = body
 
-    
     def setCode(self, code):
         self.code =code
     
@@ -24,7 +23,6 @@ class Response(Entity):
 
     def setResponse(self, response):
         self.response =response
-    
 
     def dictionary(self):
         """

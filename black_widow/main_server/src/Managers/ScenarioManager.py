@@ -69,7 +69,7 @@ class ScenarioManager(object):
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
         else:
             response.setResponse(False)
-            response.setCode('Scenario doesn\'t already exist')
+            response.setCode('Scenario doesn\'t exist')
             response.setBody(dict())
         return response.dictionary()
 
@@ -90,7 +90,7 @@ class ScenarioManager(object):
             response.setResponse(True)
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
         else:
-            response.setCode('Scenario doesn\'t already exist')
+            response.setCode('Scenario doesn\'t exist')
             response.setResponse(False)
 
             response.setBody(dict())
@@ -109,7 +109,7 @@ class ScenarioManager(object):
             response.setBody(deleted_scenario.dictionary())
         else:
             response.setResponse(False)
-            response.setCode('Scenario doesn\'t already exist')
+            response.setCode('Scenario doesn\'t exist')
             response.setBody(dict())
         return response.dictionary()
 
