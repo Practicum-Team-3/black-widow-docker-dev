@@ -99,14 +99,14 @@ else
     echo MONGODB_PORT=$MONGODB_PORT | tee -a .env $LOCAL_APP_PATH/.env
 fi 
 
-read -p 'Enter the name of the database that will be set up for the app [Default=softpract] '  MONGODB_DATABASE
+read -p 'Enter the name of the database that will be set up for the app [Default=soft_pract] '  MONGODB_DATABASE
 until [[  $MONGODB_DATABASE =~ $alphaNumReg || $MONGODB_DATABASE == "" ]] ; do 
     echo 'Oops! the name of the mongo database should be between 4 to 15 characters long. Only use alpha numeric characters'
     echo 
     read -p 'Enter the name of the database once again' MONGODB_DATABASE
 done
 if [[ $MONGODB_DATABASE = "" ]]; then 
-    echo MONGODB_DATABASE=softpract  | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_DATABASE=soft_pract  | tee -a .env #$LOCAL_APP_PATH/.env
 else 
     echo MONGODB_DATABASE=$MONGODB_DATABASE | tee -a .env #$LOCAL_APP_PATH/.env
 fi 
