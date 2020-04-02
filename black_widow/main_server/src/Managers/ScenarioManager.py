@@ -37,11 +37,12 @@ class ScenarioManager(object):
             self.scenarios_dict[scenario_name] = scenario
             self._saveScenarioAsJSON(scenario)
             response.setResponse(True)
-            response.setBody(scenario_dict)
+            response.setBody(scenario.dictionary())
         else:
             response.setResponse(False)
             response.setCode('Scenario already exist')
             response.setBody(dict())
+
         return response.dictionary()
 
     def getScenarios(self):
