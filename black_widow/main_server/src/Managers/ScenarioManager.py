@@ -3,8 +3,7 @@ import json
 import shutil
 from Managers.FileManager import FileManager
 from Entities.Scenario import Scenario
-
-
+from Entities.Response import Response
 
 class ScenarioManager(object):
 
@@ -31,14 +30,19 @@ class ScenarioManager(object):
         :return: True if the new scenario was successfully created
         """
         #Folder creation moved to FileManager
+        response = Response()
         if scenario_name not in self.scenarios_dict:
             self.file_manager.createScenarioFolders(scenario_name)
             scenario = Scenario(scenario_name)
             self.scenarios_dict[scenario_name] = scenario
             self._saveScenarioAsJSON(scenario)
-            return scenario.dictionary()
+            response.setResponse(True)
+            respose.setBody(scenario_dict)
         else:
-            return dict()
+            response.setResponse(False)
+            response.setCode('Scenario already exist')
+            response.setBody(dict())
+        return response
 
     def getScenarios(self):
         """
@@ -47,7 +51,10 @@ class ScenarioManager(object):
         """
         # Variables
         scenarios_dict = {"scenarios": [self.scenarios_dict[s].scenario_name for s in self.scenarios_dict]}
-        return scenarios_dict
+        response = Response()
+        response.setResponse(True)
+        respose.setBody(scenarios_dict)
+        return response
 
     def getScenario(self, scenario_name):
         """
@@ -55,10 +62,15 @@ class ScenarioManager(object):
         :param scenario_name: String with the scenario name
         :return: JSON file with the scenario info
         """
+        response = Response()
         if scenario_name in self.scenarios_dict:
-            return self.scenarios_dict[scenario_name].dictionary()
+            response.setResponse(True)
+            response.setBody(self.scenarios_dict[scenario_name].dictionary())
         else:
-            return dict()
+            response.setResponse(False)
+            response.setCode('Scenario doesn\'t already exist')
+            response.setBody(dict())
+        return response
 
     def editScenario(self, new_scenario):
         """
@@ -67,17 +79,24 @@ class ScenarioManager(object):
         :param scenario_json: JSON file with the new scenario
         :return: True if the scenario has been successfully edited, otherwise False
         """
+        response = Response()
         print(new_scenario)
         scenario_name = new_scenario["scenario_name"]
         if scenario_name in self.scenarios_dict:
             new_scenario = Scenario(scenario_name).objectFromDictionary(new_scenario)
             self.scenarios_dict[scenario_name] = new_scenario
             self._saveScenarioAsJSON(new_scenario)
-            return self.scenarios_dict[scenario_name].dictionary()
+            response.setResponse(True)
+            response.setBody(self.scenarios_dict[scenario_name].dictionary())
         else:
-            return dict()
+            response.setCode('Scenario doesn\'t already exist')
+            response.setResponse(False)
+
+            response.setBody(dict())
+        return response
 
     def deleteScenario(self, scenario_name):
+        response = Response()
         if scenario_name in self.scenarios_dict:
             deleted_scenario = self.scenarios_dict.pop(scenario_name)
             scenario_path = self.file_manager.getScenariosPath() / scenario_name
@@ -85,9 +104,13 @@ class ScenarioManager(object):
                 shutil.rmtree(scenario_path)
             except OSError as e:
                 print("Error: %s : %s" % (scenario_path, e.strerror))
-            return deleted_scenario.dictionary()
+            response.setResponse(True)
+            response.setBody(deleted_scenario.dictionary())
         else:
-            return dict()
+            response.setResponse(False)
+            response.setCode('Scenario doesn\'t already exist')
+            response.setBody(dict())
+        return response
 
     def scenarioExists(self, scenario_name):
         """
