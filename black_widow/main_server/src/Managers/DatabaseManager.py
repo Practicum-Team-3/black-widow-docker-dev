@@ -20,7 +20,7 @@ db_name = settings.db_name
 mongodb_username = settings.mongodb_username
 mongdb_password = settings.mongdb_password
 mongodb_url = "mongodb://" + mongodb_ip + ":" + mongodb_port
-'''
+
 MONGOD_IP = settings.mongodb_ip
 MONGOD_PORT = settings.mongodb_port
 
@@ -32,7 +32,7 @@ MONGODB_HOSTNAME = settings.mongodb_hostname
 print(MONGOD_IP, MONGODB_USERNAME, MONGODB_PASSWORD, MONGODB_HOSTNAME, MONGOD_PORT, DB_NAME)
 MONGODB_URL = "mongodb://" + MONGODB_USERNAME + ":" + MONGODB_PASSWORD + "@" + MONGODB_HOSTNAME + ":" + MONGOD_PORT + "/" + DB_NAME
 print(MONGODB_URL)
-
+'''
 
 class DatabaseManager():
 

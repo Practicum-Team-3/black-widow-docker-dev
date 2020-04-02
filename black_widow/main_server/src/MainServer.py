@@ -18,12 +18,16 @@ MONGODB_PASSWORD = settings.mongdb_password
 MONGODB_URL = "mongodb://" + MONGOD_IP + ":" + MONGOD_PORT
 MONGODB_HOSTNAME = settings.mongodb_hostname
 
+MONGODB_ROOT_USER = settings.mongodb_root_username
+MONGODB_ROOT_PASSWORD = settings.mongodb_root_password
+print(MONGOD_IP, MONGODB_USERNAME, MONGODB_PASSWORD, MONGODB_HOSTNAME, MONGOD_PORT, DB_NAME)
+
 
 application = Flask(__name__)
 application.config["MONGO_URI"] = "mongodb://" + MONGODB_USERNAME + ":" + MONGODB_PASSWORD + "@" + MONGODB_HOSTNAME + ":" + MONGOD_PORT + "/" + DB_NAME
 
-mongo = PyMongo(application)
-db = mongo.db
+#mongo = PyMongo(application)
+#db = mongo.db
 
 
 UPLOAD_IP = '172.18.128.4'
