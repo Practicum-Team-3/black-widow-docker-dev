@@ -45,7 +45,7 @@ class VagrantManager(object):
         """
         response = Response()
         self.file_manager.createMachineFolders(scenario_name)
-        scenario_manager_response = self.scenario_manager.getScenario(scenario_name) #Line was added
+        scenario_manager_response = self.scenario_manager.getScenario(scenario_name)
         if scenario_manager_response["response"]:
             scenario_json = scenario_manager_response["body"]
 
@@ -67,21 +67,27 @@ class VagrantManager(object):
         """
         response = Response()
         self.createVagrantFiles(scenario_name)
-        scenario_json = self.scenario_manager.getScenario(scenario_name)
-        for machine_name in scenario_json["machines"]:
-            machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-            if not os.path.exists(machine_path):  # Proceed if path exists
-                return
-            os.chdir(machine_path)
-            process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
-                                       universal_newlines=True)
-            while True:
-                output = process.stdout.readline()
-                if output == '' and process.poll() is not None:
-                    break
-                if output:
-                    print(output.strip())
-        response.setResponse(True)
+        scenario_manager_response = self.scenario_manager.getScenario(scenario_name)
+        if scenario_manager_response["response"]:
+            scenario_json = scenario_manager_response["body"]
+            for machine_name in scenario_json["machines"]:
+                machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                if not os.path.exists(machine_path):  # Proceed if path exists
+                    response.setResponse(False)
+                    response.setCode("Path doesn't exist")
+                os.chdir(machine_path)
+                process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
+                                           universal_newlines=True)
+                while True:
+                    output = process.stdout.readline()
+                    if output == '' and process.poll() is not None:
+                        break
+                    if output:
+                        print(output.strip())
+            response.setResponse(True)
+        else:
+            response.setResponse(False)
+            response.setCode(scenario_manager_response["code"])
         return response.dictionary()
 
 
