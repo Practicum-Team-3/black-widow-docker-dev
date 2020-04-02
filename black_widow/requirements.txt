@@ -1,7 +1,6 @@
 #
 ######### Pip3 Requirements for the Black Widow Server #########
 #
-######### May have to add versions specifiers
 
 flask==1.1.1
 requests==2.23.0

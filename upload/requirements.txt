@@ -1,3 +1,7 @@
+#
+########## Pip3 Requirements for Upload Server ##########
+#
+
 Flask==1.1.1
 requests==2.23.0
 Werkzeug==1.0.1
