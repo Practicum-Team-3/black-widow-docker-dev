@@ -45,9 +45,9 @@ def deleteFile(file_name):
 @application.route('/upload/uploadFile', methods=['GET','POST'])
 def uploadFile():
     print("Posted file: {}".format(request.files['file']))
-    file = request.files['file']
-    files = {'file': file.read()}
-    return requests.post('/'.join([UPLOAD_URL, "uploadFile"]), files=files).json()
+    if request.method == 'POST' :
+      f = request.files['file']
+    return requests.post('/'.join([UPLOAD_URL, "uploadFile"]), files=f)
 
 @application.route('/scenarios/all')
 def getScenarios():
