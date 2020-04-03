@@ -21,6 +21,3 @@
 *This script runs both servers. This is the equivalent of running the commands:* <br/>
 `docker-compose up` <br/>
 `python3 ./vagrant/src/VagrantServer.py` <br/>
-
-5. Once the script has finished run: <br/>
-`sudo shutdown now -r`
