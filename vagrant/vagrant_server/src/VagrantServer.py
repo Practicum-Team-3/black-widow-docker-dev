@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, request
 from Managers.VagrantManager import VagrantManager
+from CeleryApp import createApp, celery
+from Entities.Response import Response
+from Managers import Tasks
 
-application = Flask(__name__)
+#application = Flask(__name__)
+application = createApp()
 vagrant_manager = VagrantManager()
 
 @application.route('/vagrant/boxes/all')
@@ -28,7 +32,9 @@ def runVagrantUp(scenario_name):
   :param scenario_name: String with the scenario name
   :return: True if the vagrant up commands were successfully executed
   """
-  return jsonify(vagrant_manager.runVagrantUp(scenario_name))
+  task = celery.send_task('Tasks.runVagrantUp', args=[scenario_name])
+  response = Response(True, 200, "Pending", task.id)
+  return jsonify(response.dictionary())
 
 @application.route('/vagrant/<scenario_name>/ping/<source>/<destination>')
 def testPing(scenario_name, source, destination):
