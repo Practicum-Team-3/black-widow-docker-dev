@@ -17,3 +17,6 @@ http://172.18.128.1:8080/vagrant/Scenario_1/all
 http://localhost:5000/vagrant/Scenario_1/all
 http://172.18.128.1:8080/vagrant/Scenario_1/run
 
+mongo -u rootuser -p your_mongodb_password
+mongodb://rootuser:your_mongodb_password@172.18.128.3:27017
+

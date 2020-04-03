@@ -96,7 +96,3 @@ networks:
             driver: default
             config:
                 - subnet: ${SUBNET_WIDOW}/24
-
-
-            
-        

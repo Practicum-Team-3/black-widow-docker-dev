@@ -24,7 +24,7 @@
         "/sharedfolder"
       ],
       "network_settings": {
-        "network_name": "My Net",
+        "network_name": "Name",
         "network_type": "type",
         "ip_address": "192.168.50.5",
         "auto_config": "True"

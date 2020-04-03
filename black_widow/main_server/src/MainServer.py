@@ -1,38 +1,30 @@
 from flask import Flask, jsonify, request
-from flask_pymongo import PyMongo
 import requests
 import settings
 from Managers.ScenarioManager import ScenarioManager
+from Managers.DatabaseManager import DatabaseManager
 
 ENVIRONMENT_DEBUG = settings.env_debug
 VAGRANT_PORT = settings.vagrant_app_port
 WIDOW_PORT = settings.widow_app_port
 VSERVER_URL = "http://"+ settings.vagrant_host_ip + ":" + VAGRANT_PORT
 
-MONGOD_IP = settings.mongodb_ip
+MONGODB_IP = settings.mongodb_ip
 MONGOD_PORT = settings.mongodb_port
-
-DB_NAME = settings.db_name
 MONGODB_USERNAME = settings.mongodb_username
 MONGODB_PASSWORD = settings.mongdb_password
-MONGODB_URL = "mongodb://" + MONGOD_IP + ":" + MONGOD_PORT
-MONGODB_HOSTNAME = settings.mongodb_hostname
-
-
-application = Flask(__name__)
-application.config["MONGO_URI"] = "mongodb://" + MONGODB_USERNAME + ":" + MONGODB_PASSWORD + "@" + MONGODB_HOSTNAME + ":" + MONGOD_PORT + "/" + DB_NAME
-
-mongo = PyMongo(application)
-db = mongo.db
-
+MONGODB_ROOT_USERNAME = "rootuser"
+MONGODB_ROOT_PASSWORD = "your_mongodb_password"
+MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGOD_PORT
 
 UPLOAD_IP = '172.18.128.4'
 UPLOAD_PORT = '5000'
 UPLOAD_URL = 'http://' + UPLOAD_IP + ':' + UPLOAD_PORT
 
-scenario_manager = ScenarioManager()
+database_manager = DatabaseManager(url= MONGODB_COMPLETE_URL)
+scenario_manager = ScenarioManager(db_manager = database_manager)
 
-
+application = Flask(__name__)
 
 @application.route('/upload/filelist')
 def getFileList():

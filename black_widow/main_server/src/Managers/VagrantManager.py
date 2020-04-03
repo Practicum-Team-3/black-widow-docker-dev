@@ -6,7 +6,6 @@ from Managers.ScenarioManager import ScenarioManager
 from Entities.VagrantFile import VagrantFile
 from Entities.Response import Response
 
-
 class VagrantManager(object):
     def __init__(self):
         self.file_manager = FileManager()

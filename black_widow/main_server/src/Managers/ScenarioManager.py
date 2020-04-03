@@ -7,11 +7,12 @@ from Entities.Response import Response
 
 class ScenarioManager(object):
 
-    def __init__(self):
+    def __init__(self, db_manager=""):
         self.file_manager = FileManager()
-        self.scenarios_dict = self._initializeScenarios()
+        self.db_manager = db_manager
+        self.scenarios_dict = self._initializeScenariosFromDatabase()
 
-    def _initializeScenarios(self):
+    def _initializeScenariosFromDirectory(self):
         # Variables
         scenarios_dict = dict()
         scenarios = os.listdir(self.file_manager.getScenariosPath())
@@ -20,6 +21,17 @@ class ScenarioManager(object):
             with open(self.file_manager.getJSONPath(scenario_name) / json_name) as outfile:
                 scenario_dict = json.load(outfile)
             scenario = Scenario(scenario_name).objectFromDictionary(scenario_dict)
+            scenarios_dict[scenario_name] = scenario
+        return scenarios_dict
+
+    def _initializeScenariosFromDatabase(self):
+        # Variables
+        scenarios_dict = dict()
+        scenarios = self.db_manager.getScenarios()
+        for raw_scenario in scenarios:
+            del raw_scenario["_id"]
+            scenario_name = raw_scenario["scenario_name"]
+            scenario = Scenario(scenario_name).objectFromDictionary(raw_scenario)
             scenarios_dict[scenario_name] = scenario
         return scenarios_dict
 
@@ -38,6 +50,7 @@ class ScenarioManager(object):
             self._saveScenarioAsJSON(scenario)
             response.setResponse(True)
             response.setBody(scenario.dictionary())
+            self.db_manager.insertScenario(scenario.dictionary().copy())
         else:
             response.setResponse(False)
             response.setCode('Scenario already exist')
@@ -90,6 +103,7 @@ class ScenarioManager(object):
             self._saveScenarioAsJSON(new_scenario)
             response.setResponse(True)
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
+            self.db_manager.editScenario(new_scenario.dictionary().copy())
         else:
             response.setCode('Scenario doesn\'t exist')
             response.setResponse(False)
@@ -100,6 +114,7 @@ class ScenarioManager(object):
     def deleteScenario(self, scenario_name):
         response = Response()
         if scenario_name in self.scenarios_dict:
+            self.db_manager.deleteScenario(scenario_name)
             deleted_scenario = self.scenarios_dict.pop(scenario_name)
             scenario_path = self.file_manager.getScenariosPath() / scenario_name
             try:
@@ -139,3 +154,27 @@ class ScenarioManager(object):
                 outfile.write(json.dumps(scenario.dictionary(), indent=2))
                 outfile.close()
         return
+
+    def testDB(self, scenario_name):
+        response = Response()
+        if scenario_name in self.scenarios_dict:
+            scenario_dict = self.scenarios_dict[scenario_name].dictionary()
+            response.setResponse(True)
+            response.setBody(scenario_dict)
+            self.db_manager.insertScenario(scenario_dict.copy())
+            print("setDatabaseManager")
+            print(response.dictionary())
+            print("string")
+            print(json.dumps(scenario_dict, indent=4))
+        else:
+            response.setResponse(False)
+            response.setCode('Scenario doesn\'t exist')
+            response.setBody(dict())
+        return response.dictionary()
+
+    def testDB2(self):
+        response = Response()
+        print("testDB2")
+        print(self.db_manager.getScenarios())
+        response.setResponse(True)
+        return response.dictionary()
