@@ -1,0 +1,132 @@
+from CeleryApp import celery, file_manager, scenario_manager, vagrant_file
+from Entities.Response import Response
+import os
+import subprocess
+import re
+
+
+def createVagrantFiles(scenario_name):
+    """
+    Creates a vagrant file per machine in a scenario
+    :param scenario_json: String with the scenario name
+    :return: True if vagrant files were successfully created
+    """
+    response = Response()
+    file_manager.createMachineFolders(scenario_name)
+    scenario_manager_response = scenario_manager.getScenario(scenario_name)
+    if scenario_manager_response["response"]:
+        scenario_json = scenario_manager_response["body"]
+
+        for machine_name in scenario_json["machines"]:
+            machine = scenario_json["machines"][machine_name]
+            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            print(vagrant_file.vagrantFilePerMachine(machine , machine_path))
+            response.setResponse(True)
+    else:
+        response.setResponse(False)
+        response.setCode(scenario_manager_response["code"])
+    return response.dictionary()
+
+@celery.task(name = 'Tasks.runVagrantUp', bind = True)
+def runVagrantUp(self, scenario_name):
+    """
+    Executes the vagrant up command for each machine in the scenario
+    :param scenario_name: String with the scenario name
+    :return: True if the vagrant up commands were successfully executed
+    """
+    response = Response()
+    createVagrantFiles(scenario_name)
+    scenario_manager_response = scenario_manager.getScenario(scenario_name)
+    if scenario_manager_response["response"]:
+        scenario_json = scenario_manager_response["body"]
+        for machine_name in scenario_json["machines"]:
+            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            if not os.path.exists(machine_path):  # Proceed if path exists
+                response.setResponse(False)
+                response.setCode("Path doesn't exist")
+            os.chdir(machine_path)
+            process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
+                                        universal_newlines=True)
+            while True:
+                output = process.stdout.readline()
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    print(output.strip())
+        response.setResponse(True)
+    else:
+        return False
+        # response.setResponse(False)
+        # response.setCode(scenario_manager_response["code"])
+    return True
+
+
+def sendCommand(scenario_name, machine_name, command, default_timeout = 5, show_output = True):
+    #First we need to move to the directory of the given machine
+    machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+    #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
+    connect_command = "vagrant ssh -c '{}' {}".format(command, machine_name)
+    sshProcess = subprocess.Popen(connect_command,
+                                cwd=machine_path,
+                                stdin=subprocess.PIPE, 
+                                stdout = subprocess.PIPE,
+                                universal_newlines=True,
+                                shell=True,
+                                bufsize=0)
+    #wait for the execution to finish, process running on different shell
+    sshProcess.wait()
+    sshProcess.stdin.close()
+    return_code = sshProcess.returncode
+
+    if show_output:
+        for line in sshProcess.stdout:
+            if line == "END\n":
+                break
+            print(line,end="")
+
+        for line in sshProcess.stdout:
+            if line == "END\n":
+                break
+            print(line,end="")
+    return return_code
+
+def restartVM(machine_name):
+    pass
+
+def haltVM(machine_name):
+    pass
+
+
+def testNetworkPing(scenario_name, machine_name, destination_machine_name, count=1):
+    response = Response()
+    if scenario_manager.scenarioExists(scenario_name):
+        scenario_data = scenario_manager.getScenario(scenario_name)
+
+        try:
+            machines = scenario_data['machines']
+            machine_to_ping = machines[destination_machine_name]
+            machine_to_ping_network_settings = machine_to_ping['network_settings']
+            destination_ip = machine_to_ping_network_settings['ip_address']
+            ping_command = "ping -c {} {}".format(count, destination_ip)
+            return_code = sendCommand(scenario_name, machine_name, ping_command)
+            if return_code == 0:
+                print("Ping Succesful")
+                response.setResponse(True)
+                response.code("Ping Succesful")
+            elif return_code == 1:
+                print("No answer from %s" % destination_machine_name)
+                response.setResponse(False)
+                response.setCode("No answer from %s" % destination_machine_name)
+            else:
+                print("Another error as ocurred")
+                response.setResponse(False)
+                response.setCode("Another error as ocurred")
+        except KeyError:
+            print("Machines not defined for this Scenario")
+            response.setResponse(False)
+            response.setCode("Machines not defined for this Scenario")
+    else:
+        print("Scenario %s not found" % scenario_name)
+        response.setResponse(False)
+        response.setCode("Scenario %s not found" % scenario_name)
+    return response.dictionary()
