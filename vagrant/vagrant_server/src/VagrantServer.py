@@ -12,14 +12,6 @@ def getAvailableBoxes():
   """
   return jsonify(vagrant_manager.getAvailableBoxes())
 
-@application.route('/vagrant/<scenario_name>/all')
-def createVagrantFiles(scenario_name):
-  """
-  Create the vagrant files for the existing machines in the scenario
-  :param scenario_name: String with the scenario name
-  :return: True if the files were successfully created
-  """
-  return jsonify(vagrant_manager.createVagrantFiles(scenario_name))
 
 @application.route('/vagrant/<scenario_name>/run')
 def runVagrantUp(scenario_name):

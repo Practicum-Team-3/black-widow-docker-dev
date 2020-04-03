@@ -42,12 +42,11 @@ def getFileList():
 def deleteFile(file_name):
   return requests.get('/'.join([UPLOAD_URL, "deleteFile", file_name])).json()
 
-@application.route('/upload/uploadFile', methods=['GET','POST'])
+@application.route('/upload/file', methods=['GET','POST'])
 def uploadFile():
-    print("Posted file: {}".format(request.files['file']))
-    file = request.files['file']
-    files = {'file': file.read()}
-    return requests.post('/'.join([UPLOAD_URL, "uploadFile"]), files=files).json()
+  if request.method == 'POST':
+      f = request.files['file']
+  return requests.post('/'.join([UPLOAD_URL, "uploadFile"]), files=f).json()
 
 @application.route('/scenarios/newEmpty/<scenario_name>')
 def createScenario(scenario_name):
@@ -101,14 +100,6 @@ def getAvailableBoxes():
   """
   return requests.get('/'.join([VSERVER_URL, "vagrant", "boxes", "all"])).json()
 
-@application.route('/vagrant/<scenario_name>/all')
-def createVagrantFiles(scenario_name):
-  """
-  Create the vagrant files for the existing machines in the scenario
-  :param scenario_name: String with the scenario name
-  :return: True if the files were successfully created
-  """
-  return requests.get('/'.join([VSERVER_URL, "vagrant", scenario_name,"all"])).json()
 
 @application.route('/vagrant/<scenario_name>/run')
 def runVagrantUp(scenario_name):
