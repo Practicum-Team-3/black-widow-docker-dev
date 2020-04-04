@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Entities package &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Managers package" href="Managers.html" />
+    <link rel="prev" title="MainServer module" href="MainServer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="MainServer.html">MainServer module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Entities package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.Entity">Entities.Entity module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.ExploitInfo">Entities.ExploitInfo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.NetworkSettings">Entities.NetworkSettings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.Provision">Entities.Provision module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.Response">Entities.Response module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.Scenario">Entities.Scenario module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.VagrantFile">Entities.VagrantFile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.VirtualMachine">Entities.VirtualMachine module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.VulnerabilityInfo">Entities.VulnerabilityInfo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html">Managers package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Automated Malware and Exploit Data Collection Tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+      <li>Entities package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Entities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="entities-package">
+<h1>Entities package<a class="headerlink" href="#entities-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Entities.Entity">
+<span id="entities-entity-module"></span><h2>Entities.Entity module<a class="headerlink" href="#module-Entities.Entity" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.Entity.Entity">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.Entity.</code><code class="sig-name descname">Entity</code><a class="reference internal" href="_modules/Entities/Entity.html#Entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Entity.Entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="Entities.Entity.Entity.dictionary">
+<em class="property">abstract </em><code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Entity.html#Entity.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Entity.Entity.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Entity.Entity.objectFromDictionary">
+<em class="property">abstract </em><code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Entity.html#Entity.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Entity.Entity.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.ExploitInfo">
+<span id="entities-exploitinfo-module"></span><h2>Entities.ExploitInfo module<a class="headerlink" href="#module-Entities.ExploitInfo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.ExploitInfo.ExploitInfo">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.ExploitInfo.</code><code class="sig-name descname">ExploitInfo</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">type=''</em>, <em class="sig-param">download_link=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/ExploitInfo.html#ExploitInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.ExploitInfo.ExploitInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.ExploitInfo.ExploitInfo.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/ExploitInfo.html#ExploitInfo.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.ExploitInfo.ExploitInfo.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the ExploitInfo object
+:return: A dictionary with ExploitInfo data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.ExploitInfo.ExploitInfo.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/ExploitInfo.html#ExploitInfo.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.ExploitInfo.ExploitInfo.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.NetworkSettings">
+<span id="entities-networksettings-module"></span><h2>Entities.NetworkSettings module<a class="headerlink" href="#module-Entities.NetworkSettings" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.NetworkSettings.NetworkSettings">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.NetworkSettings.</code><code class="sig-name descname">NetworkSettings</code><span class="sig-paren">(</span><em class="sig-param">network_name=''</em>, <em class="sig-param">network_type=''</em>, <em class="sig-param">ip_address=''</em>, <em class="sig-param">auto_config=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/NetworkSettings.html#NetworkSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.NetworkSettings.NetworkSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.NetworkSettings.NetworkSettings.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/NetworkSettings.html#NetworkSettings.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.NetworkSettings.NetworkSettings.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the NetworkSettings object
+:return: A dictionary with NetworkSettings data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.NetworkSettings.NetworkSettings.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/NetworkSettings.html#NetworkSettings.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.NetworkSettings.NetworkSettings.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.Provision">
+<span id="entities-provision-module"></span><h2>Entities.Provision module<a class="headerlink" href="#module-Entities.Provision" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.Provision.Provision">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.Provision.</code><code class="sig-name descname">Provision</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">provision_type='shell'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Provision.html#Provision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Provision.Provision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.Provision.Provision.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Provision.html#Provision.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Provision.Provision.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Provision object
+:return: A dictionary with Provision data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.Provision.Provision.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Provision.html#Provision.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Provision.Provision.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Provision.Provision.setShellCommand">
+<code class="sig-name descname">setShellCommand</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Provision.html#Provision.setShellCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Provision.Provision.setShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a new command to be executed as part of the provisioning
+:param command: Bash command intended for provisioning a virtual machine</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.Response">
+<span id="entities-response-module"></span><h2>Entities.Response module<a class="headerlink" href="#module-Entities.Response" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.Response.Response">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.Response.</code><code class="sig-name descname">Response</code><span class="sig-paren">(</span><em class="sig-param">response=''</em>, <em class="sig-param">code=''</em>, <em class="sig-param">status=''</em>, <em class="sig-param">task_id=''</em>, <em class="sig-param">body=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.Response.Response.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Wrapper object
+:return: A dictionary with Wrapper data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.Response.Response.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Response.Response.setBody">
+<code class="sig-name descname">setBody</code><span class="sig-paren">(</span><em class="sig-param">body</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setBody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setBody" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Response.Response.setCode">
+<code class="sig-name descname">setCode</code><span class="sig-paren">(</span><em class="sig-param">code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setCode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Response.Response.setResponse">
+<code class="sig-name descname">setResponse</code><span class="sig-paren">(</span><em class="sig-param">response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setResponse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Response.Response.setStatus">
+<code class="sig-name descname">setStatus</code><span class="sig-paren">(</span><em class="sig-param">status</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Response.Response.setTask_id">
+<code class="sig-name descname">setTask_id</code><span class="sig-paren">(</span><em class="sig-param">task_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setTask_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setTask_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.Scenario">
+<span id="entities-scenario-module"></span><h2>Entities.Scenario module<a class="headerlink" href="#module-Entities.Scenario" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.Scenario.Scenario">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.Scenario.</code><code class="sig-name descname">Scenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Scenario.html#Scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Scenario.Scenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.Scenario.Scenario.addVM">
+<code class="sig-name descname">addVM</code><span class="sig-paren">(</span><em class="sig-param">vm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Scenario.html#Scenario.addVM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Scenario.Scenario.addVM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new virtual machine to this scenario
+:param vm: Object which carries the virtual machine data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.Scenario.Scenario.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Scenario.html#Scenario.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Scenario.Scenario.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Scenario object
+:return: A dictionary with Scenario data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.Scenario.Scenario.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Scenario.html#Scenario.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Scenario.Scenario.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.Scenario.Scenario.setExploitInfo">
+<code class="sig-name descname">setExploitInfo</code><span class="sig-paren">(</span><em class="sig-param">exploit_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Scenario.html#Scenario.setExploitInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Scenario.Scenario.setExploitInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the exploit info for this scenario
+:param exploit_info: Object which carries the exploit info</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.Scenario.Scenario.setVulnerabilityInfo">
+<code class="sig-name descname">setVulnerabilityInfo</code><span class="sig-paren">(</span><em class="sig-param">vulnerability_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Scenario.html#Scenario.setVulnerabilityInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Scenario.Scenario.setVulnerabilityInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the vulnerability info for this scenario
+:param vulnerability_info: Object which carries the vulnerability info</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.VagrantFile">
+<span id="entities-vagrantfile-module"></span><h2>Entities.VagrantFile module<a class="headerlink" href="#module-Entities.VagrantFile" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.VagrantFile.VagrantFile">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.VagrantFile.</code><code class="sig-name descname">VagrantFile</code><a class="reference internal" href="_modules/Entities/VagrantFile.html#VagrantFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VagrantFile.VagrantFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Entities.VagrantFile.VagrantFile.vagrantFilePerMachine">
+<code class="sig-name descname">vagrantFilePerMachine</code><span class="sig-paren">(</span><em class="sig-param">machine</em>, <em class="sig-param">machine_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VagrantFile.html#VagrantFile.vagrantFilePerMachine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VagrantFile.VagrantFile.vagrantFilePerMachine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a vagrant file for this machine
+:param machine: Object which carries the virtual machine data
+:param machine_path: Folder path to this machine
+:return: String used to write the vagrant file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.VirtualMachine">
+<span id="entities-virtualmachine-module"></span><h2>Entities.VirtualMachine module<a class="headerlink" href="#module-Entities.VirtualMachine" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.VirtualMachine.VirtualMachine">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.VirtualMachine.</code><code class="sig-name descname">VirtualMachine</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">os=''</em>, <em class="sig-param">is_attacker=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.addSharedFolder">
+<code class="sig-name descname">addSharedFolder</code><span class="sig-paren">(</span><em class="sig-param">hostPath</em>, <em class="sig-param">guestPath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.addSharedFolder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.addSharedFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the shared folder between the host and the guest
+:param hostPath: String with the host path
+:param guestPath: String with the guest path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Virtual Machine object
+:return: A dictionary with Virtual Machine data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.enableGUI">
+<code class="sig-name descname">enableGUI</code><span class="sig-paren">(</span><em class="sig-param">isVisible</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.enableGUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.enableGUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the GUI for this virtual machine
+:param isVisible: Boolean to enable or disable the GUI in a virtual machine</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.setName">
+<code class="sig-name descname">setName</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.setName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.setName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the name for this virtual machine
+:param name: String with the virtual machine name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.setNetworkSettings">
+<code class="sig-name descname">setNetworkSettings</code><span class="sig-paren">(</span><em class="sig-param">network_settings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.setNetworkSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.setNetworkSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the network settings for this virtual machine
+:param network_settings: Object which carries the network settings data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.setOS">
+<code class="sig-name descname">setOS</code><span class="sig-paren">(</span><em class="sig-param">os</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.setOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.setOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the OS for this virtual machine
+:param os: String with the virtual machine OS</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VirtualMachine.VirtualMachine.setProvision">
+<code class="sig-name descname">setProvision</code><span class="sig-paren">(</span><em class="sig-param">provision</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VirtualMachine.html#VirtualMachine.setProvision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VirtualMachine.VirtualMachine.setProvision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the provision for this virtual machine
+:param provision: Object which carries the provision data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.VulnerabilityInfo">
+<span id="entities-vulnerabilityinfo-module"></span><h2>Entities.VulnerabilityInfo module<a class="headerlink" href="#module-Entities.VulnerabilityInfo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Entities.VulnerabilityInfo.VulnerabilityInfo">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.VulnerabilityInfo.</code><code class="sig-name descname">VulnerabilityInfo</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">type=''</em>, <em class="sig-param">cve_link=''</em>, <em class="sig-param">download_link=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VulnerabilityInfo.html#VulnerabilityInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VulnerabilityInfo.VulnerabilityInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="method">
+<dt id="Entities.VulnerabilityInfo.VulnerabilityInfo.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VulnerabilityInfo.html#VulnerabilityInfo.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VulnerabilityInfo.VulnerabilityInfo.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the VulnerabilityInfo object
+:return: A dictionary with VulnerabilityInfo data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Entities.VulnerabilityInfo.VulnerabilityInfo.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param">dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VulnerabilityInfo.html#VulnerabilityInfo.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VulnerabilityInfo.VulnerabilityInfo.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Entities" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Managers.html" class="btn btn-neutral float-right" title="Managers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="MainServer.html" class="btn btn-neutral float-left" title="MainServer module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Software Practicum Team 3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
