@@ -3,10 +3,9 @@
 #
 ######### May have to add versions specifiers
 
-flask
+flask==1.1.1
 python-dotenv
-requests
-unique-id
-python-dotenv
-flask_pymongo
-pymongo
+requests==2.23.0
+unique-id==1.0.1
+Flask_Pymongo==2.3.0
+pymongo==3.10.1
