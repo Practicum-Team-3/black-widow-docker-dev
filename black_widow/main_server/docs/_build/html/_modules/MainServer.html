@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MainServer &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">src</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Automated Malware and Exploit Data Collection Tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>MainServer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for MainServer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="kn">from</span> <span class="nn">Managers.ScenarioManager</span> <span class="kn">import</span> <span class="n">ScenarioManager</span>
+<span class="kn">from</span> <span class="nn">Managers.DatabaseManager</span> <span class="kn">import</span> <span class="n">DatabaseManager</span>
+
+<span class="n">ENVIRONMENT_DEBUG</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">env_debug</span>
+<span class="n">VAGRANT_PORT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">vagrant_app_port</span>
+<span class="n">WIDOW_PORT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">widow_app_port</span>
+<span class="n">VSERVER_URL</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span><span class="o">+</span> <span class="n">settings</span><span class="o">.</span><span class="n">vagrant_host_ip</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">VAGRANT_PORT</span>
+
+<span class="n">MONGODB_IP</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">mongodb_ip</span>
+<span class="n">MONGOD_PORT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">mongodb_port</span>
+<span class="n">MONGODB_USERNAME</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">mongodb_username</span>
+<span class="n">MONGODB_PASSWORD</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">mongdb_password</span>
+<span class="n">MONGODB_ROOT_USERNAME</span> <span class="o">=</span> <span class="s2">&quot;rootuser&quot;</span>
+<span class="n">MONGODB_ROOT_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;your_mongodb_password&quot;</span>
+<span class="n">MONGODB_COMPLETE_URL</span> <span class="o">=</span> <span class="s2">&quot;mongodb://&quot;</span> <span class="o">+</span> <span class="n">MONGODB_ROOT_USERNAME</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">MONGODB_ROOT_PASSWORD</span> <span class="o">+</span> <span class="s2">&quot;@&quot;</span> <span class="o">+</span> <span class="n">MONGODB_IP</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">MONGOD_PORT</span>
+
+<span class="n">UPLOAD_IP</span> <span class="o">=</span> <span class="s1">&#39;172.18.128.4&#39;</span>
+<span class="n">UPLOAD_PORT</span> <span class="o">=</span> <span class="s1">&#39;5000&#39;</span>
+<span class="n">UPLOAD_URL</span> <span class="o">=</span> <span class="s1">&#39;http://&#39;</span> <span class="o">+</span> <span class="n">UPLOAD_IP</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="n">UPLOAD_PORT</span>
+
+<span class="n">database_manager</span> <span class="o">=</span> <span class="n">DatabaseManager</span><span class="p">(</span><span class="n">url</span><span class="o">=</span> <span class="n">MONGODB_COMPLETE_URL</span><span class="p">)</span>
+<span class="n">scenario_manager</span> <span class="o">=</span> <span class="n">ScenarioManager</span><span class="p">(</span><span class="n">db_manager</span> <span class="o">=</span> <span class="n">database_manager</span><span class="p">)</span>
+
+<span class="n">application</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="getFileList"><a class="viewcode-back" href="../MainServer.html#MainServer.getFileList">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/upload/filelist&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">getFileList</span><span class="p">():</span>
+  <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">UPLOAD_URL</span><span class="p">,</span> <span class="s2">&quot;fileList&quot;</span><span class="p">]))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="deleteFile"><a class="viewcode-back" href="../MainServer.html#MainServer.deleteFile">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/upload/deletefile/&lt;file_name&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">deleteFile</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">UPLOAD_URL</span><span class="p">,</span> <span class="s2">&quot;deleteFile&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">]))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="uploadFile"><a class="viewcode-back" href="../MainServer.html#MainServer.uploadFile">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/upload/file&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">uploadFile</span><span class="p">():</span>
+  <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+      <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+  <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">UPLOAD_URL</span><span class="p">,</span> <span class="s2">&quot;uploadFile&quot;</span><span class="p">]),</span> <span class="n">files</span><span class="o">=</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="createScenario"><a class="viewcode-back" href="../MainServer.html#MainServer.createScenario">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/scenarios/newEmpty/&lt;scenario_name&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">createScenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Creates a new scenario which includes the folders and the scenario JSON file</span>
+<span class="sd">  :param scenario_name: String with the scenario name</span>
+<span class="sd">  :return: True if the new scenario was successfully created</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">scenario_manager</span><span class="o">.</span><span class="n">newEmptyScenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="getScenarios"><a class="viewcode-back" href="../MainServer.html#MainServer.getScenarios">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/scenarios/all&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">getScenarios</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Gets the available scenarios</span>
+<span class="sd">  :return: A list of strings with the available scenarios</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">scenario_manager</span><span class="o">.</span><span class="n">getScenarios</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="getScenario"><a class="viewcode-back" href="../MainServer.html#MainServer.getScenario">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/scenarios/&lt;scenario_name&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">getScenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Gets the scenario as a JSON file</span>
+<span class="sd">  :param scenario_name: String with the scenario name</span>
+<span class="sd">  :return: JSON file with the scenario info</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">scenario_manager</span><span class="o">.</span><span class="n">getScenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="editScenario"><a class="viewcode-back" href="../MainServer.html#MainServer.editScenario">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/scenarios/edit&#39;</span><span class="p">,</span> <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">editScenario</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Edits a current scenario with a JSON file</span>
+<span class="sd">  :param scenario_name: String with the scenario name</span>
+<span class="sd">  :return: True if the scenario has been successfully edited, otherwise False</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">scenario_manager</span><span class="o">.</span><span class="n">editScenario</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="deleteScenario"><a class="viewcode-back" href="../MainServer.html#MainServer.deleteScenario">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/scenarios/delete/&lt;scenario_name&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">deleteScenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Edits a current scenario with a JSON file</span>
+<span class="sd">  :param scenario_name: String with the scenario name</span>
+<span class="sd">  :return: True if the scenario has been successfully edited, otherwise False</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">scenario_manager</span><span class="o">.</span><span class="n">deleteScenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="getAvailableBoxes"><a class="viewcode-back" href="../MainServer.html#MainServer.getAvailableBoxes">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/vagrant/boxes/all&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">getAvailableBoxes</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Gets the available boxes in the Vagrant context</span>
+<span class="sd">  :return: A list of string with the available boxes</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">VSERVER_URL</span><span class="p">,</span> <span class="s2">&quot;vagrant&quot;</span><span class="p">,</span> <span class="s2">&quot;boxes&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="runVagrantUp"><a class="viewcode-back" href="../MainServer.html#MainServer.runVagrantUp">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/vagrant/&lt;scenario_name&gt;/run&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">runVagrantUp</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Executes the vagrant up command for each machine in the scenario</span>
+<span class="sd">  :param scenario_name: String with the scenario name</span>
+<span class="sd">  :return: True if the vagrant up commands were successfully executed</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">VSERVER_URL</span><span class="p">,</span> <span class="s2">&quot;vagrant&quot;</span><span class="p">,</span> <span class="n">scenario_name</span><span class="p">,</span><span class="s2">&quot;run&quot;</span><span class="p">]))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="testPing"><a class="viewcode-back" href="../MainServer.html#MainServer.testPing">[docs]</a><span class="nd">@application</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/vagrant/&lt;scenario_name&gt;/ping/&lt;source&gt;/&lt;destination&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">testPing</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Tests network connectivity between two virtual machines</span>
+<span class="sd">  :param scenario_name: String with the scenario name</span>
+<span class="sd">  :param source: Source virtual machine</span>
+<span class="sd">  :param destination: Destination virtual machine</span>
+<span class="sd">  :return:</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">VSERVER_URL</span><span class="p">,</span> <span class="s2">&quot;vagrant&quot;</span><span class="p">,</span> <span class="n">scenario_name</span><span class="p">,</span><span class="s2">&quot;ping&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">destination</span><span class="p">]))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+  
+  <span class="n">application</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">WIDOW_PORT</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Software Practicum Team 3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
