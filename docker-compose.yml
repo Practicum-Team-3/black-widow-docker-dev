@@ -51,21 +51,82 @@ services:
             widow_dev:
                 ipv4_address: ${MONGODB_IP}
 
-    upload:
-        build: './upload'
-        hostname: upload-server
-        container_name: upload
+
+    redis:
+        build: './redis/'
+        container_name: redis
+        hostname: redis
         ports: 
-            - 8081:5000
-        volumes:
-            - type: volume
-              source: uploaddata
-              target: /opt/Upload_Server
-        working_dir: /opt/Upload_Server
-        command: /bin/bash -c "python3 UploadFile.py"
+            - ${REDIS_PORT}:${REDIS_PORT}
         networks: 
             widow_dev:
-                ipv4_address: "172.18.128.4"
+                ipv4_address: ${REDIS_HOST}
+        
+
+#     nextcloud:
+#         image: nextcloud
+#         container_name: nextcloud
+#         hostname: nextcloud
+#         ports: 
+#             - 8081:80
+#         volumes:
+#             - nextcloud:/var/www/html
+#         environment: 
+#             - POSTGRES_HOST=fileServer
+#             - POSTGRES_DB=Files
+#             - POSTGRES_USER=user
+#             - POSTGRES_PASSWORD=password
+#             - NEXTCLOUD_ADMIN_PASSWORD=password
+#             - NEXTCLOUD_ADMIN_USER=admin
+  
+#         depends_on:
+#             - file_storage_DB 
+# #########
+#         #secrets:
+#         #    - nextcloud_admin_password
+#         #    - nextcloud_admin_user
+#         #    - postgres_db
+#         #    - postgres_password
+#         #    - postgres_user
+#         networks: 
+#             widow_dev:
+#                 ipv4_address: "172.18.128.4"
+    
+    # file_storage_DB:
+    #     image: postgres
+    #     restart: always
+    #     hostname: fileServer
+    #     container_name: fileServer
+    #     volumes:
+    #     - file_storage_DB:/var/lib/postgresql/data
+    #     environment:
+    #     - POSTGRES_DB=Files
+    #     - POSTGRES_USER=user
+    #     - POSTGRES_PASSWORD=password
+    #     - POSTGRES_HOST=fileServer
+    #     #########
+    #     #secrets:
+    #     #- postgres_db
+    #     #- postgres_password
+    #     #- postgres_user
+    #     networks: 
+    #         widow_dev:
+    #             ipv4_address: "172.18.128.5"
+
+
+# secrets:
+#     nextcloud_admin_password:
+#         file: ./secrets/nextcloud_admin_password.txt # put admin password to this file
+#     nextcloud_admin_user:
+#         file: ./secrets/nextcloud_admin_user.txt # put admin username to this file
+#     postgres_db:
+#         file: ./secrets/postgres_db.txt # put postgresql db name to this file
+#     postgres_password:
+#         file: ./secrets/postgres_password.txt # put postgresql password to this file
+#     postgres_user:
+#         file: ./secrets/postgres_user.txt # put postgresql username to this file
+
+
            
 volumes:
     black_widow_vol:
@@ -79,12 +140,15 @@ volumes:
     mongodbdata:
         driver: local
 
-    uploaddata:
-        driver: local
-        driver_opts: 
-            type: none
-            device: /home/vagrant/Desktop/practicum/upload/Upload_Server
-            o: 'bind'
+    #uploaddata:
+    #    driver: local
+    #    driver_opts: 
+    #        type: none
+    #        device: ${UPLOAD_SERVER_PATH}
+    #        o: 'bind'
+        
+    # nextcloud:
+    # file_storage_DB:
 
        
 
@@ -96,3 +160,7 @@ networks:
             driver: default
             config:
                 - subnet: ${SUBNET_WIDOW}/24
+
+
+            
+        
