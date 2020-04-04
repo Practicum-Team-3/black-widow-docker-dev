@@ -7,12 +7,16 @@ WORKING_DIR=`pwd`
 LOCAL_APP_PATH=$WORKING_DIR'/black_widow/main_server/src'
 DESTINATION_APP='/opt/black_widow'
 BW_DOCKERFILE_PATH='./black_widow'
+VAGRANT_PATH=$WORKING_DIR'/vagrant/vagrant_server/src'
 
 rm -f .env
 touch .env
 
 rm -f $LOCAL_APP_PATH/.env
 touch $LOCAL_APP_PATH/.env
+
+rm -f $VAGRANT_PATH/.env
+touch $VAGRANT_PATH/.env
 
 rm -f $BW_DOCKERFILE_PATH/black_widow.env
 touch $BW_DOCKERFILE_PATH/black_widow.env
@@ -61,6 +65,38 @@ if [[ $BW_CON_PORT = "" ]]; then
 else 
     echo BW_CON_PORT=$BW_CON_PORT  | tee -a .env 
 fi 
+
+
+read -p 'Enter the IP address subnet that will be used by the Redis Host, else press enter [Default=172.18.128.7]: '  REDIS_HOST
+until [[  $REDIS_HOST =~ $ipRegex || $REDIS_HOST == "" ]] ; do 
+    echo 'Oops! Use input was not in the IP format as it should be as it should be'
+    echo 
+    read -p 'Enter the Redis host IP once again' REDIS_HOST
+done
+if [[ $REDIS_HOST = "" ]]; then 
+    echo REDIS_HOST=172.18.128.7 | tee -a .env $VAGRANT_PATH/.env
+else 
+    echo REDIS_HOST=$REDIS_HOST | tee -a .env $VAGRANT_PATH/.env
+fi 
+
+
+read -p 'Enter the port number that will be used by the Redis container, else press enter [Default=6379]: '  REDIS_PORT
+until [[  $REDIS_PORT =~ $numReg || $REDIS_PORT == "" ]] ; do 
+    echo 'Oops! Use input was not 5 digits as it should be'
+    echo 
+    read -p 'Enter the Black Widow container port once again' REDIS_PORT
+done
+if [[ $REDIS_PORT = "" ]]; then 
+    echo REDIS_PORT=6379 | tee -a .env $VAGRANT_PATH/.env
+else 
+    echo REDIS_PORT=$REDIS_PORT  | tee -a .env $VAGRANT_PATH/.env
+fi 
+
+
+
+
+
+
 
 read -p 'Enter the port number that will be used by the Black Widow APP, else press enter [Default=5000]: '  BW_APP_PORT
 until [[  $BW_APP_PORT =~ $numReg || $BW_APP_PORT == "" ]] ; do 
