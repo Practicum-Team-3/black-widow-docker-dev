@@ -4,7 +4,6 @@ import os
 import subprocess
 import re
 
-
 def createVagrantFiles(scenario_name):
     """
     Creates a vagrant file per machine in a scenario
