@@ -118,9 +118,9 @@ until [[  $MONGODB_IP =~ $ipRegex || $MONGODB_IP == "" ]] ; do
     read -p 'Enter the Black Widow Gateway once again' MONGODB_IP
 done
 if [[ $MONGODB_IP = "" ]]; then 
-    echo MONGODB_IP=172.18.128.3 | tee -a .env $LOCAL_APP_PATH/.env
+    echo MONGODB_IP=172.18.128.3 | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 else 
-    echo MONGODB_IP=$MONGODB_IP  | tee -a .env $LOCAL_APP_PATH/.env
+    echo MONGODB_IP=$MONGODB_IP  | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 fi 
 
 read -p 'Enter the port number that will be used by MongoDB for the app [Default=27017] '  MONGODB_PORT
@@ -130,9 +130,9 @@ until [[  $MONGODB_PORT =~ $numReg || $MONGODB_PORT == "" ]] ; do
     read -p 'Enter the name of the database once again' MONGODB_PORT
 done
 if [[ $MONGODB_PORT = "" ]]; then 
-    echo MONGODB_PORT=27017  | tee -a .env $LOCAL_APP_PATH/.env
+    echo MONGODB_PORT=27017  | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 else 
-    echo MONGODB_PORT=$MONGODB_PORT | tee -a .env $LOCAL_APP_PATH/.env
+    echo MONGODB_PORT=$MONGODB_PORT | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 fi 
 
 read -p 'Enter the name of the database that will be set up for the app [Default=softpract] '  MONGODB_DATABASE
@@ -142,9 +142,9 @@ until [[  $MONGODB_DATABASE =~ $alphaNumReg || $MONGODB_DATABASE == "" ]] ; do
     read -p 'Enter the name of the database once again' MONGODB_DATABASE
 done
 if [[ $MONGODB_DATABASE = "" ]]; then 
-    echo MONGODB_DATABASE=softpract  | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_DATABASE=softpract  | tee -a .env 
 else 
-    echo MONGODB_DATABASE=$MONGODB_DATABASE | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_DATABASE=$MONGODB_DATABASE | tee -a .env 
 fi 
 
 read -p 'Enter the username for mongo [Default=widowuser] '  MONGODB_USERNAME
@@ -154,9 +154,9 @@ until [[  $MONGODB_USERNAME =~ $alphaNumReg || $MONGODB_USERNAME == "" ]] ; do
     read -p 'Enter the name of the database once again' MONGODB_USERNAME
 done
 if [[ $MONGODB_USERNAME = "" ]]; then 
-    echo MONGODB_USERNAME=widowuser  | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_USERNAME=widowuser  | tee -a .env 
 else 
-    echo MONGODB_USERNAME=$MONGODB_USERNAME | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_USERNAME=$MONGODB_USERNAME | tee -a .env 
 fi 
 
 read -p 'Enter the password for the mongo database user [Default=mongodb_password] '  MONGODB_PASSWORD
@@ -166,9 +166,9 @@ until [[  $MONGODB_PASSWORD =~ $passwordReg || $MONGODB_PASSWORD == "" ]] ; do
     read -p 'Enter the name of the database once again' MONGODB_PASSWORD
 done
 if [[ $MONGODB_PASSWORD = "" ]]; then 
-    echo MONGODB_PASSWORD=mongodb_password  | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_PASSWORD=mongodb_password  | tee -a .env 
 else 
-    echo MONGODB_PASSWORD=$MONGODB_PASSWORD | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_PASSWORD=$MONGODB_PASSWORD | tee -a .env 
 fi 
 
 
@@ -179,9 +179,9 @@ until [[  $MONGODB_ROOT_USER =~ $alphaNumReg || $MONGODB_ROOT_USER == "" ]] ; do
     read -p 'Enter the name of the database once again' MONGODB_ROOT_USER
 done
 if [[ $MONGODB_ROOT_USER = "" ]]; then 
-    echo MONGODB_ROOT_USER=rootuser  | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_ROOT_USER=rootuser  | tee -a .env $VAGRANT_PATH/.env
 else 
-    echo MONGODB_ROOT_USER=$MONGODB_ROOT_USER | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_ROOT_USER=$MONGODB_ROOT_USER | tee -a .env $VAGRANT_PATH/.env
 fi
 
 read -p 'Enter the ROOT password for the database [Default=root_password] '  MONGODB_ROOT_PASSWORD
@@ -191,9 +191,9 @@ until [[  $MONGODB_ROOT_PASSWORD =~ $passwordReg || $MONGODB_ROOT_PASSWORD == ""
     read -p 'Enter the name of the database once again' MONGODB_ROOT_PASSWORD
 done
 if [[ $MONGODB_ROOT_PASSWORD = "" ]]; then 
-    echo MONGODB_ROOT_PASSWORD=your_mongodb_password  | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_ROOT_PASSWORD=your_mongodb_password  | tee -a .env $VAGRANT_PATH/.env
 else 
-    echo MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD | tee -a .env #$LOCAL_APP_PATH/.env
+    echo MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD | tee -a .env $VAGRANT_PATH/.env
 fi
 
 read -p 'Enter the mongodb hostname [Default=mongodb] '  MONGODB_HOSTNAME
