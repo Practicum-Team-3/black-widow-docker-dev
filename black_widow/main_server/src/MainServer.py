@@ -9,13 +9,13 @@ VAGRANT_PORT = settings.vagrant_app_port
 WIDOW_PORT = settings.widow_app_port
 VSERVER_URL = "http://"+ settings.vagrant_host_ip + ":" + VAGRANT_PORT
 
-MONGODB_IP = settings.mongodb_ip
-MONGOD_PORT = settings.mongodb_port
 MONGODB_USERNAME = settings.mongodb_username
 MONGODB_PASSWORD = settings.mongdb_password
+MONGODB_IP = settings.mongodb_ip
+MONGODB_PORT = settings.mongodb_port
 MONGODB_ROOT_USERNAME = "rootuser"
 MONGODB_ROOT_PASSWORD = "your_mongodb_password"
-MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGOD_PORT
+MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGODB_PORT
 
 UPLOAD_IP = '172.18.128.4'
 UPLOAD_PORT = '5000'

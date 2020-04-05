@@ -3,10 +3,20 @@ from Managers.VagrantManager import VagrantManager
 from CeleryApp import createApp, celery
 from Entities.Response import Response
 from Managers import Tasks
+from Managers.DatabaseManager import DatabaseManager
+from Entities.Response import Response
+import settings
 
-#application = Flask(__name__)
+MONGODB_IP = settings.mongodb_ip
+MONGODB_PORT = settings.mongodb_port
+MONGODB_ROOT_USERNAME = "rootuser"
+MONGODB_ROOT_PASSWORD = "your_mongodb_password"
+MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGODB_PORT
+
+database_manager = DatabaseManager(url= MONGODB_COMPLETE_URL)
+vagrant_manager = VagrantManager(database_manager)
+
 application = createApp()
-vagrant_manager = VagrantManager()
 
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():

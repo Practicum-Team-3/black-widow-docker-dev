@@ -7,10 +7,10 @@ from Entities.VagrantFile import VagrantFile
 from Entities.Response import Response
 
 class VagrantManager(object):
-    def __init__(self):
+    def __init__(self , db_manager=""):
         self.file_manager = FileManager()
         self.vagrant_file = VagrantFile()
-        self.scenario_manager = ScenarioManager()
+        self.scenario_manager = ScenarioManager(db_manager)
 
     def getAvailableBoxes(self):
         """

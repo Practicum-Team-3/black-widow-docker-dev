@@ -43,7 +43,7 @@
       "name": "defender",
       "is_attacker": false,
       "shared_folders": [
-        "./attackerfiles",
+        "./defenderfiles",
         "/sharedfolder"
       ],
       "network_settings": {
