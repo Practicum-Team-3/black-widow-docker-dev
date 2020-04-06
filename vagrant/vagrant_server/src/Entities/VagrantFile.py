@@ -1,9 +1,5 @@
-from Managers.FileManager import FileManager
 
 class VagrantFile(object):   
-  def __init__(self):
-    self.file_manager = FileManager()
-
   def vagrantFilePerMachine(self , machine , machine_path):
     """
     Creates a vagrant file for this machine

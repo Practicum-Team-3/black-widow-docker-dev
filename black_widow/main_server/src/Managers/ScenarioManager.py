@@ -53,7 +53,7 @@ class ScenarioManager(object):
             self.db_manager.insertScenario(scenario.dictionary().copy())
         else:
             response.setResponse(False)
-            response.setCode('Scenario already exist')
+            response.setReason('Scenario already exist')
             response.setBody(dict())
 
         return response.dictionary()
@@ -83,7 +83,7 @@ class ScenarioManager(object):
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
         else:
             response.setResponse(False)
-            response.setCode('Scenario doesn\'t exist')
+            response.setReason('Scenario doesn\'t exist')
             response.setBody(dict())
         return response.dictionary()
 
@@ -105,7 +105,7 @@ class ScenarioManager(object):
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
             self.db_manager.editScenario(new_scenario.dictionary().copy())
         else:
-            response.setCode('Scenario doesn\'t exist')
+            response.setReason('Scenario doesn\'t exist')
             response.setResponse(False)
 
             response.setBody(dict())
@@ -125,7 +125,7 @@ class ScenarioManager(object):
             response.setBody(deleted_scenario.dictionary())
         else:
             response.setResponse(False)
-            response.setCode('Scenario doesn\'t exist')
+            response.setReason('Scenario doesn\'t exist')
             response.setBody(dict())
         return response.dictionary()
 
@@ -154,27 +154,3 @@ class ScenarioManager(object):
                 outfile.write(json.dumps(scenario.dictionary(), indent=2))
                 outfile.close()
         return
-
-    def testDB(self, scenario_name):
-        response = Response()
-        if scenario_name in self.scenarios_dict:
-            scenario_dict = self.scenarios_dict[scenario_name].dictionary()
-            response.setResponse(True)
-            response.setBody(scenario_dict)
-            self.db_manager.insertScenario(scenario_dict.copy())
-            print("setDatabaseManager")
-            print(response.dictionary())
-            print("string")
-            print(json.dumps(scenario_dict, indent=4))
-        else:
-            response.setResponse(False)
-            response.setCode('Scenario doesn\'t exist')
-            response.setBody(dict())
-        return response.dictionary()
-
-    def testDB2(self):
-        response = Response()
-        print("testDB2")
-        print(self.db_manager.getScenarios())
-        response.setResponse(True)
-        return response.dictionary()

@@ -11,7 +11,7 @@
 '''
 
 import pymongo
-import settings
+import os
 from Managers.FileManager import FileManager
 from Entities.Scenario import Scenario
 import json

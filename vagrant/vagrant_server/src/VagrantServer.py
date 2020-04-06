@@ -1,20 +1,9 @@
-from flask import Flask, jsonify, request
-from Managers.VagrantManager import VagrantManager
+from flask import jsonify
 from CeleryApp import createApp, celery
+from Managers.VagrantManager import VagrantManager
 from Entities.Response import Response
-from Managers import Tasks
-from Managers.DatabaseManager import DatabaseManager
-from Entities.Response import Response
-import settings
 
-MONGODB_IP = settings.mongodb_ip
-MONGODB_PORT = settings.mongodb_port
-MONGODB_ROOT_USERNAME = "rootuser"
-MONGODB_ROOT_PASSWORD = "your_mongodb_password"
-MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGODB_PORT
-
-database_manager = DatabaseManager(url= MONGODB_COMPLETE_URL)
-vagrant_manager = VagrantManager(database_manager)
+vagrant_manager = VagrantManager()
 
 application = createApp()
 
@@ -34,8 +23,8 @@ def runVagrantUp(scenario_name):
   :param scenario_name: String with the scenario name
   :return: True if the vagrant up commands were successfully executed
   """
-  task = celery.send_task('Tasks.runVagrantUp', args=[scenario_name])
-  response = Response(True, 200, "Pending", task.id)
+  task = celery.send_task('VagrantManager.runVagrantUp', args=[scenario_name])
+  response = Response(True, "Sent to task queue", "Pending", task.id)
   return jsonify(response.dictionary())
 
 @application.route('/vagrant/<scenario_name>/ping/<source>/<destination>')

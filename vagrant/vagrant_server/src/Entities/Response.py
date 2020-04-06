@@ -1,29 +1,27 @@
 from Entities.Entity import Entity
 
 class Response(Entity):
-    def __init__(self, response = "", code = "", status = "", task_id = "", body = ""):
-
+    def __init__(self, response="", reason="", status="", task_id="", body=""):
         self.response = response
-        self.code = code
+        self.reason = reason
         self.status = status
         self.task_id = task_id
         self.body = body
 
-    def setCode(self, code):
-        self.code =code
-    
+    def setReason(self, reason):
+        self.reason = reason
+
     def setStatus(self, status):
-        self.status =status
+        self.status = status
 
     def setTask_id(self, task_id):
-        self.task_id =task_id
+        self.task_id = task_id
 
     def setBody(self, body):
-        self.body =body
+        self.body = body
 
     def setResponse(self, response):
-        self.response =response
-    
+        self.response = response
 
     def dictionary(self):
         """
@@ -32,7 +30,7 @@ class Response(Entity):
         """
         dicti = dict()
         dicti["response"] = self.response
-        dicti["code"] = self.code
+        dicti["reason"] = self.reason
         dicti["status"] = self.status
         dicti["task_id"] = self.task_id
         dicti["body"] = self.body
@@ -40,7 +38,7 @@ class Response(Entity):
 
     def objectFromDictionary(self, dict):
         self.response = dict["response"]
-        self.code = dict["code"]
+        self.reason = dict["reason"]
         self.status = dict["status"]
         self.task_id = dict["task_id"]
         self.body = dict["body"]

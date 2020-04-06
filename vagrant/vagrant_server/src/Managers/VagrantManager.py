@@ -2,15 +2,23 @@ import os
 import subprocess
 import re
 from Managers.FileManager import FileManager
-from Managers.ScenarioManager import ScenarioManager
+from Managers.DatabaseManager import DatabaseManager
 from Entities.VagrantFile import VagrantFile
 from Entities.Response import Response
+from CeleryApp import celery
+import settings
+
+MONGODB_IP = settings.mongodb_ip
+MONGODB_PORT = settings.mongodb_port
+MONGODB_ROOT_USERNAME = "rootuser"
+MONGODB_ROOT_PASSWORD = "your_mongodb_password"
+MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGODB_PORT
+
+file_manager = FileManager()
+db_manager = DatabaseManager(url= MONGODB_COMPLETE_URL)
+vagrant_file = VagrantFile()
 
 class VagrantManager(object):
-    def __init__(self , db_manager=""):
-        self.file_manager = FileManager()
-        self.vagrant_file = VagrantFile()
-        self.scenario_manager = ScenarioManager(db_manager)
 
     def getAvailableBoxes(self):
         """
@@ -37,44 +45,58 @@ class VagrantManager(object):
         response.setBody(boxes)
         return response.dictionary()
 
-    def createVagrantFiles(self, scenario_name):
+    @staticmethod
+    def createVagrantFiles(scenario_name):
         """
         Creates a vagrant file per machine in a scenario
         :param scenario_json: String with the scenario name
         :return: True if vagrant files were successfully created
         """
         response = Response()
-        self.file_manager.createMachineFolders(scenario_name)
-        scenario_manager_response = self.scenario_manager.getScenario(scenario_name)
-        if scenario_manager_response["response"]:
-            scenario_json = scenario_manager_response["body"]
-
+        file_manager.createMachineFolders(scenario_name)
+        scenario = db_manager.getScenario(scenario_name)
+        print('createVagrantFiles')
+        if scenario:
+            scenario_json = scenario[0]
+            print(scenario_json)
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
-                machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                print(self.vagrant_file.vagrantFilePerMachine(machine , machine_path))
-                response.setResponse(True)
+                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
+                shared_folder_path = machine_path / shared_folder_name
+                file_manager.createSharedFolders(shared_folder_path)
+                print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
+            response.setResponse(True)
         else:
             response.setResponse(False)
-            response.setCode(scenario_manager_response["code"])
+            response.setReason('Scenario doesn\'t exist')
         return response.dictionary()
 
+    @celery.task(name='VagrantManager.runVagrantUp', bind=True)
     def runVagrantUp(self, scenario_name):
         """
         Executes the vagrant up command for each machine in the scenario
         :param scenario_name: String with the scenario name
         :return: True if the vagrant up commands were successfully executed
         """
+        print(scenario_name)
         response = Response()
-        self.createVagrantFiles(scenario_name)
-        scenario_manager_response = self.scenario_manager.getScenario(scenario_name)
-        if scenario_manager_response["response"]:
-            scenario_json = scenario_manager_response["body"]
+        VagrantManager.createVagrantFiles(scenario_name)
+        scenario = db_manager.getScenario(scenario_name)
+        if scenario:
+            scenario_json = scenario[0]
             for machine_name in scenario_json["machines"]:
-                machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
+                shared_folder_path = machine_path / shared_folder_name
                 if not os.path.exists(machine_path):  # Proceed if path exists
                     response.setResponse(False)
-                    response.setCode("Path doesn't exist")
+                    response.setReason("Machine path doesn't exist")
+                    break
+                if not os.path.exists(shared_folder_path):  # Proceed if path exists
+                    response.setResponse(False)
+                    response.setReason("Shared folder path doesn't exist")
+                    break
                 os.chdir(machine_path)
                 process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
@@ -87,13 +109,13 @@ class VagrantManager(object):
             response.setResponse(True)
         else:
             response.setResponse(False)
-            response.setCode(scenario_manager_response["code"])
+            response.setReason('Scenario doesn\'t exist')
         return response.dictionary()
 
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
         #First we need to move to the directory of the given machine
-        machine_path = self.file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+        machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
         #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
         connect_command = "vagrant ssh -c '{}' {}".format(command, machine_name)
         sshProcess = subprocess.Popen(connect_command,
@@ -128,9 +150,9 @@ class VagrantManager(object):
 
     def testNetworkPing(self, scenario_name, machine_name, destination_machine_name, count=1):
         response = Response()
-        if self.scenario_manager.scenarioExists(scenario_name):
-            scenario_data = self.scenario_manager.getScenario(scenario_name)
-
+        scenario = db_manager.getScenario(scenario_name)
+        if scenario:
+            scenario_data = scenario[0]
             try:
                 machines = scenario_data['machines']
                 machine_to_ping = machines[destination_machine_name]
@@ -141,21 +163,21 @@ class VagrantManager(object):
                 if return_code == 0:
                     print("Ping Succesful")
                     response.setResponse(True)
-                    response.code("Ping Succesful")
+                    response.setReason("Ping Succesful")
                 elif return_code == 1:
                     print("No answer from %s" % destination_machine_name)
                     response.setResponse(False)
-                    response.setCode("No answer from %s" % destination_machine_name)
+                    response.setReason("No answer from %s" % destination_machine_name)
                 else:
                     print("Another error as ocurred")
                     response.setResponse(False)
-                    response.setCode("Another error as ocurred")
+                    response.setReason("Another error as ocurred")
             except KeyError:
                 print("Machines not defined for this Scenario")
                 response.setResponse(False)
-                response.setCode("Machines not defined for this Scenario")
+                response.setReason("Machines not defined for this Scenario")
         else:
             print("Scenario %s not found" % scenario_name)
             response.setResponse(False)
-            response.setCode("Scenario %s not found" % scenario_name)
+            response.setReason("Scenario %s not found" % scenario_name)
         return response.dictionary()

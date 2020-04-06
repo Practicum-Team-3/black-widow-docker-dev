@@ -1,7 +1,7 @@
 import sys
 import os
 from pathlib import Path
-
+from Entities.Response import Response
 
 class FileManager(object):
     def __init__(self):
@@ -33,7 +33,7 @@ class FileManager(object):
         :return: True if the scenario is created successfully
         """
         # Variables
-        folders = ["JSON", "Exploit", "Vulnerability", "Machines"]
+        folders = ["JSON", "Exploit", "Vulnerability"]
         scenario_path = self.getScenariosPath() / scenario_name
         try:
             os.makedirs(scenario_path)
@@ -49,8 +49,7 @@ class FileManager(object):
                 print("Creation of the directory %s failed" % path)
             else:
                 print("Successfully created the directory %s" % path)
-        result = {"result": True}
-        return result
+        return
 
     def createMachineFolders(self, scenario_json):
         """
@@ -59,7 +58,7 @@ class FileManager(object):
         :return: True if machine folders are created successfully
         """
         # Response message for the requester
-        response = {"result": True, "reason": ""}
+        response = Response()
         try:
             machines = scenario_json['machines']
             scenario_name = scenario_json['scenario_name']
@@ -81,16 +80,24 @@ class FileManager(object):
 
         except KeyError as key_not_found:
             print("%s has not been defined" % key_not_found)
-            response["result"] = False
-            response["reason"] = key_not_found + " has not been defined"
-
+            response.setResponse(False)
+            response.setReason(key_not_found, " has not been defined")
         except OSError:
-            print("Creation of machines directory failed")
-            response["result"] = False
-            response["reason"] = "OS Error"
+            print("OS Error")
+            response.setResponse(False)
+            response.setReason("OS Error")
         except:
             print("Unexpected error:", sys.exc_info()[0])
-        else:
-            print("Creation of machines directory succesful")
+        response.setResponse(True)
+        return response.dictionary()
 
-        return response
+    def createSharedFolders(self, shared_folder_path):
+        response = Response()
+        try:
+            os.makedirs(shared_folder_path)
+        except OSError:
+            print("Creation of the directory %s failed" % shared_folder_path)
+            response.setResponse(False)
+            response.setReason("Creation of the directory %s failed" % shared_folder_path)
+        response.setResponse(True)
+        return response.dictionary()
