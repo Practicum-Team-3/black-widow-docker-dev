@@ -179,9 +179,9 @@ until [[  $MONGODB_ROOT_USER =~ $alphaNumReg || $MONGODB_ROOT_USER == "" ]] ; do
     read -p 'Enter the name of the database once again' MONGODB_ROOT_USER
 done
 if [[ $MONGODB_ROOT_USER = "" ]]; then 
-    echo MONGODB_ROOT_USER=rootuser  | tee -a .env $VAGRANT_PATH/.env
+    echo MONGODB_ROOT_USER=rootuser  | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 else 
-    echo MONGODB_ROOT_USER=$MONGODB_ROOT_USER | tee -a .env $VAGRANT_PATH/.env
+    echo MONGODB_ROOT_USER=$MONGODB_ROOT_USER | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 fi
 
 read -p 'Enter the ROOT password for the database [Default=root_password] '  MONGODB_ROOT_PASSWORD
@@ -191,9 +191,9 @@ until [[  $MONGODB_ROOT_PASSWORD =~ $passwordReg || $MONGODB_ROOT_PASSWORD == ""
     read -p 'Enter the name of the database once again' MONGODB_ROOT_PASSWORD
 done
 if [[ $MONGODB_ROOT_PASSWORD = "" ]]; then 
-    echo MONGODB_ROOT_PASSWORD=your_mongodb_password  | tee -a .env $VAGRANT_PATH/.env
+    echo MONGODB_ROOT_PASSWORD=your_mongodb_password  | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 else 
-    echo MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD | tee -a .env $VAGRANT_PATH/.env
+    echo MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD | tee -a .env $LOCAL_APP_PATH/.env $VAGRANT_PATH/.env
 fi
 
 read -p 'Enter the mongodb hostname [Default=mongodb] '  MONGODB_HOSTNAME

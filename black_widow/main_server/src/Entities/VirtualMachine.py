@@ -4,11 +4,11 @@ from Entities.Entity import Entity
 
 
 class VirtualMachine(Entity):
-  def __init__(self, name="", os="", is_attacker=False):
+  def __init__(self, name="", os="", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder')):
     self.name = name
     self.os = os
     self.is_attacker = is_attacker
-    self.shared_folders = tuple()  # tuples of (hostPath, guestPath)
+    self.shared_folders =  shared_folders     # tuples of (hostPath, guestPath)
     self.network_settings = NetworkSettings()
     self.provision = Provision("pingVictim")
     self.gui = False

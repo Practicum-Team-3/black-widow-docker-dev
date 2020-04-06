@@ -1,7 +1,7 @@
 from flask import jsonify
-from CeleryApp import createApp, celery
 from Managers.VagrantManager import VagrantManager
 from Entities.Response import Response
+from CeleryApp import createApp, celery
 
 vagrant_manager = VagrantManager()
 

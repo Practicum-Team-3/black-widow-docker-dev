@@ -13,14 +13,15 @@
 import pymongo
 import os
 from Managers.FileManager import FileManager
+from Managers.ConfigManager import ConfigManager
 from Entities.Scenario import Scenario
 import json
 
 class DatabaseManager():
 
-    def __init__(self, url=""):
+    def __init__(self):
         self.file_manager = FileManager()
-        self.url = url
+        self.url = ConfigManager().mongoURL()
         self.db_name = "soft_prac"
         self.scenarios_col_name = 'scenarios'
         self.client = pymongo.MongoClient(self.url)

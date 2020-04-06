@@ -1,24 +1,17 @@
 import os
 import subprocess
 import re
+from CeleryApp import celery
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
 from Entities.VagrantFile import VagrantFile
 from Entities.Response import Response
-from CeleryApp import celery
-import settings
-
-MONGODB_IP = settings.mongodb_ip
-MONGODB_PORT = settings.mongodb_port
-MONGODB_ROOT_USERNAME = "rootuser"
-MONGODB_ROOT_PASSWORD = "your_mongodb_password"
-MONGODB_COMPLETE_URL = "mongodb://" + MONGODB_ROOT_USERNAME + ":" + MONGODB_ROOT_PASSWORD + "@" + MONGODB_IP + ":" + MONGODB_PORT
 
 file_manager = FileManager()
-db_manager = DatabaseManager(url= MONGODB_COMPLETE_URL)
+db_manager = DatabaseManager()
 vagrant_file = VagrantFile()
 
-class VagrantManager(object):
+class VagrantManager():
 
     def getAvailableBoxes(self):
         """
@@ -62,9 +55,10 @@ class VagrantManager(object):
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
-                shared_folder_path = machine_path / shared_folder_name
-                file_manager.createSharedFolders(shared_folder_path)
+                if scenario_json["machines"][machine_name]['shared_folders']:
+                    shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
+                    shared_folder_path = machine_path / shared_folder_name
+                    file_manager.createSharedFolders(shared_folder_path)
                 print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
             response.setResponse(True)
         else:

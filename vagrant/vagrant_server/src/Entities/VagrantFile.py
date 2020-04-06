@@ -1,5 +1,5 @@
 
-class VagrantFile(object):   
+class VagrantFile():
   def vagrantFilePerMachine(self , machine , machine_path):
     """
     Creates a vagrant file for this machine

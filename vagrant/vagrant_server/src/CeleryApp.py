@@ -1,18 +1,15 @@
 from celery import Celery 
 from flask import Flask
-import settings
+from Managers.ConfigManager import ConfigManager
 
-REDIS_HOST = settings.redis_host
-REDIS_PORT = settings.redis_port
-
-REDIS_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-celery = Celery(__name__, broker = REDIS_URL, include = ['Managers.VagrantManager'])
+redis_url = ConfigManager().redisURL()
+celery = Celery(__name__, broker = redis_url, include = ['Managers.VagrantManager'])
 
 
 def createApp():
     app = Flask(__name__)
-    app.config['CELERY_BROKER_URL'] = REDIS_URL
-    app.config['CELERY_RESULT_BACKEND'] = REDIS_URL
+    app.config['CELERY_BROKER_URL'] = redis_url
+    app.config['CELERY_RESULT_BACKEND'] = redis_url
     celery.conf.update(app.config)
 
     return app

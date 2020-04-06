@@ -11,11 +11,12 @@
 '''
 
 import pymongo
+from Managers.ConfigManager import ConfigManager
 
 class DatabaseManager():
 
-    def __init__(self, url=""):
-        self.url = url
+    def __init__(self):
+        self.url = ConfigManager().mongoURL()
         self.db_name = "soft_prac"
         self.scenarios_col_name = 'scenarios'
         self.client = pymongo.MongoClient(self.url)

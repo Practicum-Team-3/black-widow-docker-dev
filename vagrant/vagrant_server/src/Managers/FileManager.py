@@ -1,6 +1,7 @@
 import sys
 import os
 from pathlib import Path
+import shutil
 from Entities.Response import Response
 
 class FileManager(object):
@@ -49,6 +50,14 @@ class FileManager(object):
                 print("Creation of the directory %s failed" % path)
             else:
                 print("Successfully created the directory %s" % path)
+        return
+
+    def deleteScenariosFolder(self, scenario_name):
+        scenario_path = self.getScenariosPath() / scenario_name
+        try:
+            shutil.rmtree(scenario_path)
+        except OSError as e:
+            print("Error: %s : %s" % (scenario_path, e.strerror))
         return
 
     def createMachineFolders(self, scenario_json):

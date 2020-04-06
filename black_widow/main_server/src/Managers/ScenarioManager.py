@@ -1,15 +1,15 @@
 import os
 import json
-import shutil
 from Managers.FileManager import FileManager
+from Managers.DatabaseManager import DatabaseManager
 from Entities.Scenario import Scenario
 from Entities.Response import Response
 
 class ScenarioManager(object):
 
-    def __init__(self, db_manager=""):
+    def __init__(self):
         self.file_manager = FileManager()
-        self.db_manager = db_manager
+        self.db_manager = DatabaseManager()
         self.scenarios_dict = self._initializeScenariosFromDatabase()
 
     def _initializeScenariosFromDirectory(self):
@@ -44,13 +44,13 @@ class ScenarioManager(object):
         #Folder creation moved to FileManager
         response = Response()
         if scenario_name not in self.scenarios_dict:
-            self.file_manager.createScenarioFolders(scenario_name)
+            #self.file_manager.createScenarioFolders(scenario_name)
             scenario = Scenario(scenario_name)
             self.scenarios_dict[scenario_name] = scenario
-            self._saveScenarioAsJSON(scenario)
+            #self._saveScenarioAsJSON(scenario)
+            self.db_manager.insertScenario(scenario.dictionary().copy())
             response.setResponse(True)
             response.setBody(scenario.dictionary())
-            self.db_manager.insertScenario(scenario.dictionary().copy())
         else:
             response.setResponse(False)
             response.setReason('Scenario already exist')
@@ -100,10 +100,10 @@ class ScenarioManager(object):
         if scenario_name in self.scenarios_dict:
             new_scenario = Scenario(scenario_name).objectFromDictionary(new_scenario)
             self.scenarios_dict[scenario_name] = new_scenario
-            self._saveScenarioAsJSON(new_scenario)
+            #self._saveScenarioAsJSON(new_scenario)
+            self.db_manager.editScenario(new_scenario.dictionary().copy())
             response.setResponse(True)
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
-            self.db_manager.editScenario(new_scenario.dictionary().copy())
         else:
             response.setReason('Scenario doesn\'t exist')
             response.setResponse(False)
@@ -114,13 +114,9 @@ class ScenarioManager(object):
     def deleteScenario(self, scenario_name):
         response = Response()
         if scenario_name in self.scenarios_dict:
-            self.db_manager.deleteScenario(scenario_name)
             deleted_scenario = self.scenarios_dict.pop(scenario_name)
-            scenario_path = self.file_manager.getScenariosPath() / scenario_name
-            try:
-                shutil.rmtree(scenario_path)
-            except OSError as e:
-                print("Error: %s : %s" % (scenario_path, e.strerror))
+            #self.file_manager.deleteScenariosFolder(scenario_name)
+            self.db_manager.deleteScenario(scenario_name)
             response.setResponse(True)
             response.setBody(deleted_scenario.dictionary())
         else:
