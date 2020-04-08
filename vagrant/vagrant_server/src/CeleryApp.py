@@ -5,7 +5,6 @@ from Managers.ConfigManager import ConfigManager
 redis_url = ConfigManager().redisURL()
 celery = Celery(__name__, broker = redis_url, include = ['Managers.VagrantManager'])
 
-
 def createApp():
     app = Flask(__name__)
     app.config['CELERY_BROKER_URL'] = redis_url

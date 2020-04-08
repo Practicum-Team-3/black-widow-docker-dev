@@ -8,6 +8,7 @@ class FileManager(object):
         # Paths
         self.current_path = Path.cwd()
         self.scenarios_path = self.current_path / "scenarios"
+        self.exploits_path = self.current_path / "exploits"
 
     def getCurrentPath(self):
         """
@@ -23,8 +24,18 @@ class FileManager(object):
         """
         return self.scenarios_path
 
-    def getJSONPath(self, scenario_name):
+    def getExploitsPath(self):
+        """
+        Gets the exploits folder path
+        :return: String with the exploit project path
+        """
+        return self.exploits_path
+
+    def getScenarioJSONPath(self, scenario_name):
         return self.scenarios_path / scenario_name / "JSON"
+
+    def getExploitJSONPath(self, exploit_name):
+        return self.exploits_path / exploit_name
 
     def createScenarioFolders(self, scenario_name):
         """

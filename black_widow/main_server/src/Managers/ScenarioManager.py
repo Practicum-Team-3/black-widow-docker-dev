@@ -5,26 +5,26 @@ from Managers.DatabaseManager import DatabaseManager
 from Entities.Scenario import Scenario
 from Entities.Response import Response
 
-class ScenarioManager(object):
+class ScenarioManager():
 
-    def __init__(self):
+    def __init__(self, db_manager = DatabaseManager()):
         self.file_manager = FileManager()
-        self.db_manager = DatabaseManager()
-        self.scenarios_dict = self._initializeScenariosFromDatabase()
+        self.db_manager = db_manager
+        self.scenarios_dict = self._initializeFromDatabase()
 
-    def _initializeScenariosFromDirectory(self):
+    def _initializeFromDirectory(self):
         # Variables
         scenarios_dict = dict()
         scenarios = os.listdir(self.file_manager.getScenariosPath())
         for scenario_name in scenarios:
             json_name = ''.join([scenario_name , ".json"])
-            with open(self.file_manager.getJSONPath(scenario_name) / json_name) as outfile:
+            with open(self.file_manager.getScenarioJSONPath(scenario_name) / json_name) as outfile:
                 scenario_dict = json.load(outfile)
             scenario = Scenario(scenario_name).objectFromDictionary(scenario_dict)
             scenarios_dict[scenario_name] = scenario
         return scenarios_dict
 
-    def _initializeScenariosFromDatabase(self):
+    def _initializeFromDatabase(self):
         # Variables
         scenarios_dict = dict()
         scenarios = self.db_manager.getScenarios()
@@ -35,7 +35,7 @@ class ScenarioManager(object):
             scenarios_dict[scenario_name] = scenario
         return scenarios_dict
 
-    def newEmptyScenario(self, scenario_name):
+    def newEmpty(self, scenario_name):
         """
         Creates a new scenario which includes the folders and the scenario JSON file
         :param scenario_name: String with the scenario name
@@ -58,7 +58,7 @@ class ScenarioManager(object):
 
         return response.dictionary()
 
-    def getScenarios(self):
+    def getAll(self):
         """
         Gets the available scenarios
         :return: A list of strings with the available scenarios
@@ -71,7 +71,7 @@ class ScenarioManager(object):
         return response.dictionary()
 
 
-    def getScenario(self, scenario_name):
+    def getOne(self, scenario_name):
         """
         Gets the scenario as a JSON file
         :param scenario_name: String with the scenario name
@@ -87,7 +87,7 @@ class ScenarioManager(object):
             response.setBody(dict())
         return response.dictionary()
 
-    def editScenario(self, new_scenario):
+    def editOne(self, scenario_json):
         """
         Edits a current scenario with a JSON file
         :param scenario_name: String with the scenario name
@@ -95,13 +95,13 @@ class ScenarioManager(object):
         :return: True if the scenario has been successfully edited, otherwise False
         """
         response = Response()
-        print(new_scenario)
-        scenario_name = new_scenario["scenario_name"]
+        print(scenario_json)
+        scenario_name = scenario_json["scenario_name"]
         if scenario_name in self.scenarios_dict:
-            new_scenario = Scenario(scenario_name).objectFromDictionary(new_scenario)
-            self.scenarios_dict[scenario_name] = new_scenario
+            scenario_json = Scenario(scenario_name).objectFromDictionary(scenario_json)
+            self.scenarios_dict[scenario_name] = scenario_json
             #self._saveScenarioAsJSON(new_scenario)
-            self.db_manager.editScenario(new_scenario.dictionary().copy())
+            self.db_manager.editScenario(scenario_json.dictionary().copy())
             response.setResponse(True)
             response.setBody(self.scenarios_dict[scenario_name].dictionary())
         else:
@@ -111,7 +111,7 @@ class ScenarioManager(object):
             response.setBody(dict())
         return response.dictionary()
 
-    def deleteScenario(self, scenario_name):
+    def deleteOne(self, scenario_name):
         response = Response()
         if scenario_name in self.scenarios_dict:
             deleted_scenario = self.scenarios_dict.pop(scenario_name)
@@ -144,7 +144,7 @@ class ScenarioManager(object):
                 return scenario_json_path
 
     def _saveScenarioAsJSON(self, scenario):
-        scenario_json_path = self.file_manager.getJSONPath(scenario.scenario_name) /  ''.join([scenario.scenario_name, ".json"])
+        scenario_json_path = self.file_manager.getScenarioJSONPath(scenario.scenario_name) / ''.join([scenario.scenario_name, ".json"])
         if scenario_json_path:
             with open(scenario_json_path, 'w+') as outfile:
                 outfile.write(json.dumps(scenario.dictionary(), indent=2))

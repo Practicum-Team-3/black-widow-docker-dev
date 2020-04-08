@@ -38,6 +38,38 @@ class VagrantManager():
         response.setBody(boxes)
         return response.dictionary()
 
+    @celery.task(name='VagrantManager.addBoxByName', bind=True)
+    def addBoxByName(self, box_name):
+        response = Response()
+        process = subprocess.Popen(['vagrant', 'box', 'add', box_name], stdout=subprocess.PIPE,
+                                   universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+        response.setResponse(True)
+        response.setStatus(self.AsyncResult(self.request.id).state)
+        response.setTaskID(self.request.id)
+        return response.dictionary()
+
+    @celery.task(name='VagrantManager.removeBoxByName', bind=True)
+    def removeBoxByName(self, box_name):
+        response = Response()
+        process = subprocess.Popen(['vagrant', 'box', 'remove', box_name], stdout=subprocess.PIPE,
+                                   universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+        response.setResponse(True)
+        response.setStatus(self.AsyncResult(self.request.id).state)
+        response.setTaskID(self.request.id)
+        return response.dictionary()
+
     @staticmethod
     def createVagrantFiles(scenario_name):
         """
@@ -47,7 +79,7 @@ class VagrantManager():
         """
         response = Response()
         file_manager.createMachineFolders(scenario_name)
-        scenario = db_manager.getScenario(scenario_name)
+        scenario = db_manager.getOne(scenario_name)
         print('createVagrantFiles')
         if scenario:
             scenario_json = scenario[0]
@@ -76,7 +108,7 @@ class VagrantManager():
         print(scenario_name)
         response = Response()
         VagrantManager.createVagrantFiles(scenario_name)
-        scenario = db_manager.getScenario(scenario_name)
+        scenario = db_manager.getOne(scenario_name)
         if scenario:
             scenario_json = scenario[0]
             for machine_name in scenario_json["machines"]:
@@ -104,6 +136,8 @@ class VagrantManager():
         else:
             response.setResponse(False)
             response.setReason('Scenario doesn\'t exist')
+        response.setStatus(self.state)
+        response.setTaskID(self.id)
         return response.dictionary()
 
 
@@ -144,7 +178,7 @@ class VagrantManager():
 
     def testNetworkPing(self, scenario_name, machine_name, destination_machine_name, count=1):
         response = Response()
-        scenario = db_manager.getScenario(scenario_name)
+        scenario = db_manager.getOne(scenario_name)
         if scenario:
             scenario_data = scenario[0]
             try:

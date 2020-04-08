@@ -14,7 +14,7 @@ class Response(Entity):
     def setStatus(self, status):
         self.status = status
 
-    def setTask_id(self, task_id):
+    def setTaskID(self, task_id):
         self.task_id = task_id
 
     def setBody(self, body):

@@ -1,14 +1,17 @@
 from flask import Flask, jsonify, request
 import requests
 from Managers.ScenarioManager import ScenarioManager
+from Managers.ExploitManager import ExploitManager
 from Managers.ConfigManager import ConfigManager
 
 upload_url = ConfigManager().uploadURL()
 vagrant_url = ConfigManager().vagrantURL()
 scenario_manager = ScenarioManager()
+exploit_manager = ExploitManager()
 
 application = Flask(__name__)
 
+#Upload files
 @application.route('/upload/filelist')
 def getFileList():
   return requests.get('/'.join([upload_url, "fileList"])).json()
@@ -23,6 +26,7 @@ def uploadFile():
       f = request.files['file']
   return requests.post('/'.join([upload_url, "uploadFile"]), files=f).json()
 
+#Scenarios
 @application.route('/scenarios/newEmpty/<scenario_name>')
 def createScenario(scenario_name):
   """
@@ -30,7 +34,7 @@ def createScenario(scenario_name):
   :param scenario_name: String with the scenario name
   :return: True if the new scenario was successfully created
   """
-  return jsonify(scenario_manager.newEmptyScenario(scenario_name))
+  return jsonify(scenario_manager.newEmpty(scenario_name))
 
 @application.route('/scenarios/all')
 def getScenarios():
@@ -38,7 +42,7 @@ def getScenarios():
   Gets the available scenarios
   :return: A list of strings with the available scenarios
   """
-  return jsonify(scenario_manager.getScenarios())
+  return jsonify(scenario_manager.getAll())
 
 @application.route('/scenarios/<scenario_name>')
 def getScenario(scenario_name):
@@ -47,7 +51,7 @@ def getScenario(scenario_name):
   :param scenario_name: String with the scenario name
   :return: JSON file with the scenario info
   """
-  return jsonify(scenario_manager.getScenario(scenario_name))
+  return jsonify(scenario_manager.getOne(scenario_name))
 
 @application.route('/scenarios/edit', methods = ['POST'])
 def editScenario():
@@ -56,7 +60,7 @@ def editScenario():
   :param scenario_name: String with the scenario name
   :return: True if the scenario has been successfully edited, otherwise False
   """
-  return jsonify(scenario_manager.editScenario(request.get_json()))
+  return jsonify(scenario_manager.editOne(request.get_json()))
 
 @application.route('/scenarios/delete/<scenario_name>')
 def deleteScenario(scenario_name):
@@ -65,8 +69,56 @@ def deleteScenario(scenario_name):
   :param scenario_name: String with the scenario name
   :return: True if the scenario has been successfully edited, otherwise False
   """
-  return jsonify(scenario_manager.deleteScenario(scenario_name))
+  return jsonify(scenario_manager.deleteOne(scenario_name))
 
+#Exploits
+@application.route('/exploits/newEmpty/<exploit_name>')
+def createExploit(exploit_name):
+  """
+  Creates a new scenario which includes the folders and the scenario JSON file
+  :param scenario_name: String with the scenario name
+  :return: True if the new scenario was successfully created
+  """
+  return jsonify(exploit_manager.newEmpty(exploit_name))
+
+@application.route('/exploits/all')
+def getExploits():
+  """
+  Gets the available scenarios
+  :return: A list of strings with the available scenarios
+  """
+  return jsonify(exploit_manager.getAll())
+
+@application.route('/exploits/<exploit_name>')
+def getExploit(exploit_name):
+  """
+  Gets the scenario as a JSON file
+  :param exploit_name: String with the scenario name
+  :return: JSON file with the scenario info
+  """
+  return jsonify(exploit_manager.getOne(exploit_name))
+
+@application.route('/exploits/edit', methods = ['POST'])
+def editExploit():
+  """
+  Edits a current scenario with a JSON file
+  :param scenario_name: String with the scenario name
+  :return: True if the scenario has been successfully edited, otherwise False
+  """
+  return jsonify(exploit_manager.editOne(request.get_json()))
+
+@application.route('/exploits/delete/<exploit_name>')
+def deleteExploit(exploit_name):
+  """
+  Edits a current scenario with a JSON file
+  :param exploit_name: String with the scenario name
+  :return: True if the scenario has been successfully edited, otherwise False
+  """
+  return jsonify(exploit_manager.deleteOne(exploit_name))
+
+#Vulnerabilities
+
+#Vagrant
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():
   """
@@ -75,6 +127,15 @@ def getAvailableBoxes():
   """
   return requests.get('/'.join([vagrant_url, "vagrant", "boxes", "all"])).json()
 
+@application.route('/vagrant/boxes/add', methods = ['POST'])
+def addBoxByName():
+  json_file = request.get_json()
+  return requests.post('/'.join([vagrant_url, "vagrant", "boxes", "add"]), json = json_file).json()
+
+@application.route('/vagrant/boxes/remove', methods = ['POST'])
+def removeBoxByName():
+  json_file = request.get_json()
+  return requests.post('/'.join([vagrant_url, "vagrant", "boxes", "remove"]), json = json_file).json()
 
 @application.route('/vagrant/<scenario_name>/run')
 def runVagrantUp(scenario_name):

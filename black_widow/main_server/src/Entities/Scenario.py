@@ -1,8 +1,8 @@
 import json
 from unique_id import get_unique_id
 from datetime import datetime
-from Entities.ExploitInfo import ExploitInfo
-from Entities.VulnerabilityInfo import VulnerabilityInfo
+from Entities.Exploit import Exploit
+from Entities.Vulnerability import Vulnerability
 from Entities.VirtualMachine import VirtualMachine
 from Entities.Entity import Entity
 
@@ -16,23 +16,23 @@ class Scenario(Entity):
         now = datetime.now()
         self.creation_date = now.strftime("%d/%m/%Y %H:%M:%S")
         self.last_accessed = self.creation_date[:]
-        self.exploit_info = ExploitInfo()
-        self.vulnerability_info = VulnerabilityInfo()
+        self.exploit = Exploit()
+        self.vulnerability = Vulnerability()
         self.machines = dict()
 
-    def setExploitInfo(self, exploit_info):
+    def setExploit(self, exploit):
         """
         Sets the exploit info for this scenario
         :param exploit_info: Object which carries the exploit info
         """
-        self.exploit_info = exploit_info
+        self.exploit = exploit
 
-    def setVulnerabilityInfo(self, vulnerability_info):
+    def setVulnerability(self, vulnerability):
         """
         Sets the vulnerability info for this scenario
         :param vulnerability_info: Object which carries the vulnerability info
         """
-        self.vulnerability_info = vulnerability_info
+        self.vulnerability = vulnerability
 
     def addVM(self, vm):
         """
@@ -51,8 +51,8 @@ class Scenario(Entity):
         scenario_dict["scenario_id"] = self.scenario_id
         scenario_dict["creation_date"] = self.creation_date
         scenario_dict["last_accessed"] = self.last_accessed
-        scenario_dict["exploit_info"] = self.exploit_info.dictionary()
-        scenario_dict["vulnerability_info"] = self.vulnerability_info.dictionary()
+        scenario_dict["exploit"] = self.exploit.dictionary()
+        scenario_dict["vulnerability"] = self.vulnerability.dictionary()
         scenario_dict["machines"] = dict()
         for name in self.machines:
             scenario_dict["machines"][name] = self.machines[name].dictionary()
@@ -62,8 +62,8 @@ class Scenario(Entity):
         self.scenario_id = dict["scenario_id"]
         self.creation_date = dict["creation_date"]
         self.last_accessed = dict["last_accessed"]
-        self.exploit_info = ExploitInfo().objectFromDictionary(dict["exploit_info"])
-        self.vulnerability_info = VulnerabilityInfo().objectFromDictionary(dict["vulnerability_info"])
+        self.exploit = Exploit().objectFromDictionary(dict["exploit"])
+        self.vulnerability = Vulnerability().objectFromDictionary(dict["vulnerability"])
         for m in dict["machines"]:
             self.machines[m] = VirtualMachine().objectFromDictionary(dict["machines"][m])
         return self

@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from Managers.VagrantManager import VagrantManager
 from Entities.Response import Response
 from CeleryApp import createApp, celery
@@ -15,6 +15,19 @@ def getAvailableBoxes():
   """
   return jsonify(vagrant_manager.getAvailableBoxes())
 
+@application.route('/vagrant/boxes/add', methods = ['POST'])
+def addBoxByName():
+  box_name = request.get_json()['box_name']
+  task = celery.send_task('VagrantManager.addBoxByName', args=[box_name])
+  response = Response(True, "Sent to task queue", task.state, task.id)
+  return jsonify(response.dictionary())
+
+@application.route('/vagrant/boxes/remove', methods = ['POST'])
+def removeBoxByName():
+  box_name = request.get_json()['box_name']
+  task = celery.send_task('VagrantManager.removeBoxByName', args=[box_name])
+  response = Response(True, "Sent to task queue", task.state, task.id)
+  return jsonify(response.dictionary())
 
 @application.route('/vagrant/<scenario_name>/run')
 def runVagrantUp(scenario_name):

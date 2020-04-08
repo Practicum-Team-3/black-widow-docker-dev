@@ -19,10 +19,17 @@ class DatabaseManager():
         self.url = ConfigManager().mongoURL()
         self.db_name = "soft_prac"
         self.scenarios_col_name = 'scenarios'
+        self.exploits_col_name = 'exploits'
+        self.vulnerabilities_col_name = 'vulnerabilities'
         self.client = pymongo.MongoClient(self.url)
         self.db = self.client[self.db_name]
         self.scenarios_col = self.db[self.scenarios_col_name]
+        self.exploits_col = self.db[self.exploits_col_name]
+        self.vulnerabilities_col = self.db[self.vulnerabilities_col_name]
 
+    #CRUD: CREATE, READ, UPDATE and DELETE
+
+    #Scenarios
     def insertScenario(self, scenario_json):
         doc = self.scenarios_col.insert_one(scenario_json)
         return doc.inserted_id
@@ -46,4 +53,56 @@ class DatabaseManager():
     def deleteScenario(self, scenario_name):
         query = {'scenario_name': scenario_name}
         doc = self.scenarios_col.delete_one(query)
+        return doc.deleted_count
+
+    #Exploits
+    def insertExploit(self, exploit_json):
+        doc = self.exploits_col.insert_one(exploit_json)
+        return doc.inserted_id
+
+    def getExploitNames(self):
+        return [doc['name'] for doc in self.exploits_col.find()]
+
+    def getExploits(self):
+        return [doc for doc in self.exploits_col.find()]
+
+    def getExploit(self, exploit_name):
+        query = {'name': exploit_name}
+        return [doc for doc in self.exploits_col.find(query)]
+
+    def editExploit(self, exploit_json):
+        query = {'name': exploit_json['name']}
+        new_doc = {"$set": exploit_json }
+        doc = self.exploits_col.update_one(query, new_doc)
+        return doc.modified_count
+
+    def deleteExploit(self, exploit_name):
+        query = {'name': exploit_name}
+        doc = self.exploits_col.delete_one(query)
+        return doc.deleted_count
+
+    #Vulnerabilities
+    def insertVulnerability(self, vulnerability_json):
+        doc = self.vulnerabilities_col.insert_one(vulnerability_json)
+        return doc.inserted_id
+
+    def getVulnerabilityNames(self):
+        return [doc['name'] for doc in self.vulnerabilities_col.find()]
+
+    def getVulnerabilities(self):
+        return [doc for doc in self.vulnerabilities_col.find()]
+
+    def getVulnerability(self, vulnerability_name):
+        query = {'name': vulnerability_name}
+        return [doc for doc in self.vulnerabilities_col.find(query)]
+
+    def editVulnerability(self, vulnerability_json):
+        query = {'name': vulnerability_json['name']}
+        new_doc = {"$set": vulnerability_json }
+        doc = self.vulnerabilities_col.update_one(query, new_doc)
+        return doc.modified_count
+
+    def deleteVulnerability(self, vulnerability_name):
+        query = {'name': vulnerability_name}
+        doc = self.vulnerabilities_col.delete_one(query)
         return doc.deleted_count
