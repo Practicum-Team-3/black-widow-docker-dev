@@ -10,6 +10,7 @@ class FileManager(object):
         self.current_path = Path.cwd()
         self.scenarios_path = self.current_path / "scenarios"
         self.exploits_path = self.current_path / "exploits"
+        self.vulnerabilities_path = self.current_path / "vulnerabilities"
 
     def getCurrentPath(self):
         """
@@ -37,6 +38,9 @@ class FileManager(object):
 
     def getExploitJSONPath(self, exploit_name):
         return self.exploits_path / exploit_name
+
+    def getVulnerabilityJSONPath(self, vulnerability_name):
+        return self.vulnerabilities_path / vulnerability_name
 
     def createScenarioFolders(self, scenario_name):
         """

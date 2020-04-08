@@ -1,0 +1,6 @@
+{
+    "name": "rConfig_3_9_searchColumn_SQL_Injection",
+    "type": "WEBAPPS",
+    "cve_link": "test_cve_link",
+    "download_link": "https://www.exploit-db.com/apps/604788a0877e4ffdb0451142cb8b955c-rconfig-3.9.4.zip"
+}

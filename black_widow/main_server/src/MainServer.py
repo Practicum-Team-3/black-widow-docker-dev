@@ -2,12 +2,14 @@ from flask import Flask, jsonify, request
 import requests
 from Managers.ScenarioManager import ScenarioManager
 from Managers.ExploitManager import ExploitManager
+from Managers.VulnerabilityManager import VulnerabilityManager
 from Managers.ConfigManager import ConfigManager
 
 upload_url = ConfigManager().uploadURL()
 vagrant_url = ConfigManager().vagrantURL()
 scenario_manager = ScenarioManager()
 exploit_manager = ExploitManager()
+vulnerability_manager = VulnerabilityManager()
 
 application = Flask(__name__)
 
@@ -117,6 +119,49 @@ def deleteExploit(exploit_name):
   return jsonify(exploit_manager.deleteOne(exploit_name))
 
 #Vulnerabilities
+@application.route('/vulnerabilities/newEmpty/<vulnerability_name>')
+def createVulnerability(vulnerability_name):
+  """
+  Creates a new scenario which includes the folders and the scenario JSON file
+  :param scenario_name: String with the scenario name
+  :return: True if the new scenario was successfully created
+  """
+  return jsonify(vulnerability_manager.newEmpty(vulnerability_name))
+
+@application.route('/vulnerabilities/all')
+def getVulnerabilities():
+  """
+  Gets the available scenarios
+  :return: A list of strings with the available scenarios
+  """
+  return jsonify(vulnerability_manager.getAll())
+
+@application.route('/vulnerabilities/<vulnerability_name>')
+def getVulnerability(vulnerability_name):
+  """
+  Gets the scenario as a JSON file
+  :param vulnerability_name: String with the scenario name
+  :return: JSON file with the scenario info
+  """
+  return jsonify(vulnerability_manager.getOne(vulnerability_name))
+
+@application.route('/vulnerabilities/edit', methods = ['POST'])
+def editVulnearbility():
+  """
+  Edits a current scenario with a JSON file
+  :param scenario_name: String with the scenario name
+  :return: True if the scenario has been successfully edited, otherwise False
+  """
+  return jsonify(vulnerability_manager.editOne(request.get_json()))
+
+@application.route('/vulnerabilities/delete/<vulnerability_name>')
+def deleteVulnerability(vulnerability_name):
+  """
+  Edits a current scenario with a JSON file
+  :param vulnerability_name: String with the scenario name
+  :return: True if the scenario has been successfully edited, otherwise False
+  """
+  return jsonify(vulnerability_manager.deleteOne(vulnerability_name))
 
 #Vagrant
 @application.route('/vagrant/boxes/all')

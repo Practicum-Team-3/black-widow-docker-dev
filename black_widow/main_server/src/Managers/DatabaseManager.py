@@ -16,6 +16,7 @@ from Managers.FileManager import FileManager
 from Managers.ConfigManager import ConfigManager
 from Entities.Scenario import Scenario
 from Entities.Scenario import Exploit
+from Entities.Vulnerability import Vulnerability
 import json
 
 class DatabaseManager():
@@ -34,6 +35,7 @@ class DatabaseManager():
         self.vulnerabilities_col = self.db[self.vulnerabilities_col_name]
         self.addScenariosToDB()
         self.addExploitsToDB()
+        self.addVulnerabilitiesToDB()
 
     def _initializeScenariosFromDirectory(self):
         # Variables
@@ -73,6 +75,20 @@ class DatabaseManager():
                     exploit_dict = json.load(outfile)
                 exploit = Exploit().objectFromDictionary(exploit_dict)
                 self.insertExploit(exploit.dictionary().copy())
+        return
+
+    def addVulnerabilitiesToDB(self):
+        vulnerabilities_to_add = ['Django_3_0_Cross-Site_Request_Forgery_Token_Bypass']
+        currentVulnerabilities = self.getVulnerabilities()
+        vulnerabilities_list = [vulnerability['name'] for vulnerability in currentVulnerabilities]
+        vulnerabilities_set = set(vulnerabilities_list)
+        for vulnerability_name in vulnerabilities_to_add:
+            if vulnerability_name not in vulnerabilities_set:
+                json_name = ''.join([vulnerability_name, ".json"])
+                with open(self.file_manager.getVulnerabilityJSONPath(vulnerability_name) / json_name) as outfile:
+                    vulnerability_dict = json.load(outfile)
+                vulnerability = Vulnerability().objectFromDictionary(vulnerability_dict)
+                self.insertExploit(vulnerability.dictionary().copy())
         return
 
     #CRUD: CREATE, READ, UPDATE and DELETE
