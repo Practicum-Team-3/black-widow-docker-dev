@@ -95,9 +95,9 @@ http://172.18.128.1:8080/exploits/edit
 "type": "WEBAPPSHAHA"
 }
 
-http://172.18.128.1:8080/scenarios/newEmpty/Scenario_2
+http://172.18.128.1:8080/exploits/newEmpty/Scenario_2
 
-http://172.18.128.1:8080/scenarios/delete/Scenario_2
+http://172.18.128.1:8080/exploits/delete/Scenario_2
 
 #Vagrant Manager
 
