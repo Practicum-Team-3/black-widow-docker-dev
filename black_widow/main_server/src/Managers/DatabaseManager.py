@@ -78,7 +78,7 @@ class DatabaseManager():
         return
 
     def addVulnerabilitiesToDB(self):
-        vulnerabilities_to_add = ['Django_3_0_Cross-Site_Request_Forgery_Token_Bypass']
+        vulnerabilities_to_add = ['rConfig_3_9_searchColumn_SQL_Injection']
         currentVulnerabilities = self.getVulnerabilities()
         vulnerabilities_list = [vulnerability['name'] for vulnerability in currentVulnerabilities]
         vulnerabilities_set = set(vulnerabilities_list)
@@ -88,7 +88,7 @@ class DatabaseManager():
                 with open(self.file_manager.getVulnerabilityJSONPath(vulnerability_name) / json_name) as outfile:
                     vulnerability_dict = json.load(outfile)
                 vulnerability = Vulnerability().objectFromDictionary(vulnerability_dict)
-                self.insertExploit(vulnerability.dictionary().copy())
+                self.insertVulnerability(vulnerability.dictionary().copy())
         return
 
     #CRUD: CREATE, READ, UPDATE and DELETE
