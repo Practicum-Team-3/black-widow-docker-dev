@@ -63,55 +63,56 @@ services:
                 ipv4_address: ${REDIS_HOST}
         
 
-#     nextcloud:
-#         image: nextcloud
-#         container_name: nextcloud
-#         hostname: nextcloud
-#         ports: 
-#             - 8081:80
-#         volumes:
-#             - nextcloud:/var/www/html
-#         environment: 
-#             - POSTGRES_HOST=fileServer
-#             - POSTGRES_DB=Files
-#             - POSTGRES_USER=user
-#             - POSTGRES_PASSWORD=password
-#             - NEXTCLOUD_ADMIN_PASSWORD=password
-#             - NEXTCLOUD_ADMIN_USER=admin
+    nextcloud:
+        image: nextcloud
+        container_name: nextcloud
+        hostname: nextcloud
+        ports: 
+            - 8081:80
+        volumes:
+            - nextcloud:/var/www/html
+            #- ./nextcloud/config.sample.php:/var/www/html/config/config.php
+        environment: 
+            - POSTGRES_HOST=nextcloud_DB
+            - POSTGRES_DB=files
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=password
+            - NEXTCLOUD_ADMIN_PASSWORD=password
+            - NEXTCLOUD_ADMIN_USER=admin
   
-#         depends_on:
-#             - file_storage_DB 
-# #########
-#         #secrets:
-#         #    - nextcloud_admin_password
-#         #    - nextcloud_admin_user
-#         #    - postgres_db
-#         #    - postgres_password
-#         #    - postgres_user
-#         networks: 
-#             widow_dev:
-#                 ipv4_address: "172.18.128.4"
+        depends_on:
+            - nextcloud_DB
+#########
+        #secrets:
+        #    - nextcloud_admin_password
+        #    - nextcloud_admin_user
+        #    - postgres_db
+        #    - postgres_password
+        #    - postgres_user
+        networks: 
+            widow_dev:
+                ipv4_address: "172.18.128.4"
     
-    # file_storage_DB:
-    #     image: postgres
-    #     restart: always
-    #     hostname: fileServer
-    #     container_name: fileServer
-    #     volumes:
-    #     - file_storage_DB:/var/lib/postgresql/data
-    #     environment:
-    #     - POSTGRES_DB=Files
-    #     - POSTGRES_USER=user
-    #     - POSTGRES_PASSWORD=password
-    #     - POSTGRES_HOST=fileServer
-    #     #########
-    #     #secrets:
-    #     #- postgres_db
-    #     #- postgres_password
-    #     #- postgres_user
-    #     networks: 
-    #         widow_dev:
-    #             ipv4_address: "172.18.128.5"
+    nextcloud_DB:
+        image: postgres
+        restart: always
+        hostname: nextcloud_DB
+        container_name: nextcloud_DB
+        volumes:
+        - nextcloud_DB:/var/lib/postgresql/data
+        environment:
+        - POSTGRES_DB=files
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_HOST=nextcloud_DB
+        #########
+        #secrets:
+        #- postgres_db
+        #- postgres_password
+        #- postgres_user
+        networks: 
+            widow_dev:
+                ipv4_address: "172.18.128.5"
 
 
 # secrets:
@@ -147,10 +148,8 @@ volumes:
     #        device: ${UPLOAD_SERVER_PATH}
     #        o: 'bind'
         
-    # nextcloud:
-    # file_storage_DB:
-
-       
+    nextcloud:
+    nextcloud_DB:
 
         
 networks:
