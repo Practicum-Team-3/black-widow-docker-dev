@@ -79,7 +79,7 @@ class VagrantManager():
         """
         response = Response()
         file_manager.createMachineFolders(scenario_name)
-        scenario = db_manager.getOne(scenario_name)
+        scenario = db_manager.getScenario(scenario_name)
         print('createVagrantFiles')
         if scenario:
             scenario_json = scenario[0]
@@ -108,7 +108,7 @@ class VagrantManager():
         print(scenario_name)
         response = Response()
         VagrantManager.createVagrantFiles(scenario_name)
-        scenario = db_manager.getOne(scenario_name)
+        scenario = db_manager.getScenario(scenario_name)
         if scenario:
             scenario_json = scenario[0]
             for machine_name in scenario_json["machines"]:
