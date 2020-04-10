@@ -70,10 +70,14 @@ services:
         ports: 
             - 8081:80
         volumes:
+            # - type: volume
+            #   source: nextcloud_shared
+            #   target: /var/www/html/data/admin/files
             - nextcloud:/var/www/html
+        
             #- ./nextcloud/config.sample.php:/var/www/html/config/config.php
         environment: 
-            - POSTGRES_HOST=nextcloud_DB
+            - POSTGRES_HOST=nextcloud_db
             - POSTGRES_DB=files
             - POSTGRES_USER=user
             - POSTGRES_PASSWORD=password
@@ -81,7 +85,7 @@ services:
             - NEXTCLOUD_ADMIN_USER=admin
   
         depends_on:
-            - nextcloud_DB
+            - nextcloud_db
 #########
         #secrets:
         #    - nextcloud_admin_password
@@ -93,18 +97,18 @@ services:
             widow_dev:
                 ipv4_address: "172.18.128.4"
     
-    nextcloud_DB:
+    nextcloud_db:
         image: postgres
         restart: always
-        hostname: nextcloud_DB
-        container_name: nextcloud_DB
+        hostname: nextcloud_db
+        container_name: nextcloud_db
         volumes:
-        - nextcloud_DB:/var/lib/postgresql/data
+        - nextcloud_db:/var/lib/postgresql/data
         environment:
         - POSTGRES_DB=files
         - POSTGRES_USER=user
         - POSTGRES_PASSWORD=password
-        - POSTGRES_HOST=nextcloud_DB
+        - POSTGRES_HOST=nextcloud_db
         #########
         #secrets:
         #- postgres_db
@@ -149,7 +153,14 @@ volumes:
     #        o: 'bind'
         
     nextcloud:
-    nextcloud_DB:
+    nextcloud_db:
+    # nextcloud_shared: 
+    #     driver: local
+    #     driver_opts: 
+    #         type: none
+    #         device: /home/vagrant/Desktop/files
+    #         o: 'bind'
+      
 
         
 networks:
