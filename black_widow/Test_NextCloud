@@ -1,0 +1,11 @@
+Download file
+curl -u admin:password -o Nextcloud.png http://localhost:8081/remote.php/dav/files/admin/Nextcloud.png
+
+Upload file
+curl -T curl_commands.txt -u admin:password http://localhost:8081/remote.php/dav/files/admin/
+
+Delete file
+curl -X DELETE -u admin:password http://localhost:8081/remote.php/dav/files/admin/curl_commands.txt
+
+Get list of files in xml
+curl -u admin:password -i -X PROPFIND http://localhost:8081/remote.php/dav/files/admin
