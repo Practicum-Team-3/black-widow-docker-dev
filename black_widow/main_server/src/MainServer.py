@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import requests
 from Managers.ScenarioManager import ScenarioManager
 from Managers.ExploitManager import ExploitManager
@@ -12,6 +12,20 @@ exploit_manager = ExploitManager()
 vulnerability_manager = VulnerabilityManager()
 
 application = Flask(__name__)
+
+#________________REMOVE THIS AFTER TESTING_____________
+@application.route('/test', methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
+        return render_template('index.html')
+    return redirect(url_for('index'))
+
+@application.route('/longtask')
+def longtask():
+
+    toReturn = requests.get('/'.join([vagrant_url, "longtask"])).json()
+    print(toReturn)
+    return toReturn
 
 #Upload files
 @application.route('/upload/filelist')
@@ -202,8 +216,8 @@ def testPing(scenario_name, source, destination):
   """
   return requests.get('/'.join([vagrant_url, "vagrant", scenario_name, "ping", source, destination])).json()
 
-@application.route('vagrant/taskStatus/<task_id>')
-def getTaskStatus(task_id)
+@application.route('/vagrant/taskStatus/<task_id>')
+def getTaskStatus(task_id):
   """
   Requests the status of an ongoing task from the VagranServer
   :param task_id: Task ID given by Celery

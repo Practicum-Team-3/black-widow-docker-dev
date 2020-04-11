@@ -7,6 +7,13 @@ vagrant_manager = VagrantManager()
 
 application = createApp()
 
+#________________REMOVE THIS AFTER TESTING_____________
+@application.route('/longtask')
+def longtask(scenario_name = 'Scenario_3'):
+    task = celery.send_task('VagrantManager.runVagrantUp', args=[scenario_name])
+    print(task.id)
+    return jsonify({'task_id': task.id})
+
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():
   """
@@ -55,7 +62,7 @@ def testPing(scenario_name, source, destination):
 def getTaskStatus(self, task_id):
     return self.AsyncResult(task_id)
 
-@app.route('vagrant/taskStatus/<task_id>')
+@application.route('/vagrant/taskStatus/<task_id>')
 def taskstatus(task_id):
     task = getTaskStatus(task_id)
     if task.state == 'PENDING':

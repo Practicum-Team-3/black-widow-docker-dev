@@ -116,14 +116,14 @@ class VagrantManager():
             total = len(scenario_json["machines"]) #Number of machines in scenario
             message = "Starting all VMs inside %s scenario" % scenario_name
             self.update_state(state='PROGRESS',
-                          meta={'current': i, 'total': total,
+                          meta={'current': completed, 'total': total,
                                 'status': message})
 
             for machine_name in scenario_json["machines"]:
 
                 message = "Working on %s" % machine_name
                 self.update_state(state='PROGRESS',
-                          meta={'current': i, 'total': total,
+                          meta={'current': completed, 'total': total,
                                 'status': message})
 
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
@@ -153,8 +153,9 @@ class VagrantManager():
         else:
             response.setResponse(False)
             response.setReason('Scenario doesn\'t exist')
-        response.setStatus(self.state)
-        response.setTaskID(self.id)
+
+        response.setStatus(self.AsyncResult(self.request.id).state)
+        response.setTaskID(self.request.id)
         return response.dictionary()
 
 
