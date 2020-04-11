@@ -83,7 +83,7 @@ class VagrantManager():
         print('createVagrantFiles')
         if scenario:
             scenario_json = scenario[0]
-            print(scenario_json)
+            #print(scenario_json)
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
@@ -105,8 +105,7 @@ class VagrantManager():
         :param scenario_name: String with the scenario name
         :return: True if the vagrant up commands were successfully executed
         """
-        print(scenario_name)
-        response = Response()
+        message = ""
         VagrantManager.createVagrantFiles(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
 
@@ -117,46 +116,53 @@ class VagrantManager():
             message = "Starting all VMs inside %s scenario" % scenario_name
             self.update_state(state='PROGRESS',
                           meta={'current': completed, 'total': total,
-                                'status': message})
+                                'message': message})
 
             for machine_name in scenario_json["machines"]:
-
-                message = "Working on %s" % machine_name
-                self.update_state(state='PROGRESS',
-                          meta={'current': completed, 'total': total,
-                                'status': message})
-
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
                 shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
                 shared_folder_path = machine_path / shared_folder_name
                 if not os.path.exists(machine_path):  # Proceed if path exists
-                    response.setResponse(False)
-                    response.setReason("Machine path doesn't exist")
+                    print("Machine path doesn't exist")
                     break
                 if not os.path.exists(shared_folder_path):  # Proceed if path exists
-                    response.setResponse(False)
-                    response.setReason("Shared folder path doesn't exist")
+                    print("Shared folder path doesn't exist")
                     break
                 os.chdir(machine_path)
                 process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
+
+                message = "Working on %s" % machine_name
+                self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
                 while True:
                     output = process.stdout.readline()
                     if output == '' and process.poll() is not None:
                         break
                     if output:
                         print(output.strip())
-
+                        message = output.strip()
+                        self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
                 completed += 1 #For progress bar
-
-            response.setResponse(True)
+            #response.setResponse(True)
+            message = "Completed Vagrant Up"
+            self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
         else:
-            response.setResponse(False)
-            response.setReason('Scenario doesn\'t exist')
+            message = "Scenario does not exist"
 
-        response.setStatus(self.AsyncResult(self.request.id).state)
-        response.setTaskID(self.request.id)
-        return response.dictionary()
+        self.update_state(state='COMPLETE',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
+        machines_running = ["Attacker", "Defender"] #This will be a method call to check which machines are actually running
+
+        return {'current': total, 'total': total, 'message': message,
+            'result': machines_running}
+
 
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):

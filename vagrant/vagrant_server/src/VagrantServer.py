@@ -14,6 +14,8 @@ def longtask(scenario_name = 'Scenario_3'):
     print(task.id)
     return jsonify({'task_id': task.id})
 
+#___________________________________________________________
+
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():
   """
@@ -62,6 +64,47 @@ def testPing(scenario_name, source, destination):
 def getTaskStatus(self, task_id):
     return self.AsyncResult(task_id)
 
+#____ USE THIS WHEN INTEGRATING WITH GUI, USES RESPONSE OBJECT
+
+# @application.route('/vagrant/taskStatus/<task_id>')
+# def taskstatus(task_id):
+#     task = getTaskStatus(task_id)
+#     status = ""
+#     if task.state == 'PENDING':
+
+#         status = task.state
+#         body = {
+#             'state': task.state,
+#             'current': 0,
+#             'total': 1
+#         }
+#     elif task.state != 'FAILURE':
+
+#         status = "IN_PROGRESS"
+#         status = task.info.get('status', '')
+#         body = {
+#             'state': task.state,
+#             'current': task.info.get('current', 0),
+#             'total': task.info.get('total', 1),
+#         }
+#         if 'result' in task.info:
+#             body['result'] = task.info['result']
+#     else:
+#         # something went wrong in the background job
+#         body = {
+#             'state': task.state,
+#             'current': 1,
+#             'total': 1,
+#             'status': str(task.info),  # this is the exception raised
+#         }
+
+#     response = Response(True, "Task status", status, task_id)
+#     response.setBody(body)
+#     return jsonify(response.dictionary())
+
+
+#______________Testing_________________________
+
 @application.route('/vagrant/taskStatus/<task_id>')
 def taskstatus(task_id):
     task = getTaskStatus(task_id)
@@ -70,14 +113,14 @@ def taskstatus(task_id):
             'state': task.state,
             'current': 0,
             'total': 1,
-            'status': 'Pending...'
+            'message': 'Pending...'
         }
     elif task.state != 'FAILURE':
         response = {
             'state': task.state,
             'current': task.info.get('current', 0),
             'total': task.info.get('total', 1),
-            'status': task.info.get('status', '')
+            'message': task.info.get('message', '')
         }
         if 'result' in task.info:
             response['result'] = task.info['result']
@@ -87,7 +130,7 @@ def taskstatus(task_id):
             'state': task.state,
             'current': 1,
             'total': 1,
-            'status': str(task.info),  # this is the exception raised
+            'message': str(task.info),  # this is the exception raised
         }
     return jsonify(response)
 

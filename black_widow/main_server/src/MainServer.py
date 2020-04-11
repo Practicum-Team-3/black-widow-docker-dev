@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template,redirect, url_for
 import requests
 from Managers.ScenarioManager import ScenarioManager
 from Managers.ExploitManager import ExploitManager
