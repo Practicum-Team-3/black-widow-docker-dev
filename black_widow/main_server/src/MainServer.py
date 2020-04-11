@@ -202,6 +202,15 @@ def testPing(scenario_name, source, destination):
   """
   return requests.get('/'.join([vagrant_url, "vagrant", scenario_name, "ping", source, destination])).json()
 
+@application.route('vagrant/taskStatus/<task_id>')
+def getTaskStatus(task_id)
+  """
+  Requests the status of an ongoing task from the VagranServer
+  :param task_id: Task ID given by Celery
+  :return: a json response that denotes the status of the task
+  """
+  return requests.get('/'.join([vagrant_url, "vagrant", "taskStatus", task_id])).json()
+
 if __name__=="__main__":
   
   application.run(host='0.0.0.0', port=ConfigManager().widow_app_port)

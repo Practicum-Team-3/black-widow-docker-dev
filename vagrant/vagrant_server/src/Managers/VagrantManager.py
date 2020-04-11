@@ -109,9 +109,23 @@ class VagrantManager():
         response = Response()
         VagrantManager.createVagrantFiles(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
+
         if scenario:
             scenario_json = scenario[0]
+            completed = 0 #number of VMs started
+            total = len(scenario_json["machines"]) #Number of machines in scenario
+            message = "Starting all VMs inside %s scenario" % scenario_name
+            self.update_state(state='PROGRESS',
+                          meta={'current': i, 'total': total,
+                                'status': message})
+
             for machine_name in scenario_json["machines"]:
+
+                message = "Working on %s" % machine_name
+                self.update_state(state='PROGRESS',
+                          meta={'current': i, 'total': total,
+                                'status': message})
+
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
                 shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
                 shared_folder_path = machine_path / shared_folder_name
@@ -132,6 +146,9 @@ class VagrantManager():
                         break
                     if output:
                         print(output.strip())
+
+                completed += 1 #For progress bar
+
             response.setResponse(True)
         else:
             response.setResponse(False)

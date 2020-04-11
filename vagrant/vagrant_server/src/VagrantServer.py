@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, url_for
 from Managers.VagrantManager import VagrantManager
 from Entities.Response import Response
 from CeleryApp import createApp, celery
@@ -50,6 +50,41 @@ def testPing(scenario_name, source, destination):
   :return:
   """
   return jsonify(vagrant_manager.testNetworkPing(scenario_name, source, destination))
+
+@celery.task(bind = True)
+def getTaskStatus(self, task_id):
+    return self.AsyncResult(task_id)
+
+@app.route('vagrant/taskStatus/<task_id>')
+def taskstatus(task_id):
+    task = getTaskStatus(task_id)
+    if task.state == 'PENDING':
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': 'Pending...'
+        }
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', '')
+        }
+        if 'result' in task.info:
+            response['result'] = task.info['result']
+    else:
+        # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'current': 1,
+            'total': 1,
+            'status': str(task.info),  # this is the exception raised
+        }
+    return jsonify(response)
+
+
 
 if __name__=="__main__":
   application.run('0.0.0.0')
