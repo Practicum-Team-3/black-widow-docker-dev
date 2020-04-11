@@ -80,10 +80,8 @@ class VagrantManager():
         response = Response()
         file_manager.createMachineFolders(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
-        print('createVagrantFiles')
         if scenario:
             scenario_json = scenario[0]
-            print(scenario_json)
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
@@ -105,7 +103,6 @@ class VagrantManager():
         :param scenario_name: String with the scenario name
         :return: True if the vagrant up commands were successfully executed
         """
-        print(scenario_name)
         response = Response()
         VagrantManager.createVagrantFiles(scenario_name)
         scenario = db_manager.getScenario(scenario_name)

@@ -16,6 +16,7 @@ class Scenario(Entity):
         now = datetime.now()
         self.creation_date = now.strftime("%d/%m/%Y %H:%M:%S")
         self.last_accessed = self.creation_date[:]
+        self.description = ""
         self.exploit = Exploit()
         self.vulnerability = Vulnerability()
         self.machines = dict()
@@ -51,6 +52,7 @@ class Scenario(Entity):
         scenario_dict["scenario_id"] = self.scenario_id
         scenario_dict["creation_date"] = self.creation_date
         scenario_dict["last_accessed"] = self.last_accessed
+        scenario_dict["description"] = self.description
         scenario_dict["exploit"] = self.exploit.dictionary()
         scenario_dict["vulnerability"] = self.vulnerability.dictionary()
         scenario_dict["machines"] = dict()
@@ -62,6 +64,7 @@ class Scenario(Entity):
         self.scenario_id = dict["scenario_id"]
         self.creation_date = dict["creation_date"]
         self.last_accessed = dict["last_accessed"]
+        self.description = dict["description"]
         self.exploit = Exploit().objectFromDictionary(dict["exploit"])
         self.vulnerability = Vulnerability().objectFromDictionary(dict["vulnerability"])
         for m in dict["machines"]:

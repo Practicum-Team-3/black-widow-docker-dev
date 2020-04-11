@@ -3,6 +3,7 @@
   "scenario_id": "dTRN{P)C",
   "creation_date": "02/03/2020 21:22:38",
   "last_accessed": "02/03/2020 21:22:38",
+  "description": "description",
   "exploit": {
     "name": "test_name",
     "type": "test_type",
@@ -16,8 +17,10 @@
   },
   "machines": {
     "attacker": {
-      "os": "laravel/homestead",
       "name": "attacker",
+      "os": "laravel/homestead",
+      "base_memory": "1024",
+      "processors": "2",
       "is_attacker": true,
       "shared_folders": [
         "./attackerfiles",
@@ -29,18 +32,28 @@
         "ip_address": "192.168.50.5",
         "auto_config": true
       },
-      "provisions": {
-        "name": "pingVictim",
-        "provision_type": "shell",
-        "commands": [
-          "pip install unique-id"
-        ]
-      },
-      "gui": false
+      "provisions": [
+        {
+          "name": "pingVictim",
+          "provision_type": "shell",
+          "commands": [
+            "pip install unique-id"
+          ]
+        }
+      ],
+      "gui": false,
+      "programs": [
+        {
+          "name": "e0",
+          "location": "/bin"
+        }
+      ]
     },
     "victim": {
-      "os": "laravel/homestead",
       "name": "victim",
+      "os": "laravel/homestead",
+      "base_memory": "1024",
+      "processors": "2",
       "is_attacker": false,
       "shared_folders": [
         "./victimfiles",
@@ -52,14 +65,22 @@
         "ip_address": "192.168.50.6",
         "auto_config": true
       },
-      "provisions": {
-        "name": "pingVictim",
-        "provision_type": "shell",
-        "commands": [
-          "pip install unique-id"
-        ]
-      },
-      "gui": false
+      "provisions": [
+        {
+          "name": "pingVictim",
+          "provision_type": "shell",
+          "commands": [
+            "pip install unique-id"
+          ]
+        }
+      ],
+      "gui": false,
+      "programs": [
+        {
+          "name": "e0",
+          "location": "/bin"
+        }
+      ]
     }
   }
 }

@@ -1,17 +1,28 @@
 from Entities.NetworkSettings import NetworkSettings
 from Entities.Provision import Provision
+from Entities.Program import Program
 from Entities.Entity import Entity
 
 
 class VirtualMachine(Entity):
-  def __init__(self, name="", os="", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder')):
+  def __init__(self, name="", os="", base_memory = "1024", processors = "2", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder')):
     self.name = name
     self.os = os
     self.is_attacker = is_attacker
+    self.base_memory = base_memory
+    self.processors = processors
     self.shared_folders =  shared_folders     # tuples of (hostPath, guestPath)
     self.network_settings = NetworkSettings()
-    self.provision = Provision("pingVictim")
+    self.provision = [Provision("pingVictim")]
     self.gui = False
+    self.programs = [Program()]
+
+  def setName(self, name):
+    """
+    Sets the name for this virtual machine
+    :param name: String with the virtual machine name
+    """
+    self.name = name
 
   def setOS(self, os):
     """
@@ -20,12 +31,8 @@ class VirtualMachine(Entity):
     """
     self.os = os
 
-  def setName(self, name):
-    """
-    Sets the name for this virtual machine
-    :param name: String with the virtual machine name
-    """
-    self.name = name
+  def setBaseMemory(self, base_memory):
+    self.base_memory = base_memory
 
   def addSharedFolder(self, hostPath, guestPath):
     """
@@ -49,12 +56,13 @@ class VirtualMachine(Entity):
     """
     self.gui = isVisible
 
-  def setProvision(self, provision):
+  def setProvision(self, i, provision):
     """
     Sets the provision for this virtual machine
     :param provision: Object which carries the provision data
     """
-    self.provision = provision
+    if i < len(self.provision):
+      self.provision[i] = provision
 
   def dictionary(self):
     """
@@ -62,21 +70,27 @@ class VirtualMachine(Entity):
     :return: A dictionary with Virtual Machine data
     """
     dicti = dict()
-    dicti["os"] = self.os
     dicti["name"] = self.name
+    dicti["os"] = self.os
+    dicti["base_memory"] = self.base_memory
+    dicti["processors"] = self.processors
     dicti["is_attacker"] = self.is_attacker
     dicti["shared_folders"] = self.shared_folders
     dicti["network_settings"] = self.network_settings.dictionary()
-    dicti["provisions"] = self.provision.dictionary()
+    dicti["provisions"] = [prov.dictionary() for prov in self.provision]
+    dicti["programs"] = [prog.dictionary() for prog in self.programs]
     dicti["gui"] = self.gui
     return dicti
 
   def objectFromDictionary(self, dict):
-    self.os = dict["os"]
     self.name = dict["name"]
+    self.os = dict["os"]
+    self.base_memory = dict["base_memory"]
+    self.processors = dict["processors"]
     self.is_attacker = dict["is_attacker"]
     self.shared_folders = dict["shared_folders"]
     self.network_settings = NetworkSettings().objectFromDictionary(dict["network_settings"])
-    self.provision = Provision().objectFromDictionary(dict["provisions"])
+    self.provision = [Provision().objectFromDictionary(prov) for prov in dict["provisions"]]
+    self.programs = [Program().objectFromDictionary(prog) for prog in dict["programs"]]
     self.gui = dict["gui"]
     return self

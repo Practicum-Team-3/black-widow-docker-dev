@@ -32,10 +32,11 @@ class VagrantFile():
     #set provision
     if "provisions" in machine:
         provisions = machine["provisions"]
-        buffer += f'\t\t{machine["name"]}.vm.provision \"{provisions["provision_type"]}\", inline: <<-SHELL\n'
-        for command in provisions["commands"]:
-            buffer += f'\t\t\t{command}\n'
-        buffer += f'\t\tSHELL\n'
+        for provision in provisions:
+            buffer += f'\t\t{machine["name"]}.vm.provision \"{provision["provision_type"]}\", inline: <<-SHELL\n'
+            for command in provision["commands"]:
+                buffer += f'\t\t\t{command}\n'
+            buffer += f'\t\tSHELL\n'
     buffer += f'\tend\n'
     #GUI
     buffer += f"\tconfig.vm.provider \"virtualbox\" do |vb|\n"
@@ -46,7 +47,8 @@ class VagrantFile():
         buffer += "true\n"
     else:
         buffer += "false\n"
-    buffer += f'\t\tvb.memory = \"1024\"\n'
+    buffer += f'\t\tvb.memory = \"{machine["base_memory"]}\"\n'
+    buffer += f'\t\tvb.cpus = \"{machine["processors"]}\"\n'
     buffer += f"\tend\n"
     buffer += f"end\n"
 
