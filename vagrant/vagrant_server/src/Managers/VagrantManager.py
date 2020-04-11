@@ -136,8 +136,8 @@ class VagrantManager():
         else:
             response.setResponse(False)
             response.setReason('Scenario doesn\'t exist')
-        response.setStatus(self.state)
-        response.setTaskID(self.id)
+        response.setStatus(self.AsyncResult(self.request.id).state)
+        response.setTaskID(self.request.id)
         return response.dictionary()
 
 
