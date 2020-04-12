@@ -2,6 +2,16 @@
 # Created by https://www.gitignore.io/api/dotenv,python,virtualenv,pycharm+all,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=dotenv,python,virtualenv,pycharm+all,visualstudiocode
 
+
+### Ignore these volumes from Docker ###
+
+./data
+./init 
+./drive
+./record
+./datda
+
+
 ### dotenv ###
 .env
 
