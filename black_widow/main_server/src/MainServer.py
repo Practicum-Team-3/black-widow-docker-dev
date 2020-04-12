@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template,redirect, url_for
+from flask import Flask, jsonify, request,redirect, url_for
 import requests
 from Managers.ScenarioManager import ScenarioManager
 from Managers.ExploitManager import ExploitManager
@@ -13,20 +13,6 @@ vulnerability_manager = VulnerabilityManager()
 
 application = Flask(__name__)
 
-#________________REMOVE THIS AFTER TESTING_____________
-@application.route('/test', methods=['GET', 'POST'])
-def index():
-    if request.method == 'GET':
-        return render_template('index.html')
-    return redirect(url_for('index'))
-
-@application.route('/longtask')
-def longtask():
-
-    toReturn = requests.get('/'.join([vagrant_url, "longtask"])).json()
-    print(toReturn)
-    return toReturn
-#_____________________________________________________#
 #Upload files
 @application.route('/upload/filelist')
 def getFileList():

@@ -7,17 +7,6 @@ vagrant_manager = VagrantManager()
 
 application = createApp()
 
-#________________REMOVE THIS AFTER TESTING_____________
-@application.route('/longtask')
-def longtask(scenario_name = 'Scenario_3'):
-    #task = celery.send_task('VagrantManager.runVagrantUp', args=[scenario_name])
-    box_name = "centos/7"
-    task = celery.send_task('VagrantManager.addBoxByName', args=[box_name])
-    print(task.id)
-    return jsonify({'task_id': task.id})
-
-#___________________________________________________________
-
 @application.route('/vagrant/boxes/all')
 def getAvailableBoxes():
   """
@@ -102,39 +91,6 @@ def taskstatus(task_id):
     response = Response(True, "Task status", status, task_id)
     response.setBody(body)
     return jsonify(response.dictionary())
-
-
-#______________Testing_________________________
-
-# @application.route('/vagrant/taskStatus/<task_id>')
-# def taskstatus(task_id):
-#     task = getTaskStatus(task_id)
-#     if task.state == 'PENDING':
-#         response = {
-#             'state': task.state,
-#             'current': 0,
-#             'total': 1,
-#             'message': 'Pending...'
-#         }
-#     elif task.state != 'FAILURE':
-#         response = {
-#             'state': task.state,
-#             'current': task.info.get('current', 0),
-#             'total': task.info.get('total', 1),
-#             'message': task.info.get('message', '')
-#         }
-#         if 'result' in task.info:
-#             response['result'] = task.info['result']
-#     else:
-#         # something went wrong in the background job
-#         response = {
-#             'state': task.state,
-#             'current': 1,
-#             'total': 1,
-#             'message': str(task.info),  # this is the exception raised
-#         }
-#     return jsonify(response)
-
 
 
 if __name__=="__main__":
