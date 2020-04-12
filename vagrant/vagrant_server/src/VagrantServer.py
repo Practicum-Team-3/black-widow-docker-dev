@@ -10,7 +10,9 @@ application = createApp()
 #________________REMOVE THIS AFTER TESTING_____________
 @application.route('/longtask')
 def longtask(scenario_name = 'Scenario_3'):
-    task = celery.send_task('VagrantManager.runVagrantUp', args=[scenario_name])
+    #task = celery.send_task('VagrantManager.runVagrantUp', args=[scenario_name])
+    box_name = "centos/7"
+    task = celery.send_task('VagrantManager.addBoxByName', args=[box_name])
     print(task.id)
     return jsonify({'task_id': task.id})
 
@@ -64,75 +66,74 @@ def testPing(scenario_name, source, destination):
 def getTaskStatus(self, task_id):
     return self.AsyncResult(task_id)
 
-#____ USE THIS WHEN INTEGRATING WITH GUI, USES RESPONSE OBJECT
-
-# @application.route('/vagrant/taskStatus/<task_id>')
-# def taskstatus(task_id):
-#     task = getTaskStatus(task_id)
-#     status = ""
-#     if task.state == 'PENDING':
-
-#         status = task.state
-#         body = {
-#             'state': task.state,
-#             'current': 0,
-#             'total': 1
-#         }
-#     elif task.state != 'FAILURE':
-
-#         status = "IN_PROGRESS"
-#         status = task.info.get('status', '')
-#         body = {
-#             'state': task.state,
-#             'current': task.info.get('current', 0),
-#             'total': task.info.get('total', 1),
-#         }
-#         if 'result' in task.info:
-#             body['result'] = task.info['result']
-#     else:
-#         # something went wrong in the background job
-#         body = {
-#             'state': task.state,
-#             'current': 1,
-#             'total': 1,
-#             'status': str(task.info),  # this is the exception raised
-#         }
-
-#     response = Response(True, "Task status", status, task_id)
-#     response.setBody(body)
-#     return jsonify(response.dictionary())
-
-
-#______________Testing_________________________
 
 @application.route('/vagrant/taskStatus/<task_id>')
 def taskstatus(task_id):
     task = getTaskStatus(task_id)
+    status = ""
     if task.state == 'PENDING':
-        response = {
+
+        status = task.state
+        body = {
             'state': task.state,
             'current': 0,
-            'total': 1,
-            'message': 'Pending...'
+            'total': 1
         }
     elif task.state != 'FAILURE':
-        response = {
+
+        status = "IN_PROGRESS"
+        status = task.info.get('status', '')
+        body = {
             'state': task.state,
             'current': task.info.get('current', 0),
             'total': task.info.get('total', 1),
-            'message': task.info.get('message', '')
         }
         if 'result' in task.info:
-            response['result'] = task.info['result']
+            body['result'] = task.info['result']
     else:
         # something went wrong in the background job
-        response = {
+        body = {
             'state': task.state,
             'current': 1,
             'total': 1,
-            'message': str(task.info),  # this is the exception raised
+            'status': str(task.info),  # this is the exception raised
         }
-    return jsonify(response)
+
+    response = Response(True, "Task status", status, task_id)
+    response.setBody(body)
+    return jsonify(response.dictionary())
+
+
+#______________Testing_________________________
+
+# @application.route('/vagrant/taskStatus/<task_id>')
+# def taskstatus(task_id):
+#     task = getTaskStatus(task_id)
+#     if task.state == 'PENDING':
+#         response = {
+#             'state': task.state,
+#             'current': 0,
+#             'total': 1,
+#             'message': 'Pending...'
+#         }
+#     elif task.state != 'FAILURE':
+#         response = {
+#             'state': task.state,
+#             'current': task.info.get('current', 0),
+#             'total': task.info.get('total', 1),
+#             'message': task.info.get('message', '')
+#         }
+#         if 'result' in task.info:
+#             response['result'] = task.info['result']
+#     else:
+#         # something went wrong in the background job
+#         response = {
+#             'state': task.state,
+#             'current': 1,
+#             'total': 1,
+#             'message': str(task.info),  # this is the exception raised
+#         }
+#     return jsonify(response)
 
 
 

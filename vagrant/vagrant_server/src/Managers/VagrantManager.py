@@ -40,23 +40,43 @@ class VagrantManager():
 
     @celery.task(name='VagrantManager.addBoxByName', bind=True)
     def addBoxByName(self, box_name):
-        response = Response()
-        process = subprocess.Popen(['vagrant', 'box', 'add', box_name], stdout=subprocess.PIPE,
+
+        process = subprocess.Popen(['vagrant', 'box', 'add', box_name, '--provider', 'virtualbox'], stdout=subprocess.PIPE,
                                    universal_newlines=True)
+
+        message = "Downloading %s box..." % box_name
+        self.update_state(state='PROGRESS',
+                          meta={'current': 0, 'total': 100,
+                                'message': message})
         while True:
             output = process.stdout.readline()
             if output == '' and process.poll() is not None:
                 break
             if output:
-                print(output.strip())
-        response.setResponse(True)
-        response.setStatus(self.AsyncResult(self.request.id).state)
-        response.setTaskID(self.request.id)
-        return response.dictionary()
+                line = output.strip()
+                print(line)
+                progress = re.findall(r'\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%', line)
+                if progress:
+                    number = progress[0]
+                    number = number.replace("%", "")
+                    current = int(number)
+                    self.update_state(state='PROGRESS',
+                          meta={'current': current, 'total': 100,
+                                'message': message})
+        
+        message = "Download Complete"
+        print(message)
+        return {'current': 100, 'total': 100, 'message': message,
+            'result': message}
 
     @celery.task(name='VagrantManager.removeBoxByName', bind=True)
     def removeBoxByName(self, box_name):
-        response = Response()
+
+        message = "Removing %s box..." % box_name
+        self.update_state(state='PROGRESS',
+                          meta={'current': 0, 'total': 100,
+                                'message': message})
+
         process = subprocess.Popen(['vagrant', 'box', 'remove', box_name], stdout=subprocess.PIPE,
                                    universal_newlines=True)
         while True:
@@ -65,10 +85,10 @@ class VagrantManager():
                 break
             if output:
                 print(output.strip())
-        response.setResponse(True)
-        response.setStatus(self.AsyncResult(self.request.id).state)
-        response.setTaskID(self.request.id)
-        return response.dictionary()
+        
+        message = "Box removed."
+        return {'current': 100, 'total': 100, 'message': message,
+            'result': message}
 
     @staticmethod
     def createVagrantFiles(scenario_name):
@@ -163,8 +183,6 @@ class VagrantManager():
         return {'current': total, 'total': total, 'message': message,
             'result': machines_running}
 
-
-
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
         #First we need to move to the directory of the given machine
         machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
@@ -193,12 +211,6 @@ class VagrantManager():
                     break
                 print(line,end="")
         return return_code
-
-    def restartVM(self, machine_name):
-        pass
-
-    def haltVM(self, machine_name):
-        pass
 
     def testNetworkPing(self, scenario_name, machine_name, destination_machine_name, count=1):
         response = Response()
