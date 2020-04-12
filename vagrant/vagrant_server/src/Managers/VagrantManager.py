@@ -118,6 +118,35 @@ class VagrantManager():
             response.setReason('Scenario doesn\'t exist')
         return response.dictionary()
 
+    @staticmethod
+    def vagrantStatus(machine_name, machine_path):
+        os.chdir(machine_path)
+        process = subprocess.Popen(['vagrant', 'status'], stdout=subprocess.PIPE,
+                                           universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                line = output.strip()
+                if "running" in line:
+                    return True
+                elif "poweroff" in line:
+                    return False
+        return False
+        
+    #EXPERIMENTAL
+    def vagrantMachineCommand(machine_name, command):
+        allowed_commands = {'suspend': None, 'halt' : None, 'resume' : None, 'status' : vagrantStatus}
+        if command not in allowed_commands:
+            response = Response(False, "Given command not allowed")
+            return response.dictionary()
+
+        else:
+            function = allowed_commands[command]
+            return function(machine_name)
+
+
     @celery.task(name='VagrantManager.runVagrantUp', bind=True)
     def runVagrantUp(self, scenario_name):
         """
@@ -175,10 +204,18 @@ class VagrantManager():
         else:
             message = "Scenario does not exist"
 
+        machines_running = {}
+        for machine_name in scenario_json["machines"]:
+            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            if VagrantManager.vagrantStatus(machine_name, machine_path):
+                machines_running[machine_name] = True
+            else:
+                machines_running[machine_name] = False
+
         self.update_state(state='COMPLETE',
                           meta={'current': completed, 'total': total,
                                 'message': message})
-        machines_running = ["Attacker", "Defender"] #This will be a method call to check which machines are actually running
+        
 
         return {'current': total, 'total': total, 'message': message,
             'result': machines_running}
