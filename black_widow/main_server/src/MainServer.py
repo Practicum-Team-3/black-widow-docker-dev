@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,redirect, url_for
 import requests
 from Managers.ScenarioManager import ScenarioManager
 from Managers.ExploitManager import ExploitManager
@@ -201,6 +201,15 @@ def testPing(scenario_name, source, destination):
   :return:
   """
   return requests.get('/'.join([vagrant_url, "vagrant", scenario_name, "ping", source, destination])).json()
+
+@application.route('/vagrant/taskStatus/<task_id>')
+def getTaskStatus(task_id):
+  """
+  Requests the status of an ongoing task from the VagranServer
+  :param task_id: Task ID given by Celery
+  :return: a json response that denotes the status of the task
+  """
+  return requests.get('/'.join([vagrant_url, "vagrant", "taskStatus", task_id])).json()
 
 if __name__=="__main__":
   

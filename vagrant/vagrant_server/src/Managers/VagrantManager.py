@@ -43,20 +43,40 @@ class VagrantManager():
         response = Response()
         process = subprocess.Popen(['vagrant', 'box', 'add', box_name], stdout=subprocess.PIPE,
                                    universal_newlines=True)
+
+        message = "Downloading %s box..." % box_name
+        self.update_state(state='PROGRESS',
+                          meta={'current': 0, 'total': 100,
+                                'message': message})
         while True:
             output = process.stdout.readline()
             if output == '' and process.poll() is not None:
                 break
             if output:
-                print(output.strip())
-        response.setResponse(True)
-        response.setStatus(self.AsyncResult(self.request.id).state)
-        response.setTaskID(self.request.id)
-        return response.dictionary()
+                line = output.strip()
+                print(line)
+                progress = re.findall(r'\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%', line)
+                if progress:
+                    number = progress[0]
+                    number = number.replace("%", "")
+                    current = int(number)
+                    self.update_state(state='PROGRESS',
+                          meta={'current': current, 'total': 100,
+                                'message': message})
+
+        message = "Download Complete"
+        print(message)
+        return {'current': 100, 'total': 100, 'message': message,
+            'result': message}
 
     @celery.task(name='VagrantManager.removeBoxByName', bind=True)
     def removeBoxByName(self, box_name):
-        response = Response()
+
+        message = "Removing %s box..." % box_name
+        self.update_state(state='PROGRESS',
+                          meta={'current': 0, 'total': 100,
+                                'message': message})
+
         process = subprocess.Popen(['vagrant', 'box', 'remove', box_name], stdout=subprocess.PIPE,
                                    universal_newlines=True)
         while True:
@@ -65,10 +85,10 @@ class VagrantManager():
                 break
             if output:
                 print(output.strip())
-        response.setResponse(True)
-        response.setStatus(self.AsyncResult(self.request.id).state)
-        response.setTaskID(self.request.id)
-        return response.dictionary()
+
+        message = "Box removed."
+        return {'current': 100, 'total': 100, 'message': message,
+            'result': message}
 
     @staticmethod
     def createVagrantFiles(scenario_name):
@@ -96,6 +116,35 @@ class VagrantManager():
             response.setReason('Scenario doesn\'t exist')
         return response.dictionary()
 
+    @staticmethod
+    def vagrantStatus(machine_name, machine_path):
+        os.chdir(machine_path)
+        process = subprocess.Popen(['vagrant', 'status'], stdout=subprocess.PIPE,
+                                           universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                line = output.strip()
+                if "running" in line:
+                    return True
+                elif "poweroff" in line:
+                    return False
+        return False
+
+    #EXPERIMENTAL
+    def vagrantMachineCommand(machine_name, command):
+        allowed_commands = {'suspend': None, 'halt' : None, 'resume' : None, 'status' : vagrantStatus}
+        if command not in allowed_commands:
+            response = Response(False, "Given command not allowed")
+            return response.dictionary()
+
+        else:
+            function = allowed_commands[command]
+            return function(machine_name)
+
+
     @celery.task(name='VagrantManager.runVagrantUp', bind=True)
     def runVagrantUp(self, scenario_name):
         """
@@ -103,40 +152,71 @@ class VagrantManager():
         :param scenario_name: String with the scenario name
         :return: True if the vagrant up commands were successfully executed
         """
-        response = Response()
+        message = ""
         VagrantManager.createVagrantFiles(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
+
         if scenario:
             scenario_json = scenario[0]
+            completed = 0 #number of VMs started
+            total = len(scenario_json["machines"]) #Number of machines in scenario
+            message = "Starting all VMs inside %s scenario" % scenario_name
+            self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
+
             for machine_name in scenario_json["machines"]:
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
                 shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
                 shared_folder_path = machine_path / shared_folder_name
                 if not os.path.exists(machine_path):  # Proceed if path exists
-                    response.setResponse(False)
-                    response.setReason("Machine path doesn't exist")
+                    print("Machine path doesn't exist")
                     break
                 if not os.path.exists(shared_folder_path):  # Proceed if path exists
-                    response.setResponse(False)
-                    response.setReason("Shared folder path doesn't exist")
+                    print("Shared folder path doesn't exist")
                     break
                 os.chdir(machine_path)
                 process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
+
+                message = "Working on %s" % machine_name
+                self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
                 while True:
                     output = process.stdout.readline()
                     if output == '' and process.poll() is not None:
                         break
                     if output:
                         print(output.strip())
-            response.setResponse(True)
+                        message = output.strip()
+                        self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
+                completed += 1 #For progress bar
+            #response.setResponse(True)
+            message = "Completed Vagrant Up"
+            self.update_state(state='PROGRESS',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
         else:
-            response.setResponse(False)
-            response.setReason('Scenario doesn\'t exist')
-        response.setStatus(self.AsyncResult(self.request.id).state)
-        response.setTaskID(self.request.id)
-        return response.dictionary()
+            message = "Scenario does not exist"
 
+        machines_running = {}
+        for machine_name in scenario_json["machines"]:
+            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            if VagrantManager.vagrantStatus(machine_name, machine_path):
+                machines_running[machine_name] = True
+            else:
+                machines_running[machine_name] = False
+
+        self.update_state(state='COMPLETE',
+                          meta={'current': completed, 'total': total,
+                                'message': message})
+
+
+        return {'current': total, 'total': total, 'message': message,
+            'result': machines_running}
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
         #First we need to move to the directory of the given machine
@@ -166,12 +246,6 @@ class VagrantManager():
                     break
                 print(line,end="")
         return return_code
-
-    def restartVM(self, machine_name):
-        pass
-
-    def haltVM(self, machine_name):
-        pass
 
     def testNetworkPing(self, scenario_name, machine_name, destination_machine_name, count=1):
         response = Response()
