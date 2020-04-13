@@ -202,6 +202,10 @@ def testPing(scenario_name, source, destination):
   """
   return requests.get('/'.join([vagrant_url, "vagrant", scenario_name, "ping", source, destination])).json()
 
+@application.route('/vagrant/manage/<scenario_name>/<machine_name>/<command>')
+def vagrantCommand(scenario_name, machine_name, command):
+  return requests.get('/'.join([vagrant_url, "vagrant", "manage", scenario_name, machine_name, command])).json()
+
 @application.route('/vagrant/taskStatus/<task_id>')
 def getTaskStatus(task_id):
   """
