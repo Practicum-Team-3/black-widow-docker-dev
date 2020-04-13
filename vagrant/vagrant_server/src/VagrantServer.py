@@ -51,6 +51,10 @@ def testPing(scenario_name, source, destination):
   """
   return jsonify(vagrant_manager.testNetworkPing(scenario_name, source, destination))
 
+@application.route('/vagrant/manage/<scenario_name>/<machine_name>/<command>')
+def vagrantCommand(scenario_name, machine_name, command):
+  return jsonify(vagrant_manager.vagrantMachineCommand(scenario_name, machine_name, command))
+
 @celery.task(bind = True)
 def getTaskStatus(self, task_id):
     return self.AsyncResult(task_id)

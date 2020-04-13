@@ -40,8 +40,7 @@ class VagrantManager():
 
     @celery.task(name='VagrantManager.addBoxByName', bind=True)
     def addBoxByName(self, box_name):
-        response = Response()
-        process = subprocess.Popen(['vagrant', 'box', 'add', box_name], stdout=subprocess.PIPE,
+        process = subprocess.Popen(['vagrant', 'box', 'add', box_name, '--provider', 'virtualbox'], stdout=subprocess.PIPE,
                                    universal_newlines=True)
 
         message = "Downloading %s box..." % box_name
@@ -118,6 +117,12 @@ class VagrantManager():
 
     @staticmethod
     def vagrantStatus(machine_name, machine_path):
+        """
+        Determines the status of the given vm
+        :param machine_name: String with the machine name
+        :param machine_path: Path to the given machine
+        :return: String representing the status of the machine, False if machine not present
+        """
         os.chdir(machine_path)
         process = subprocess.Popen(['vagrant', 'status'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
@@ -127,22 +132,38 @@ class VagrantManager():
                 break
             if output:
                 line = output.strip()
-                if "running" in line:
-                    return True
-                elif "poweroff" in line:
-                    return False
+                if machine_name in line:
+                    line = line.split()
+                    if len(line) > 0:
+                        return line[1]
         return False
 
-    #EXPERIMENTAL
-    def vagrantMachineCommand(machine_name, command):
-        allowed_commands = {'suspend': None, 'halt' : None, 'resume' : None, 'status' : vagrantStatus}
+    def vagrantMachineCommand(self, scenario_name, machine_name, command):
+        """
+        Runs the given vagrant command on the desired machine, if allowed. 
+        :param scenario_name: Name of scenario containing the machine
+        :param machine_name: String with the machine name
+        :return: Response object containing the status of the machine after execution of command
+        """
+        allowed_commands = ['suspend','halt','resume','status']
         if command not in allowed_commands:
             response = Response(False, "Given command not allowed")
             return response.dictionary()
 
         else:
-            function = allowed_commands[command]
-            return function(machine_name)
+            try:
+                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                if command != 'status':
+                    os.chdir(machine_path)
+                    subprocess.run(['vagrant', command])
+                machine_state = VagrantManager.vagrantStatus(machine_name, machine_path)
+                response = Response(True, body={machine_name: machine_state})
+                return response.dictionary() 
+            except OSError:
+                error_message = "OS ERROR while running %s command on %s machine " % command, machine_name
+                print(error_message)
+                response = Response(False, error_message)
+                return response.dictionary()
 
 
     @celery.task(name='VagrantManager.runVagrantUp', bind=True)
@@ -205,10 +226,8 @@ class VagrantManager():
         machines_running = {}
         for machine_name in scenario_json["machines"]:
             machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-            if VagrantManager.vagrantStatus(machine_name, machine_path):
-                machines_running[machine_name] = True
-            else:
-                machines_running[machine_name] = False
+            machines_running[machine_name] = VagrantManager.vagrantStatus(machine_name, machine_path)
+               
 
         self.update_state(state='COMPLETE',
                           meta={'current': completed, 'total': total,
