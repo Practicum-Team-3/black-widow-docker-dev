@@ -63,7 +63,6 @@ services:
                 ipv4_address: ${REDIS_HOST}
 
     nextcloud_db:
-        #image: postgres
         build: './nextcloud_db/'
         restart: always
         hostname: ${POSTGRES_HOST}
@@ -75,7 +74,6 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_HOST: ${POSTGRES_HOST}
-
         networks: 
             nextcloud_net:
                 ipv4_address: ${NEXTCLOUD_DB_IP}
