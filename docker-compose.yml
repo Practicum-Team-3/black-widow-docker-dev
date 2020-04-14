@@ -75,10 +75,11 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_HOST: ${POSTGRES_HOST}
+
         networks: 
             nextcloud_net:
                 ipv4_address: ${NEXTCLOUD_DB_IP}
-                
+
 
     nextcloud:
         build: './nextcloud/'
@@ -95,6 +96,10 @@ services:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
             NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
+            NEXTCLOUD_TRUSTED_DOMAINS: 172.18.128.1
+
+        depends_on:
+            - nextcloud_db
     # guacd
     guacd:
         container_name: guacd_compose
@@ -140,9 +145,6 @@ services:
             guacnetwork_compose:
         ports:
             - 8085:8080/tcp
-  
-        depends_on:
-            - nextcloud_db
 
         networks: 
             guac_net:
