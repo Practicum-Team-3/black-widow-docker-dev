@@ -88,8 +88,6 @@ echo SUBNET_NEXTCLOUD=$SUBNET_NEXTCLOUD  | tee -a .env
 NEXTCLOUD_IP=172.19.128.2
 echo NEXTCLOUD_IP=$NEXTCLOUD_IP | tee -a .env 
 
-
-
 NEXTCLOUD_PORT=8081
 echo 'Setting the Nexcloud exposed port to '$NEXTCLOUD_PORT
 echo NEXTCLOUD_PORT=$NEXTCLOUD_PORT | tee -a .env
@@ -125,3 +123,9 @@ POSTGRES_HOST=nextcloud_db
 echo 'Setting the default Nextcloud Postgres hostname to '$POSTGRES_HOST
 echo POSTGRES_HOST=$POSTGRES_HOST | tee -a .env
         
+SUBNET_GUAC=172.20.128.0 
+echo 'The IP address of the subnet that will be used by Nextcloud is '$SUBNET_GUAC
+echo SUBNET_GUAC=$SUBNET_GUAC | tee -a .env 
+
+GUAC_IP=172.20.128.2
+echo GUAC_IP=$GUAC_IP | tee -a .env 

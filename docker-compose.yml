@@ -145,8 +145,8 @@ services:
             - nextcloud_db
 
         networks: 
-            nextcloud_net:
-                ipv4_address: ${NEXTCLOUD_IP}
+            guac_net:
+                ipv4_address: ${GUAC_IP}
     
     
            
@@ -183,6 +183,13 @@ networks:
             driver: default
             config:
                 - subnet: ${SUBNET_NEXTCLOUD}/24
+    
+    guac_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: ${SUBNET_GUAC}/24
 
 
             
