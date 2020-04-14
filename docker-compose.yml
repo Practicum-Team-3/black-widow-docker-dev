@@ -21,9 +21,9 @@ services:
             MONGODB_PASSWORD: ${MONGODB_PASSWORD}
             MONGODB_HOSTNAME: ${MONGODB_HOSTNAME}
         ports:
-            - "${BW_CON_PORT}:${BW_APP_PORT}"
+            - ${BW_CON_PORT}:${BW_APP_PORT}
         networks: 
-            widow_dev:
+            widow_net:
                 ipv4_address: ${WIDOW_IP}
         stdin_open: true
         tty: true
@@ -48,7 +48,7 @@ services:
               target: /data/db
         
         networks: 
-            widow_dev:
+            widow_net:
                 ipv4_address: ${MONGODB_IP}
 
     
@@ -59,9 +59,42 @@ services:
         ports: 
             - ${REDIS_PORT}:${REDIS_PORT}
         networks: 
-            widow_dev:
+            widow_net:
                 ipv4_address: ${REDIS_HOST}
 
+    nextcloud_db:
+        #image: postgres
+        build: './nextcloud_db/'
+        restart: always
+        hostname: ${POSTGRES_HOST}
+        container_name: ${POSTGRES_HOST}
+        volumes:
+            - nextcloud_db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_HOST: ${POSTGRES_HOST}
+        networks: 
+            nextcloud_net:
+                ipv4_address: ${NEXTCLOUD_DB_IP}
+                
+
+    nextcloud:
+        build: './nextcloud/'
+        container_name: nextcloud
+        hostname: nextcloud
+        ports: 
+            - "${NEXTCLOUD_PORT}:${NEXTCLOUD_APP_PORT}"
+        volumes:
+            - nextcloud:/var/www/html
+        environment: 
+            POSTGRES_HOST: ${POSTGRES_HOST}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+            NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
     # guacd
     guacd:
         container_name: guacd_compose
@@ -106,77 +139,16 @@ services:
         networks:
             guacnetwork_compose:
         ports:
-    ## enable next line if not using nginx
             - 8085:8080/tcp
-    ## enable next line when using nginx
-        #- 8080/tcp
-        #restart: always
-            
-
-#     nextcloud:
-#         image: nextcloud
-#         container_name: nextcloud
-#         hostname: nextcloud
-#         ports: 
-#             - 8081:80
-#         volumes:
-#             - nextcloud:/var/www/html
-#         environment: 
-#             - POSTGRES_HOST=fileServer
-#             - POSTGRES_DB=Files
-#             - POSTGRES_USER=user
-#             - POSTGRES_PASSWORD=password
-#             - NEXTCLOUD_ADMIN_PASSWORD=password
-#             - NEXTCLOUD_ADMIN_USER=admin
   
-#         depends_on:
-#             - file_storage_DB 
-# #########
-#         #secrets:
-#         #    - nextcloud_admin_password
-#         #    - nextcloud_admin_user
-#         #    - postgres_db
-#         #    - postgres_password
-#         #    - postgres_user
-#         networks: 
-#             widow_dev:
-#                 ipv4_address: "172.18.128.4"
+        depends_on:
+            - nextcloud_db
+
+        networks: 
+            nextcloud_net:
+                ipv4_address: ${NEXTCLOUD_IP}
     
-    # file_storage_DB:
-    #     image: postgres
-    #     restart: always
-    #     hostname: fileServer
-    #     container_name: fileServer
-    #     volumes:
-    #     - file_storage_DB:/var/lib/postgresql/data
-    #     environment:
-    #     - POSTGRES_DB=Files
-    #     - POSTGRES_USER=user
-    #     - POSTGRES_PASSWORD=password
-    #     - POSTGRES_HOST=fileServer
-    #     #########
-    #     #secrets:
-    #     #- postgres_db
-    #     #- postgres_password
-    #     #- postgres_user
-    #     networks: 
-    #         widow_dev:
-    #             ipv4_address: "172.18.128.5"
-
-
-# secrets:
-#     nextcloud_admin_password:
-#         file: ./secrets/nextcloud_admin_password.txt # put admin password to this file
-#     nextcloud_admin_user:
-#         file: ./secrets/nextcloud_admin_user.txt # put admin username to this file
-#     postgres_db:
-#         file: ./secrets/postgres_db.txt # put postgresql db name to this file
-#     postgres_password:
-#         file: ./secrets/postgres_password.txt # put postgresql password to this file
-#     postgres_user:
-#         file: ./secrets/postgres_user.txt # put postgresql username to this file
-
-
+    
            
 volumes:
     black_widow_vol:
@@ -190,21 +162,13 @@ volumes:
     mongodbdata:
         driver: local
 
-    #uploaddata:
-    #    driver: local
-    #    driver_opts: 
-    #        type: none
-    #        device: ${UPLOAD_SERVER_PATH}
-    #        o: 'bind'
-        
-    # nextcloud:
-    # file_storage_DB:
 
-       
+    nextcloud:
+    nextcloud_db:
 
         
 networks:
-    widow_dev:
+    widow_net:
         driver: bridge
         ipam:
             driver: default
@@ -213,6 +177,12 @@ networks:
     guacnetwork_compose:
         driver: bridge
 
+    nextcloud_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: ${SUBNET_NEXTCLOUD}/24
 
 
             
