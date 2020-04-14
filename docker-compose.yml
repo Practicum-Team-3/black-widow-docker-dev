@@ -23,7 +23,7 @@ services:
         ports:
             - ${BW_CON_PORT}:${BW_APP_PORT}
         networks: 
-            widow_dev:
+            widow_net:
                 ipv4_address: ${WIDOW_IP}
         stdin_open: true
         tty: true
@@ -48,7 +48,7 @@ services:
               target: /data/db
         
         networks: 
-            widow_dev:
+            widow_net:
                 ipv4_address: ${MONGODB_IP}
 
 
@@ -59,7 +59,7 @@ services:
         ports: 
             - ${REDIS_PORT}:${REDIS_PORT}
         networks: 
-            widow_dev:
+            widow_net:
                 ipv4_address: ${REDIS_HOST}
 
     nextcloud_db:
@@ -76,8 +76,8 @@ services:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_HOST: ${POSTGRES_HOST}
         networks: 
-            widow_dev:
-                ipv4_address: "172.18.128.5"
+            nextcloud_net:
+                ipv4_address: ${NEXTCLOUD_DB_IP}
                 
 
     nextcloud:
@@ -100,8 +100,8 @@ services:
             - nextcloud_db
 
         networks: 
-            widow_dev:
-                ipv4_address: "172.18.128.4"
+            nextcloud_net:
+                ipv4_address: ${NEXTCLOUD_IP}
     
     
            
@@ -123,12 +123,19 @@ volumes:
 
         
 networks:
-    widow_dev:
+    widow_net:
         driver: bridge
         ipam:
             driver: default
             config:
                 - subnet: ${SUBNET_WIDOW}/24
+
+    nextcloud_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: ${SUBNET_NEXTCLOUD}/24
 
 
             
