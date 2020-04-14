@@ -95,6 +95,10 @@ services:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
             NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
+        networks: 
+            nextcloud_net:
+                ipv4_address: ${NEXTCLOUD_IP}
+
     # guacd
     guacd:
         container_name: guacd_compose
@@ -140,15 +144,7 @@ services:
             guacnetwork_compose:
         ports:
             - 8085:8080/tcp
-  
-        depends_on:
-            - nextcloud_db
 
-        networks: 
-            guac_net:
-                ipv4_address: ${GUAC_IP}
-    
-    
            
 volumes:
     black_widow_vol:
@@ -166,6 +162,11 @@ volumes:
     nextcloud:
     nextcloud_db:
 
+    #init:
+    #data: 
+    #drive:
+    #record:
+
         
 networks:
     widow_net:
@@ -174,8 +175,7 @@ networks:
             driver: default
             config:
                 - subnet: ${SUBNET_WIDOW}/24
-    guacnetwork_compose:
-        driver: bridge
+    
 
     nextcloud_net:
         driver: bridge
@@ -184,12 +184,8 @@ networks:
             config:
                 - subnet: ${SUBNET_NEXTCLOUD}/24
     
-    guac_net:
+    guacnetwork_compose:
         driver: bridge
-        ipam:
-            driver: default
-            config:
-                - subnet: ${SUBNET_GUAC}/24
 
 
             

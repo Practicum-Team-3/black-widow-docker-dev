@@ -127,5 +127,11 @@ SUBNET_GUAC=172.20.128.0
 echo 'The IP address of the subnet that will be used by Nextcloud is '$SUBNET_GUAC
 echo SUBNET_GUAC=$SUBNET_GUAC | tee -a .env 
 
-GUAC_IP=172.20.128.2
+GUAC_IP=172.20.128.3
 echo GUAC_IP=$GUAC_IP | tee -a .env 
+
+GUACD_IP=172.20.128.4
+echo GUACD_IP=$GUACD_IP | tee -a .env 
+
+GUACDB_IP=172.20.128.5
+echo GUACDB_IP=$GUACDB_IP | tee -a .env 
