@@ -64,7 +64,8 @@ services:
         
 
     nextcloud:
-        image: nextcloud
+        build: './nextcloud/'
+        #image: nextcloud
         container_name: nextcloud
         hostname: nextcloud
         ports: 
