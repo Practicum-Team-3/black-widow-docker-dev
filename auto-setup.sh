@@ -81,6 +81,14 @@ ENVIRONMENT_DEBUG=false
 echo ENVIRONMENT_DEBUG=$ENVIRONMENT_DEBUG | tee -a .env $LOCAL_APP_PATH/.env
 
 
+SUBNET_NEXTCLOUD=172.19.128.0 
+echo 'The IP address of the subnet that will be used by Nextcloud is '$SUBNET_NEXTCLOUD
+echo SUBNET_NEXTCLOUD=$SUBNET_NEXTCLOUD  | tee -a .env 
+
+NEXTCLOUD_IP=172.19.128.2
+echo NEXTCLOUD_IP=$NEXTCLOUD_IP | tee -a .env 
+
+
 
 NEXTCLOUD_PORT=8081
 echo 'Setting the Nexcloud exposed port to '$NEXTCLOUD_PORT
@@ -97,6 +105,9 @@ echo NEXTCLOUD_ADMIN_USER=$NEXTCLOUD_ADMIN_USER | tee -a .env
 NEXTCLOUD_ADMIN_PASSWORD=password
 echo 'Setting the Nexcloud admin password to '$NEXTCLOUD_ADMIN_PASSWORD
 echo NEXTCLOUD_ADMIN_PASSWORD=$NEXTCLOUD_ADMIN_PASSWORD | tee -a .env
+
+NEXTCLOUD_DB_IP=172.19.128.3
+echo NEXTCLOUD_DB_IP=$NEXTCLOUD_DB_IP | tee -a .env 
 
 POSTGRES_DB=files
 echo 'Setting the default Nextcloud Postgres database name to '$POSTGRES_DB
