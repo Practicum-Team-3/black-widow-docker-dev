@@ -35,7 +35,6 @@ services:
         restart: always
         ports: 
             - ${MONGODB_PORT}-27019:${MONGODB_PORT}-27019
-
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USER}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
@@ -51,7 +50,6 @@ services:
             widow_net:
                 ipv4_address: ${MONGODB_IP}
 
-    
     redis:
         build: './redis/'
         container_name: redis
@@ -78,7 +76,6 @@ services:
             nextcloud_net:
                 ipv4_address: ${NEXTCLOUD_DB_IP}
 
-
     nextcloud:
         build: './nextcloud/'
         container_name: nextcloud
@@ -103,7 +100,8 @@ services:
     # guacd
     guacd:
         container_name: guacd_compose
-        image: guacamole/guacd:1.0.0
+        build: './guacd'
+        #image: guacamole/guacd:1.0.0
         networks:
             guacnetwork_compose:
         #restart: always
@@ -112,13 +110,14 @@ services:
             - ./record:/record:rw
     # postgres
     postgres:
+        build: './guaca_db'
         container_name: postgres_guacamole_compose
         environment:
             PGDATA: /var/lib/postgresql/data/guacamole
             POSTGRES_DB: guacamole_db
             POSTGRES_PASSWORD: ChooseYourOwnPasswordHere1234
             POSTGRES_USER: guacuser
-        image: postgres
+        
         networks:
             guacnetwork_compose:
         #restart: always
@@ -128,6 +127,7 @@ services:
 
     # guacamole
     guacamole:
+        build: './guac_apache'
         container_name: guacamole_compose
         depends_on:
             - guacd
@@ -138,29 +138,23 @@ services:
             POSTGRES_HOSTNAME: postgres
             POSTGRES_PASSWORD: ChooseYourOwnPasswordHere1234
             POSTGRES_USER: guacuser
-        image: guacamole/guacamole:1.0.0
+        #image: guacamole/guacamole:1.0.0
         networks:
             guacnetwork_compose:
         ports:
             - 8085:8080/tcp
 
-           
 volumes:
     black_widow_vol:
-
         driver: local
         driver_opts: 
             type: none
             device: ${LOCAL_APP_PATH}
             o: 'bind'
-
     mongodbdata:
         driver: local
-
-
     nextcloud:
     nextcloud_db:
-
         
 networks:
     widow_net:
@@ -169,15 +163,12 @@ networks:
             driver: default
             config:
                 - subnet: ${SUBNET_WIDOW}/24
-    
-
     nextcloud_net:
         driver: bridge
         ipam:
             driver: default
             config:
                 - subnet: ${SUBNET_NEXTCLOUD}/24
-    
     guacnetwork_compose:
         driver: bridge
 
