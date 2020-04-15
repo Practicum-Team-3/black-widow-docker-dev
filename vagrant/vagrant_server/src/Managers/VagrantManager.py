@@ -118,7 +118,7 @@ class VagrantManager(object):
             print("Scenario %s not found" % scenario_name)
             return False
 
-
+    #Renamed
     def getAvailableBoxes(self):
         """
         Gets the available boxes in the Vagrant context
