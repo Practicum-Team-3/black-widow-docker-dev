@@ -85,11 +85,11 @@ services:
         build: './nextcloud/'
         container_name: nextcloud
         hostname: nextcloud
-        ports: 
+        ports:
             - "${NEXTCLOUD_PORT}:${NEXTCLOUD_APP_PORT}"
         volumes:
             - nextcloud:/var/www/html
-        environment: 
+        environment:
             POSTGRES_HOST: ${POSTGRES_HOST}
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USER: ${POSTGRES_USER}
@@ -99,7 +99,7 @@ services:
             NEXTCLOUD_TRUSTED_DOMAINS: 172.18.128.1
         depends_on:
             - nextcloud_db
-        networks: 
+        networks:
             nextcloud_net:
                 ipv4_address: ${NEXTCLOUD_IP}
     # guacd
@@ -166,11 +166,11 @@ volumes:
     nextcloud_db:
 
     #init:
-    #data: 
+    #data:
     #drive:
     #record:
 
-        
+
 networks:
     widow_net:
         driver: bridge
@@ -178,7 +178,7 @@ networks:
             driver: default
             config:
                 - subnet: ${SUBNET_WIDOW}/24
-    
+
 
     nextcloud_net:
         driver: bridge

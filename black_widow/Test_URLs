@@ -148,7 +148,7 @@ http://localhost:5000/vagrant/Scenario_1/all
 
 http://172.18.128.1:8080/vagrant/Scenario_1/run
 
-http://172.18.128.1:8080/vagrant/boxes/add
+http://172.18.128.1:8080/vagrant/boxes/addByName
 {
 	"box_name" : "chrisurwin/RancherOS"
 }
@@ -158,3 +158,7 @@ http://172.18.128.1:8080/vagrant/boxes/remove
 	"box_name" : "chrisurwin/RancherOS"
 }
 
+http://172.18.128.1:8080/vagrant/boxes/addByOVAFile
+{
+	"file_name" : "cumulus-linux-4.1.0-vx-amd64-1584996322.6aca396zdd3fc1f8"
+}

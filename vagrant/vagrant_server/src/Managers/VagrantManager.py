@@ -12,7 +12,6 @@ db_manager = DatabaseManager()
 vagrant_file = VagrantFile()
 
 class VagrantManager():
-
     def getAvailableBoxes(self):
         """
         Gets the available boxes in the Vagrant context
@@ -62,7 +61,6 @@ class VagrantManager():
                     self.update_state(state='PROGRESS',
                           meta={'current': current, 'total': 100,
                                 'message': message})
-
         message = "Download Complete"
         print(message)
         return {'current': 100, 'total': 100, 'message': message,
@@ -88,6 +86,48 @@ class VagrantManager():
         message = "Box removed."
         return {'current': 100, 'total': 100, 'message': message,
             'result': message}
+
+    @celery.task(name='VagrantManager.addBoxByOVAFile', bind=True)
+    def addBoxByOVAFile(self, file_name):
+        ova_file = "".join([file_name, ".ova"])
+        box_file = "".join([file_name, ".box"])
+
+        print("Hello FOlks")
+        print(ova_file)
+        VagrantManager._runCommandFromShell(['pwd'])
+        # IMPORTING OVA FILE INTO VIRTUAL BOX
+        print('IMPORTING OVA FILE INTO VIRTUAL BOX')
+        VagrantManager._runCommandFromShell(['vboxmanage', 'import', ova_file])
+
+        # GETTING VIRTUAL MACHINE ID
+        print('GETTING VIRTUAL MACHINE ID')
+        process = subprocess.Popen(['vboxmanage', 'list', 'vms'], stdout=subprocess.PIPE,
+                                   universal_newlines=True)
+        box_id = ""
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+            if file_name in output:
+                box_id = output
+        pattern = '(^.*{)(.+)(}.*)'
+        match = re.search(pattern, box_id)
+        box_id = match.group(2)
+        print('Box id = ', box_id)
+
+        # PACKAGING VIRTUAL MACHINE INTO A BOX
+        print('PACKAGING VIRTUAL MACHINE INTO A BOX')
+        VagrantManager._runCommandFromShell(['vagrant', 'package', '--base', box_id, '--output', box_file])
+
+        # ADDING BOX BY NAME
+        # vagrant add box cumulus.box --name cumulus
+        print('ADDING BOX TO VAGRANT')
+        VagrantManager._runCommandFromShell(['vagrant', 'box', 'add', box_file, '--name', file_name])
+
+        message = "Box added using OVA file."
+        return {'current': 100, 'total': 100, 'message': message, 'result': message}
 
     @staticmethod
     def createVagrantFiles(scenario_name):
@@ -299,3 +339,14 @@ class VagrantManager():
             response.setResponse(False)
             response.setReason("Scenario %s not found" % scenario_name)
         return response.dictionary()
+
+    @staticmethod
+    def _runCommandFromShell(command):
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True)
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
+        return

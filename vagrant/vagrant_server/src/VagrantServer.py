@@ -15,7 +15,7 @@ def getAvailableBoxes():
   """
   return jsonify(vagrant_manager.getAvailableBoxes())
 
-@application.route('/vagrant/boxes/add', methods = ['POST'])
+@application.route('/vagrant/boxes/addByName', methods = ['POST'])
 def addBoxByName():
   box_name = request.get_json()['box_name']
   task = celery.send_task('VagrantManager.addBoxByName', args=[box_name])
@@ -26,6 +26,13 @@ def addBoxByName():
 def removeBoxByName():
   box_name = request.get_json()['box_name']
   task = celery.send_task('VagrantManager.removeBoxByName', args=[box_name])
+  response = Response(True, "Sent to task queue", task.state, task.id)
+  return jsonify(response.dictionary())
+
+@application.route('/vagrant/boxes/addByOVAFile', methods=['POST'])
+def addBoxByOVAFile():
+  file_name = request.get_json()['file_name']
+  task = celery.send_task('VagrantManager.addBoxByOVAFile', args=[file_name])
   response = Response(True, "Sent to task queue", task.state, task.id)
   return jsonify(response.dictionary())
 
