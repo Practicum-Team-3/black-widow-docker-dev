@@ -48,7 +48,7 @@ class FileManager(object):
         :return: True if the scenario is created successfully
         """
         # Variables
-        folders = ["JSON", "Exploit", "Vulnerability", "Machines"]
+        folders = ["Machines"]
         scenario_path = self.getScenariosPath() / scenario_name
         try:
             os.makedirs(scenario_path)

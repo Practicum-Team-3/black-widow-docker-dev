@@ -137,6 +137,7 @@ class VagrantManager():
         :return: True if vagrant files were successfully created
         """
         response = Response()
+        file_manager.createScenarioFolders(scenario_name)
         file_manager.createMachineFolders(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
         if scenario:
