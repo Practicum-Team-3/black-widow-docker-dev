@@ -15,7 +15,7 @@ def getAvailableBoxes():
   """
   return jsonify(vagrant_manager.getAvailableBoxes())
 
-@application.route('/vagrant/boxes/addByName', methods = ['POST'])
+@application.route('/vagrant/boxes/add', methods = ['POST'])
 def addBoxByName():
   box_name = request.get_json()['box_name']
   task = celery.send_task('VagrantManager.addBoxByName', args=[box_name])

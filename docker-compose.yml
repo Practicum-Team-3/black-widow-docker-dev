@@ -62,46 +62,50 @@ services:
             widow_net:
                 ipv4_address: ${REDIS_HOST}
 
-    nextcloud_db:
-        #image: postgres
-        build: './nextcloud_db/'
-        restart: always
-        hostname: ${POSTGRES_HOST}
-        container_name: ${POSTGRES_HOST}
+    nextcloud:
+        image: nextcloud
+        container_name: nextcloud
+        hostname: nextcloud
+        ports: 
+            - 8081:80
         volumes:
-            - nextcloud_db:/var/lib/postgresql/data
-        environment:
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_HOST: ${POSTGRES_HOST}
+            - nextcloud:/var/www/html
+        environment: 
+            - POSTGRES_HOST=nextcloud_db
+            - POSTGRES_DB=files
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=password
+            - NEXTCLOUD_ADMIN_PASSWORD=password
+            - NEXTCLOUD_ADMIN_USER=admin
+            - NEXTCLOUD_TRUSTED_DOMAINS=172.19.128.1
+    
+        depends_on:
+            - nextcloud_db
 
         networks: 
             nextcloud_net:
-                ipv4_address: ${NEXTCLOUD_DB_IP}
-
-
-    nextcloud:
-        build: './nextcloud/'
-        container_name: nextcloud
-        hostname: nextcloud
-        ports:
-            - "${NEXTCLOUD_PORT}:${NEXTCLOUD_APP_PORT}"
+                ipv4_address: "172.19.128.4"
+    
+    nextcloud_db:
+        image: postgres
+        restart: always
+        hostname: nextcloud_db
+        container_name: nextcloud_db
         volumes:
-            - nextcloud:/var/www/html
+        - nextcloud_db:/var/lib/postgresql/data
         environment:
-            POSTGRES_HOST: ${POSTGRES_HOST}
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
-            NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
-            NEXTCLOUD_TRUSTED_DOMAINS: 172.18.128.1
-        depends_on:
-            - nextcloud_db
-        networks:
+        - POSTGRES_DB=files
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_HOST=nextcloud_db
+        #########
+        #secrets:
+        #- postgres_db
+        #- postgres_password
+        #- postgres_user
+        networks: 
             nextcloud_net:
-                ipv4_address: ${NEXTCLOUD_IP}
+                ipv4_address: "172.19.128.5"
     # guacd
     guacd:
         container_name: guacd_compose

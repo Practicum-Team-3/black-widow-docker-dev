@@ -148,6 +148,7 @@ class VagrantManager():
                     shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
                     shared_folder_path = machine_path / shared_folder_name
                     file_manager.createSharedFolders(shared_folder_path)
+                print(scenario_json)
                 print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
             response.setResponse(True)
         else:

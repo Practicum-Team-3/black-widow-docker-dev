@@ -172,10 +172,10 @@ def getAvailableBoxes():
   """
   return requests.get('/'.join([vagrant_url, "vagrant", "boxes", "all"])).json()
 
-@application.route('/vagrant/boxes/addByName', methods = ['POST'])
+@application.route('/vagrant/boxes/add', methods = ['POST'])
 def addBoxByName():
   json_file = request.get_json()
-  return requests.post('/'.join([vagrant_url, "vagrant", "boxes", "addByName"]), json = json_file).json()
+  return requests.post('/'.join([vagrant_url, "vagrant", "boxes", "add"]), json = json_file).json()
 
 @application.route('/vagrant/boxes/remove', methods = ['POST'])
 def removeBoxByName():
