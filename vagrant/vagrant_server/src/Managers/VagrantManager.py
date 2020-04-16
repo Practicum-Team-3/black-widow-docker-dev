@@ -137,18 +137,22 @@ class VagrantManager():
         :return: True if vagrant files were successfully created
         """
         response = Response()
-        file_manager.createScenarioFolders(scenario_name)
-        file_manager.createMachineFolders(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
         if scenario:
             scenario_json = scenario[0]
+            file_manager.createScenarioFolders(scenario_name)
+            file_manager.createMachineFolders(scenario_json)
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                '''
                 if scenario_json["machines"][machine_name]['shared_folders']:
                     shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
                     shared_folder_path = machine_path / shared_folder_name
                     file_manager.createSharedFolders(shared_folder_path)
+                '''
+                shared_folder_path = machine_path / "host_shared_folder"
+                file_manager.createSharedFolders(shared_folder_path)
                 print(scenario_json)
                 print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
             response.setResponse(True)
@@ -230,7 +234,8 @@ class VagrantManager():
 
             for machine_name in scenario_json["machines"]:
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
+                #shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
+                shared_folder_name = "host_shared_folder"
                 shared_folder_path = machine_path / shared_folder_name
                 if not os.path.exists(machine_path):  # Proceed if path exists
                     print("Machine path doesn't exist")

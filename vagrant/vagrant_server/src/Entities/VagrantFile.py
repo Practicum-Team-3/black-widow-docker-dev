@@ -24,11 +24,13 @@ class VagrantFile():
         buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", ip: \"{network_settings["ip_address"]}\", virtualbox__intnet: true\n'
 
     #setup synced folders
+    '''
     if machine["shared_folders"] != None:
       host = machine["shared_folders"][0]
       guest = machine["shared_folders"][1]
       buffer += f'\t\t{machine["name"]}.vm.synced_folder \"{host}\", \"{guest}\"\n'
-
+    '''
+    buffer += f'\t\t{machine["name"]}.vm.synced_folder "./host_shared_folder", "/guest_shared_folder" \n'
     #set provision
     if "provisions" in machine:
         provisions = machine["provisions"]

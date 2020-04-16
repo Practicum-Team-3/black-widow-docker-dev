@@ -7,7 +7,7 @@ class FileManager(object):
     def __init__(self):
         # Paths
         self.current_path = Path.cwd()
-        self.scenarios_path = self.current_path / "scenarios"
+        self.scenarios_path = self.current_path / "src" /"scenarios"
         self.exploits_path = self.current_path / "exploits"
         self.vulnerabilities_path = self.current_path / "vulnerabilities"
 
@@ -54,6 +54,8 @@ class FileManager(object):
             os.makedirs(scenario_path)
         except OSError:
             print("Creation of the directory %s failed" % scenario_path)
+        except FileExistsError:
+            print("Directory ", scenario_path, " already exists")
         else:
             print("Successfully created the directory %s" % scenario_path)
         for f in folders:
@@ -62,6 +64,8 @@ class FileManager(object):
                 os.makedirs(path)
             except OSError:
                 print("Creation of the directory %s failed" % path)
+            except FileExistsError:
+                print("Directory ", path, " already exists")
             else:
                 print("Successfully created the directory %s" % path)
         return
