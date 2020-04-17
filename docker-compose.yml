@@ -1,11 +1,36 @@
 version: '3.7'
 
 services:
+
+    traefik:
+        image: "traefik:v2.2"
+        container_name: "traefik"
+        command:
+          #- "--log.level=DEBUG"
+          - "--api.insecure=true"
+          - "--providers.docker=true"
+          - "--providers.docker.exposedbydefault=false"
+          - "--entrypoints.web.address=:80"
+          - "--providers.docker.network=traefik"
+        ports:
+          - "80:80"
+          - "50000:8080"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        networks: 
+            traefik:
+            nextcloud_net:
+            guacnetwork_compose:
+            widow_net:
     
     black_widow:
         build: './black_widow/'
         container_name: black_widow_dev
         hostname: black_widow_dev
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.black_widow.entrypoints=web"
+            - "traefik.http.routers.black_widow.rule=Host(`localhost`)"
         volumes:
             - type: volume
               source: black_widow_vol
@@ -22,7 +47,8 @@ services:
             MONGODB_HOSTNAME: ${MONGODB_HOSTNAME}
         ports:
             - ${BW_CON_PORT}:${BW_APP_PORT}
-        networks: 
+        networks:
+            traefik: 
             widow_net:
                 ipv4_address: ${WIDOW_IP}
         stdin_open: true
@@ -66,8 +92,13 @@ services:
         image: nextcloud
         container_name: nextcloud
         hostname: nextcloud
-        ports: 
-            - 8081:80
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.nextcloud.entrypoints=web"
+            - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.localhost`)"
+           
+        #ports: 
+        #    - 8081:80
         volumes:
             - nextcloud:/var/www/html
         environment: 
@@ -83,6 +114,7 @@ services:
             - nextcloud_db
 
         networks: 
+            traefik:
             nextcloud_net:
                 ipv4_address: "172.19.128.4"
     
@@ -135,6 +167,11 @@ services:
     # guacamole
     guacamole:
         container_name: guacamole_compose
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.guacamole.entrypoints=web"
+            - "traefik.http.routers.guacamole.rule=Host(`guac.localhost`)"
+            - "traefik.http.routers.guacamole.rule=PathPrefix(`/guacamole`)"
         depends_on:
             - guacd
             - postgres
@@ -149,6 +186,7 @@ services:
         #    - guacd
         networks:
             guacnetwork_compose:
+            traefik:
         ports:
             - 8085:8080/tcp
 
@@ -176,6 +214,7 @@ volumes:
 
 
 networks:
+    traefik:
     widow_net:
         driver: bridge
         ipam:
