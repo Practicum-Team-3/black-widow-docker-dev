@@ -18,7 +18,8 @@
   "machines": {
     "attacker": {
       "name": "attacker",
-      "os": "laravel/homestead",
+      "box": "generic/alpine37",
+      "os": "linux",
       "base_memory": "1024",
       "processors": "2",
       "is_attacker": true,
@@ -51,7 +52,8 @@
     },
     "victim": {
       "name": "victim",
-      "os": "laravel/homestead",
+      "box": "generic/alpine37",
+      "os": "linux",
       "base_memory": "1024",
       "processors": "2",
       "is_attacker": false,

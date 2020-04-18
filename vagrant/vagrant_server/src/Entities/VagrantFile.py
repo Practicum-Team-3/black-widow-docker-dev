@@ -16,7 +16,10 @@ class VagrantFile():
     buffer += f'\tconfig.vm.define "{machine["name"]}" do |{machine["name"]}|\n'
     #This will help identify the vm inside the vagrant environment
     buffer += f'\t\t{machine["name"]}.vm.hostname = "{machine["name"]}"\n'
-    buffer += f'\t\t{machine["name"]}.vm.box = "{machine["os"]}"\n'
+    #Long term fix
+    buffer += f'\t\t{machine["name"]}.vm.box = "{machine["box"]}"\n'
+    #Hot fix
+    #buffer += f'\t\t{machine["name"]}.vm.box = "generic/alpine37"\n'
 
     #setup static ip
     if machine["network_settings"]["ip_address"]:

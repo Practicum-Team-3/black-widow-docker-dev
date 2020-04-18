@@ -5,8 +5,9 @@ from Entities.Entity import Entity
 
 
 class VirtualMachine(Entity):
-  def __init__(self, name="", os="", base_memory = "1024", processors = "2", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder')):
+  def __init__(self, name="", box="generic/alpine37", os="", base_memory = "1024", processors = "2", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder')):
     self.name = name
+    self.box = box
     self.os = os
     self.is_attacker = is_attacker
     self.base_memory = base_memory
@@ -71,6 +72,7 @@ class VirtualMachine(Entity):
     """
     dicti = dict()
     dicti["name"] = self.name
+    dicti["box"] = self.box
     dicti["os"] = self.os
     dicti["base_memory"] = self.base_memory
     dicti["processors"] = self.processors
@@ -84,6 +86,7 @@ class VirtualMachine(Entity):
 
   def objectFromDictionary(self, dict):
     self.name = dict["name"]
+    self.box = dict["box"]
     self.os = dict["os"]
     self.base_memory = dict["base_memory"]
     self.processors = dict["processors"]
