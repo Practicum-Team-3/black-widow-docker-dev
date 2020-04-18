@@ -15,7 +15,7 @@ class VagrantFile():
     #Machines
     buffer += f'\tconfig.vm.define "{machine["name"]}" do |{machine["name"]}|\n'
     #This will help identify the vm inside the vagrant environment
-    buffer += f'\t\t{machine["name"]}.vm.hostname = "{machine["name"]}"\n'
+   #buffer += f'\t\t{machine["name"]}.vm.hostname = "{machine["name"]}"\n'
     #Long term fix
     buffer += f'\t\t{machine["name"]}.vm.box = "{machine["box"]}"\n'
     #Hot fix
