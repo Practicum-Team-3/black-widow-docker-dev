@@ -3,6 +3,9 @@ Testing
 Run flower
 flower -A CeleryApp --port=5555
 
+celery worker -A CeleryWorker.celery --loglevel=info"
+
+
 #Scenario Manager
 
 http://172.18.128.1:8080/scenarios/all
