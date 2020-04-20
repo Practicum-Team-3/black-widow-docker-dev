@@ -89,7 +89,8 @@ services:
                 ipv4_address: ${REDIS_HOST}
 
     nextcloud:
-        image: nextcloud
+        #image: nextcloud
+        build: './nextcloud/'
         container_name: nextcloud
         hostname: nextcloud
         labels: 
