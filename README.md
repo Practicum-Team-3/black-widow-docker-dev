@@ -1,7 +1,7 @@
 # Docker Development Environment
 ## Steps to follow:
 1. Run the following script: <br/>
-`./setup.sh` <br/>
+`./auto-setup.sh` <br/>
 **Note:** 
 *This script will set all the necesary environment variables for the docker container to set up. For a painless configuration, leave all the values by default* <br/>
 
