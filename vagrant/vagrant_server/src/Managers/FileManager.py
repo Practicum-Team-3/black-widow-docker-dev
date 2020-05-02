@@ -119,13 +119,64 @@ class FileManager(object):
         response.setResponse(True)
         return response.dictionary()
 
-    def createSharedFolders(self, shared_folder_path):
+    def createSaltStackFolder(self, scenario_json):
+        """
+        Creates a folder for each machine in the scenario
+        :param scenario_json: String with the scenario name
+        :return: True if machine folders are created successfully
+        """
+        # Response message for the requester
         response = Response()
         try:
-            os.makedirs(shared_folder_path)
-        except OSError:
-            print("Creation of the directory %s failed" % shared_folder_path)
+            machines = scenario_json['machines']
+            scenario_name = scenario_json['scenario_name']
+            machine_names = machines.keys()
+            machines_path = self.getScenariosPath() / scenario_name / "Machines"
+            for machine_name in machine_names:
+                saltstack_path = machines_path / machine_name / 'saltstack'
+                keys_path = machines_path / machine_name / 'saltstack' / 'keys'
+                etc_path = machines_path / machine_name / 'saltstack' / 'etc'
+                paths = [saltstack_path, keys_path, etc_path]
+                for path in paths:
+                    if os.path.isdir(path):
+                        print("Folder already exists: ", path)
+                    else:
+                        os.makedirs(path)
+        except KeyError as key_not_found:
+            print("%s has not been defined" % key_not_found)
             response.setResponse(False)
-            response.setReason("Creation of the directory %s failed" % shared_folder_path)
+            response.setReason(key_not_found, " has not been defined")
+        except OSError:
+            print("OS Error")
+            response.setResponse(False)
+            response.setReason("OS Error")
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+        response.setResponse(True)
+        return response.dictionary()
+
+    def createSharedFolders(self, scenario_json):
+        response = Response()
+        try:
+            machines = scenario_json['machines']
+            scenario_name = scenario_json['scenario_name']
+            machine_names = machines.keys()
+            machines_path = self.getScenariosPath() / scenario_name / "Machines"
+            for machine_name in scenario_json["machines"]:
+                shared_folder_path = machines_path / machine_name / "host_shared_folder"
+                if os.path.isdir(shared_folder_path):
+                    print("Folder already exists: ", shared_folder_path)
+                else:
+                    os.makedirs(shared_folder_path)
+        except KeyError as key_not_found:
+            print("%s has not been defined" % key_not_found)
+            response.setResponse(False)
+            response.setReason(key_not_found, " has not been defined")
+        except OSError:
+            print("OS Error")
+            response.setResponse(False)
+            response.setReason("OS Error")
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
         response.setResponse(True)
         return response.dictionary()
