@@ -150,6 +150,8 @@ class VagrantManager():
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                keys_path = machine_path / 'saltstack' / 'keys'
+                salt_manager.generateKeys(keys_path, machine_name)
                 print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
             response.setResponse(True)
         else:

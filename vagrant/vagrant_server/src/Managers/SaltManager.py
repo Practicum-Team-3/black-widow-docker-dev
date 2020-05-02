@@ -12,7 +12,10 @@ db_manager = DatabaseManager()
 vagrant_file = VagrantFile()
 
 class SaltManager():
-    def generateKeys(self, minion_id):
+    def generateKeys(self, keys_path, minion_id):
+        #Access to salt user
+        #command = ['sudo', 'cd', keys_path]
+        #self._runCommandFromShell(command)
         #Access to salt user
         command = ['sudo', 'chmod', 'a+rwx', '.']
         self._runCommandFromShell(command)
@@ -22,8 +25,11 @@ class SaltManager():
         #Add public key to the accepted minion folder
         command = [ 'sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/etc/salt/pki/master/minions/', minion_id]) ]
         self._runCommandFromShell(command)
-
-    def _runCommandFromShell(command):
+        #Move keys to keys folder
+        command = [ 'sudo', 'mv', ''.join([minion_id, '.pub']), ''.join([minion_id, '.pem']), './saltstack/keys' ]
+        self._runCommandFromShell(command)
+        return
+    def _runCommandFromShell(self, command):
         process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True)
         while True:
             output = process.stdout.readline()
