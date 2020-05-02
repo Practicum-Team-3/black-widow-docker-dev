@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 import shutil
 from Entities.Response import Response
+from Entities.VagrantFile import VagrantFile
+from Managers.SaltManager import SaltManager
 
 class FileManager(object):
     def __init__(self):
@@ -11,6 +13,8 @@ class FileManager(object):
         self.scenarios_path = self.current_path /"scenarios"
         self.exploits_path = self.current_path / "exploits"
         self.vulnerabilities_path = self.current_path / "vulnerabilities"
+        self.vagrant_file = VagrantFile()
+        self.salt_manager = SaltManager()
 
     def getCurrentPath(self):
         """
@@ -42,33 +46,34 @@ class FileManager(object):
     def getVulnerabilityJSONPath(self, vulnerability_name):
         return self.vulnerabilities_path / vulnerability_name
 
-    def createScenarioFolders(self, scenario_name):
+    def createScenarioFolders(self, scenario_json):
         """
         Creates a scenario folder with the JSON, Exploit, Vulnerability and Machines subfolders
-        :param scenario_name: String with the scenario name
+        :param scenario_json: String with the scenario name
         :return: True if the scenario is created successfully
         """
         # Variables
         folders = ["Machines"]
+        scenario_name = scenario_json['scenario_name']
         scenario_path = self.getScenariosPath() / scenario_name
         try:
             os.makedirs(scenario_path)
+            for f in folders:
+                path = scenario_path / f
+                try:
+                    os.makedirs(path)
+                except OSError:
+                    print("Creation of the directory %s failed" % path)
+                except FileExistsError:
+                    print("Directory ", path, " already exists")
+                else:
+                    print("Successfully created the directory %s" % path)
         except OSError:
             print("Creation of the directory %s failed" % scenario_path)
         except FileExistsError:
             print("Directory ", scenario_path," already exists")
         else:
             print("Successfully created the directory %s" % scenario_path)
-        for f in folders:
-            path = scenario_path / f
-            try:
-                os.makedirs(path)
-            except OSError:
-                print("Creation of the directory %s failed" % path)
-            except FileExistsError:
-                print("Directory ", path, " already exists")
-            else:
-                print("Successfully created the directory %s" % path)
         return
 
     def deleteScenariosFolder(self, scenario_name):
@@ -178,5 +183,25 @@ class FileManager(object):
             response.setReason("OS Error")
         except:
             print("Unexpected error:", sys.exc_info()[0])
+        response.setResponse(True)
+        return response.dictionary()
+
+    def createVagrantFiles(self, scenario_json):
+        response = Response()
+        for machine_name in scenario_json["machines"]:
+            machine = scenario_json["machines"][machine_name]
+            scenario_name = scenario_json['scenario_name']
+            machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
+            print('Vagrant File created: ', self.vagrant_file.vagrantFilePerMachine(machine, machine_path))
+        response.setResponse(True)
+        return response.dictionary()
+
+    def createSaltFiles(self, scenario_json):
+        response = Response()
+        for machine_name in scenario_json["machines"]:
+            scenario_name = scenario_json['scenario_name']
+            machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
+            keys_path = machine_path / 'saltstack' / 'keys'
+            self.salt_manager.generateKeys(keys_path, machine_name)
         response.setResponse(True)
         return response.dictionary()

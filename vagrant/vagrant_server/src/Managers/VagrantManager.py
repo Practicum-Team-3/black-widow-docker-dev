@@ -4,14 +4,10 @@ import re
 from CeleryApp import celery
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
-from Managers.SaltManager import SaltManager
-from Entities.VagrantFile import VagrantFile
 from Entities.Response import Response
 
 file_manager = FileManager()
 db_manager = DatabaseManager()
-vagrant_file = VagrantFile()
-salt_manager = SaltManager()
 
 class VagrantManager():
     def getAvailableBoxes(self):
@@ -132,34 +128,6 @@ class VagrantManager():
         return {'current': 100, 'total': 100, 'message': message, 'result': message}
 
     @staticmethod
-    def createVagrantFiles(scenario_name):
-        """
-        Creates a vagrant file per machine in a scenario
-        :param scenario_json: String with the scenario name
-        :return: True if vagrant files were successfully created
-        """
-        response = Response()
-        scenario = db_manager.getScenario(scenario_name)
-        if scenario:
-            scenario_json = scenario[0]
-            #Folders creation
-            file_manager.createScenarioFolders(scenario_name)
-            file_manager.createMachineFolders(scenario_json)
-            file_manager.createSharedFolders(scenario_json)
-            file_manager.createSaltStackFolder(scenario_json)
-            for machine_name in scenario_json["machines"]:
-                machine = scenario_json["machines"][machine_name]
-                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                keys_path = machine_path / 'saltstack' / 'keys'
-                salt_manager.generateKeys(keys_path, machine_name)
-                print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
-            response.setResponse(True)
-        else:
-            response.setResponse(False)
-            response.setReason('Scenario doesn\'t exist')
-        return response.dictionary()
-
-    @staticmethod
     def vagrantStatus(machine_name, machine_path):
         """
         Determines the status of the given vm
@@ -218,11 +186,11 @@ class VagrantManager():
         :return: True if the vagrant up commands were successfully executed
         """
         message = ""
-        VagrantManager.createVagrantFiles(scenario_name)
         scenario = db_manager.getScenario(scenario_name)
 
         if scenario:
             scenario_json = scenario[0]
+            VagrantManager.createFoldersAndFiles(scenario_json)
             completed = 0 #number of VMs started
             total = len(scenario_json["machines"]) #Number of machines in scenario
             message = "Starting all VMs inside %s scenario" % scenario_name
@@ -232,15 +200,6 @@ class VagrantManager():
 
             for machine_name in scenario_json["machines"]:
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                #shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
-                shared_folder_name = "host_shared_folder"
-                shared_folder_path = machine_path / shared_folder_name
-                if not os.path.exists(machine_path):  # Proceed if path exists
-                    print("Machine path doesn't exist")
-                    break
-                if not os.path.exists(shared_folder_path):  # Proceed if path exists
-                    print("Shared folder path doesn't exist")
-                    break
                 os.chdir(machine_path)
                 process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
@@ -281,6 +240,35 @@ class VagrantManager():
 
         return {'current': total, 'total': total, 'message': message,
             'result': machines_running}
+
+    @staticmethod
+    def createFoldersAndFiles(scenario_json):
+        """
+        Creates a vagrant file per machine in a scenario
+        :param scenario_json: String with the scenario name
+        :return: True if vagrant files were successfully created
+        """
+        response = Response()
+        #Folders creation
+        VagrantManager.createFolders(scenario_json)
+        #Files creation
+        VagrantManager.createFiles(scenario_json)
+        response.setResponse(True)
+        return response.dictionary()
+
+    @staticmethod
+    def createFolders(scenario_json):
+        file_manager.createScenarioFolders(scenario_json)
+        file_manager.createMachineFolders(scenario_json)
+        file_manager.createSharedFolders(scenario_json)
+        file_manager.createSaltStackFolder(scenario_json)
+        return
+
+    @staticmethod
+    def createFiles(scenario_json):
+        file_manager.createVagrantFiles(scenario_json)
+        file_manager.createSaltFiles(scenario_json)
+        return
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
         #First we need to move to the directory of the given machine
