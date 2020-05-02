@@ -142,6 +142,7 @@ class VagrantManager():
         scenario = db_manager.getScenario(scenario_name)
         if scenario:
             scenario_json = scenario[0]
+            #Folders creation
             file_manager.createScenarioFolders(scenario_name)
             file_manager.createMachineFolders(scenario_json)
             file_manager.createSharedFolders(scenario_json)
@@ -149,8 +150,6 @@ class VagrantManager():
             for machine_name in scenario_json["machines"]:
                 machine = scenario_json["machines"][machine_name]
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                shared_folder_path = machine_path / "host_shared_folder"
-                print(scenario_json)
                 print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
             response.setResponse(True)
         else:

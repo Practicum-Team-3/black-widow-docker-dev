@@ -162,7 +162,7 @@ class FileManager(object):
             scenario_name = scenario_json['scenario_name']
             machine_names = machines.keys()
             machines_path = self.getScenariosPath() / scenario_name / "Machines"
-            for machine_name in scenario_json["machines"]:
+            for machine_name in machine_names:
                 shared_folder_path = machines_path / machine_name / "host_shared_folder"
                 if os.path.isdir(shared_folder_path):
                     print("Folder already exists: ", shared_folder_path)
