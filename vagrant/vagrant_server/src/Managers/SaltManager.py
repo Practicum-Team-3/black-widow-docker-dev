@@ -1,11 +1,7 @@
-import os
 import subprocess
-import re
-from CeleryApp import celery
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
 from Entities.VagrantFile import VagrantFile
-from Entities.Response import Response
 
 file_manager = FileManager()
 db_manager = DatabaseManager()
