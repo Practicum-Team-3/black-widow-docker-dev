@@ -18,14 +18,12 @@
   "machines": {
     "attacker": {
       "name": "attacker",
-      "box": "generic/alpine37",
+      "box": "bento/ubuntu-18.04",
       "os": "linux",
-      "base_memory": "1024",
-      "processors": "2",
+      "base_memory": "400",
+      "processors": "1",
       "is_attacker": true,
       "shared_folders": [
-        "./attackerfiles",
-        "/sharedfolder"
       ],
       "network_settings": {
         "network_name": "Network Name",
@@ -52,14 +50,12 @@
     },
     "victim": {
       "name": "victim",
-      "box": "generic/alpine37",
+      "box": "bento/ubuntu-18.04",
       "os": "linux",
-      "base_memory": "1024",
-      "processors": "2",
+      "base_memory": "400",
+      "processors": "1",
       "is_attacker": false,
       "shared_folders": [
-        "./victimfiles",
-        "/sharedfolder"
       ],
       "network_settings": {
         "network_name": "Network Name",

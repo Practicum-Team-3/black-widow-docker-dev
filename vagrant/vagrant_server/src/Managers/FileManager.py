@@ -140,7 +140,7 @@ class FileManager(object):
             for machine_name in machine_names:
                 saltstack_path = machines_path / machine_name / 'saltstack'
                 keys_path = machines_path / machine_name / 'saltstack' / 'keys'
-                etc_path = machines_path / machine_name / 'saltstack' / 'etc'
+                etc_path = machines_path / machine_name / 'saltstack' / 'conf'
                 paths = [saltstack_path, keys_path, etc_path]
                 for path in paths:
                     if os.path.isdir(path):
@@ -192,7 +192,7 @@ class FileManager(object):
             machine = scenario_json["machines"][machine_name]
             scenario_name = scenario_json['scenario_name']
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
-            print('Vagrant File created: ', self.vagrant_file.vagrantFilePerMachine(machine, machine_path))
+            print('Vagrant file created: ', self.vagrant_file.generateVagrantFile(machine, machine_path))
         response.setResponse(True)
         return response.dictionary()
 
@@ -202,6 +202,8 @@ class FileManager(object):
             scenario_name = scenario_json['scenario_name']
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
             keys_path = machine_path / 'saltstack' / 'keys'
+            conf_path = machine_path / 'saltstack' / 'conf'
             self.salt_manager.generateKeys(keys_path, machine_name)
+            print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, machine_name))
         response.setResponse(True)
         return response.dictionary()
