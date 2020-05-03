@@ -20,7 +20,8 @@ class SaltManager():
         self._runCommandFromShell(command)
         #Add public key to the accepted minion folder
         print("Copying the minion public key to the salt master public keys folder")
-        command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/var/lib/salt/pki/master/minions/', minion_id]) ]
+        #command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/var/lib/salt/pki/master/minions/', minion_id]) ]
+        command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/etc/salt/pki/master/minions/', minion_id]) ]
         self._runCommandFromShell(command)
         return
 

@@ -3,7 +3,7 @@ class MinionConfigFile():
 
   def generateMinionConfigFile(self, conf_path, minion_id):
     buffer = ""
-    ip_address = "192.168.50.10"
+    ip_address = "192.168.50.1"
 
     file = open(conf_path / minion_id, "w")
 
