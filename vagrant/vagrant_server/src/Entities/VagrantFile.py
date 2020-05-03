@@ -28,8 +28,8 @@ class VagrantFile():
     #setup static ip
     if machine["network_settings"]["ip_address"]:
         network_settings = machine["network_settings"]
-        #buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", ip: \"{network_settings["ip_address"]}\"\n'#, virtualbox__intnet: true\n'
-        buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", type: \"dhcp\"\n'#, virtualbox__intnet: true\n'
+        buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", ip: \"{network_settings["ip_address"]}\"\n'#, virtualbox__intnet: true\n'
+        #buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", type: \"dhcp\"\n'#, virtualbox__intnet: true\n'
 
     #setup synced folders
     '''
