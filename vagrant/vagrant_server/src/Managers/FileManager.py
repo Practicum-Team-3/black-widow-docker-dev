@@ -2,6 +2,7 @@ import sys
 import os
 from pathlib import Path
 import shutil
+import string
 from Entities.Response import Response
 from Entities.VagrantFile import VagrantFile
 from Managers.SaltManager import SaltManager
@@ -189,21 +190,33 @@ class FileManager(object):
     def createVagrantFiles(self, scenario_json):
         response = Response()
         for machine_name in scenario_json["machines"]:
-            machine = scenario_json["machines"][machine_name]
+            #Names
             scenario_name = scenario_json['scenario_name']
+            minion_id = '_'.join([self._removeWhitespaces(scenario_name), self._removeWhitespaces(machine_name)])
+            #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
-            print('Vagrant file created: ', self.vagrant_file.generateVagrantFile(machine, machine_path))
+            #Machine JSON
+            machine = scenario_json["machines"][machine_name]
+            #Generate vagrant files
+            print('Vagrant file created: ', self.vagrant_file.generateVagrantFile(machine, machine_path, minion_id))
         response.setResponse(True)
         return response.dictionary()
 
     def createSaltFiles(self, scenario_json):
         response = Response()
         for machine_name in scenario_json["machines"]:
+            # Names
             scenario_name = scenario_json['scenario_name']
+            minion_id = '_'.join([self._removeWhitespaces(scenario_name), self._removeWhitespaces(machine_name)])
+            #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
             keys_path = machine_path / 'saltstack' / 'keys'
             conf_path = machine_path / 'saltstack' / 'conf'
-            self.salt_manager.generateKeys(keys_path, machine_name)
-            print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, machine_name))
+            #Generate salt files
+            self.salt_manager.generateKeys(keys_path, minion_id)
+            print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, minion_id))
         response.setResponse(True)
         return response.dictionary()
+
+    def _removeWhitespaces(self, s):
+        return s.translate({ord(c): None for c in string.whitespace})

@@ -190,7 +190,7 @@ class VagrantManager():
 
         if scenario:
             scenario_json = scenario[0]
-            VagrantManager.createFoldersAndFiles(scenario_json)
+            VagrantManager._createFoldersAndFiles(scenario_json)
             completed = 0 #number of VMs started
             total = len(scenario_json["machines"]) #Number of machines in scenario
             message = "Starting all VMs inside %s scenario" % scenario_name
@@ -219,7 +219,6 @@ class VagrantManager():
                           meta={'current': completed, 'total': total,
                                 'message': message})
                 completed += 1 #For progress bar
-            #response.setResponse(True)
             message = "Completed Vagrant Up"
             self.update_state(state='PROGRESS',
                           meta={'current': completed, 'total': total,
@@ -242,22 +241,20 @@ class VagrantManager():
             'result': machines_running}
 
     @staticmethod
-    def createFoldersAndFiles(scenario_json):
+    def _createFoldersAndFiles(scenario_json):
         """
         Creates a vagrant file per machine in a scenario
         :param scenario_json: String with the scenario name
         :return: True if vagrant files were successfully created
         """
-        response = Response()
         #Folders creation
-        VagrantManager.createFolders(scenario_json)
+        VagrantManager._createFolders(scenario_json)
         #Files creation
-        VagrantManager.createFiles(scenario_json)
-        response.setResponse(True)
-        return response.dictionary()
+        VagrantManager._createFiles(scenario_json)
+        return
 
     @staticmethod
-    def createFolders(scenario_json):
+    def _createFolders(scenario_json):
         file_manager.createScenarioFolders(scenario_json)
         file_manager.createMachineFolders(scenario_json)
         file_manager.createSharedFolders(scenario_json)
@@ -265,7 +262,7 @@ class VagrantManager():
         return
 
     @staticmethod
-    def createFiles(scenario_json):
+    def _createFiles(scenario_json):
         file_manager.createVagrantFiles(scenario_json)
         file_manager.createSaltFiles(scenario_json)
         return

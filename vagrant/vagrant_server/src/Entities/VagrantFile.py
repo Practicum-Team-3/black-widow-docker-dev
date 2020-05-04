@@ -1,11 +1,12 @@
 
 class VagrantFile():
 
-  def generateVagrantFile(self, machine, machine_path):
+  def generateVagrantFile(self, machine, machine_path, minion_id):
     """
     Creates a vagrant file for this machine
     :param machine: Object which carries the virtual machine data
     :param machine_path: Folder path to this machine
+    :param minion_id: Minion ID assigned to this virtual machine
     :return: String used to write the vagrant file
     """
     machine_vagrant_file_path = machine_path / "Vagrantfile"
@@ -56,7 +57,7 @@ class VagrantFile():
     #Virtual box config
     buffer += f"\tconfig.vm.provider \"virtualbox\" do |vb|\n"
     #Added to show machine name in virtualbox
-    buffer += f'\t\tvb.name = \"{machine["name"]}\"\n'
+    buffer += f'\t\tvb.name = \"{minion_id}\"\n'
     buffer += f"\t\tvb.gui = "
     #GUI
     if machine["gui"]:
@@ -69,9 +70,9 @@ class VagrantFile():
 
     #Salt provisioner
     buffer += f"\tconfig.vm.provision :salt do |salt|\n"
-    buffer += f'\t\tsalt.minion_config = \"saltstack/conf/{machine["name"]}\"\n'
-    buffer += f'\t\tsalt.minion_key = \"saltstack/keys/{machine["name"]}.pem\"\n'
-    buffer += f'\t\tsalt.minion_key = \"saltstack/keys/{machine["name"]}.pub\"\n'
+    buffer += f'\t\tsalt.minion_config = \"saltstack/conf/{minion_id}\"\n'
+    buffer += f'\t\tsalt.minion_key = \"saltstack/keys/{minion_id}.pem\"\n'
+    buffer += f'\t\tsalt.minion_key = \"saltstack/keys/{minion_id}.pub\"\n'
     buffer += f'\t\tsalt.install_type = \"stable\"\n'
     buffer += f'\t\tsalt.verbose = true\n'
     buffer += f'\t\tsalt.colorize = true\n'
