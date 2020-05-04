@@ -2,7 +2,6 @@ import sys
 import os
 from pathlib import Path
 import shutil
-import string
 from Entities.Response import Response
 from Entities.VagrantFile import VagrantFile
 from Managers.SaltManager import SaltManager
@@ -192,7 +191,7 @@ class FileManager(object):
         for machine_name in scenario_json["machines"]:
             #Names
             scenario_name = scenario_json['scenario_name']
-            minion_id = '_'.join([self._removeWhitespaces(scenario_name), self._removeWhitespaces(machine_name)])
+            minion_id = self.salt_manager.generateMinionID(scenario_name, machine_name)
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
             #Machine JSON
@@ -207,7 +206,7 @@ class FileManager(object):
         for machine_name in scenario_json["machines"]:
             # Names
             scenario_name = scenario_json['scenario_name']
-            minion_id = '_'.join([self._removeWhitespaces(scenario_name), self._removeWhitespaces(machine_name)])
+            minion_id = self.salt_manager.generateMinionID(scenario_name, machine_name)
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
             keys_path = machine_path / 'saltstack' / 'keys'
@@ -217,6 +216,3 @@ class FileManager(object):
             print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, minion_id))
         response.setResponse(True)
         return response.dictionary()
-
-    def _removeWhitespaces(self, s):
-        return s.translate({ord(c): None for c in string.whitespace})

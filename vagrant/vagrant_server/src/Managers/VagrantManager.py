@@ -4,10 +4,12 @@ import re
 from CeleryApp import celery
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
+from Managers.SaltManager import SaltManager
 from Entities.Response import Response
 
 file_manager = FileManager()
 db_manager = DatabaseManager()
+salt_manager = SaltManager()
 
 class VagrantManager():
     def getAvailableBoxes(self):
@@ -199,11 +201,14 @@ class VagrantManager():
                                 'message': message})
 
             for machine_name in scenario_json["machines"]:
+                # Names
+                scenario_name = scenario_json['scenario_name']
+                minion_id = salt_manager.generateMinionID(scenario_name, machine_name)
+                #Paths
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
                 os.chdir(machine_path)
                 process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
-
                 message = "Working on %s" % machine_name
                 self.update_state(state='PROGRESS',
                           meta={'current': completed, 'total': total,
@@ -218,6 +223,8 @@ class VagrantManager():
                         self.update_state(state='PROGRESS',
                           meta={'current': completed, 'total': total,
                                 'message': message})
+                #Accepting public keys for this virtual machine aka minion
+                salt_manager.acceptKeys(minion_id)
                 completed += 1 #For progress bar
             message = "Completed Vagrant Up"
             self.update_state(state='PROGRESS',
