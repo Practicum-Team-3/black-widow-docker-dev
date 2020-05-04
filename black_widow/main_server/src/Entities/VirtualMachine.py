@@ -5,7 +5,7 @@ from Entities.Entity import Entity
 
 
 class VirtualMachine(Entity):
-  def __init__(self, name="", box="generic/alpine37", os="", base_memory = "1024", processors = "2", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder')):
+  def __init__(self, name="", box="generic/alpine37", os="", base_memory = "1024", processors = "2", is_attacker=False, shared_folders = ('./vmfiles', '/sharedfolder'), uuid = ""):
     self.name = name
     self.box = box
     self.os = os
@@ -17,6 +17,7 @@ class VirtualMachine(Entity):
     self.provision = [Provision("pingVictim")]
     self.gui = False
     self.programs = [Program()]
+    self.uuid = uuid
 
   def setName(self, name):
     """
@@ -82,6 +83,7 @@ class VirtualMachine(Entity):
     dicti["provisions"] = [prov.dictionary() for prov in self.provision]
     dicti["programs"] = [prog.dictionary() for prog in self.programs]
     dicti["gui"] = self.gui
+    dicti["uuid"] = self.uuid
     return dicti
 
   def objectFromDictionary(self, dict):
@@ -96,4 +98,5 @@ class VirtualMachine(Entity):
     self.provision = [Provision().objectFromDictionary(prov) for prov in dict["provisions"]]
     self.programs = [Program().objectFromDictionary(prog) for prog in dict["programs"]]
     self.gui = dict["gui"]
+    self.uuid = dict["uuid"]
     return self

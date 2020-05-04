@@ -21,6 +21,7 @@
       "box": "generic/alpine37",
       "os": "linux",
       "base_memory": "1024",
+      "uuid": "",
       "processors": "2",
       "is_attacker": true,
       "shared_folders": [
@@ -57,6 +58,7 @@
       "base_memory": "1024",
       "processors": "2",
       "is_attacker": false,
+      "uuid": "",
       "shared_folders": [
         "./victimfiles",
         "/sharedfolder"

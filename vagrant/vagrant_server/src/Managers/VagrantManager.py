@@ -1,7 +1,9 @@
 import os
 import subprocess
 import re
+import psutil
 from CeleryApp import celery
+from math import ceil
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
 from Entities.VagrantFile import VagrantFile
@@ -12,6 +14,22 @@ db_manager = DatabaseManager()
 vagrant_file = VagrantFile()
 
 class VagrantManager():
+
+    def getSystemInfo(self): 
+        cpu_count_logical = psutil.cpu_count(logical=True)
+        cpu_count = psutil.cpu_count(logical=False)
+        memory = psutil.virtual_memory()
+        mem = getattr(memory, 'total')
+        memory_bytes = int(mem)
+        gigabytes = float(1024 ** 3)
+        total_ram = ceil(memory_bytes/gigabytes)
+        info = {'cpu_count_logical' : cpu_count, 'cpu_count' : cpu_count, 'total_ram' : total_ram }
+        response = Response()
+        response.setResponse(True)
+        response.setBody(info)
+        return response.dictionary()
+
+
     def getAvailableBoxes(self):
         """
         Gets the available boxes in the Vagrant context
@@ -154,7 +172,7 @@ class VagrantManager():
                 shared_folder_path = machine_path / "host_shared_folder"
                 file_manager.createSharedFolders(shared_folder_path)
                 print(scenario_json)
-                print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path))
+                print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path, scenario_name))
             response.setResponse(True)
         else:
             response.setResponse(False)
@@ -191,6 +209,8 @@ class VagrantManager():
         :param machine_name: String with the machine name
         :return: Response object containing the status of the machine after execution of command
         """
+        machine_name = scenario_name + "_" + machine_name
+
         allowed_commands = ['suspend','halt','resume','status']
         if command not in allowed_commands:
             response = Response(False, "Given command not allowed")
@@ -273,6 +293,7 @@ class VagrantManager():
         machines_running = {}
         for machine_name in scenario_json["machines"]:
             machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            machine_name = scenario_name + "_" + machine_name
             machines_running[machine_name] = VagrantManager.vagrantStatus(machine_name, machine_path)
                
 
@@ -288,6 +309,7 @@ class VagrantManager():
         #First we need to move to the directory of the given machine
         machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
         #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
+        machine_name = scenario_name + "_" + machine_name
         connect_command = "vagrant ssh -c '{}' {}".format(command, machine_name)
         sshProcess = subprocess.Popen(connect_command,
                                     cwd=machine_path,
