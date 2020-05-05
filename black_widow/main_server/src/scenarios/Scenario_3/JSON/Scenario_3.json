@@ -22,6 +22,7 @@
       "os": "linux",
       "base_memory": "1024",
       "processors": "2",
+      "uuid": "",
       "is_attacker": true,
       "shared_folders": [
         "./attackerfiles",
@@ -56,6 +57,7 @@
       "os": "linux",
       "base_memory": "1024",
       "processors": "2",
+      "uuid": "",
       "is_attacker": false,
       "shared_folders": [
         "./attackerfiles",

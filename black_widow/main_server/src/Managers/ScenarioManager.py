@@ -1,5 +1,6 @@
 import os
 import json
+import uuid
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
 from Entities.Scenario import Scenario
@@ -87,6 +88,8 @@ class ScenarioManager():
             response.setBody(dict())
         return response.dictionary()
 
+
+
     def editOne(self, scenario_json):
         """
         Edits a current scenario with a JSON file
@@ -98,7 +101,20 @@ class ScenarioManager():
         print(scenario_json)
         scenario_name = scenario_json["scenario_name"]
         if scenario_name in self.scenarios_dict:
+
+            if "machines" in scenario_json:
+                for machine in scenario_json["machines"]:
+
+                    if not "uuid" in scenario_json["machines"][machine]:
+                        new_uuid = uuid.uuid4()
+                        new_uuid = str(new_uuid).replace('-', '')
+                        print("Unique id: " , new_uuid)
+                        scenario_json['machines'][machine]['uuid'] = new_uuid
+            
+
             scenario_json = Scenario(scenario_name).objectFromDictionary(scenario_json)
+            
+            
             self.scenarios_dict[scenario_name] = scenario_json
             #self._saveScenarioAsJSON(new_scenario)
             self.db_manager.editScenario(scenario_json.dictionary().copy())

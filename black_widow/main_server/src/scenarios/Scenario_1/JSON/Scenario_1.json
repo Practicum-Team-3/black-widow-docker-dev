@@ -22,6 +22,7 @@
       "os": "linux",
       "base_memory": "400",
       "processors": "1",
+      "uuid": "",
       "is_attacker": true,
       "shared_folders": [
       ],
@@ -55,6 +56,7 @@
       "base_memory": "400",
       "processors": "1",
       "is_attacker": false,
+      "uuid": "",
       "shared_folders": [
       ],
       "network_settings": {

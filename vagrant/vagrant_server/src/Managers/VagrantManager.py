@@ -1,7 +1,9 @@
 import os
 import subprocess
 import re
+import psutil
 from CeleryApp import celery
+from math import ceil
 from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
 from Managers.SaltManager import SaltManager
@@ -12,6 +14,22 @@ db_manager = DatabaseManager()
 salt_manager = SaltManager()
 
 class VagrantManager():
+
+    def getSystemInfo(self): 
+        cpu_count_logical = psutil.cpu_count(logical=True)
+        cpu_count = psutil.cpu_count(logical=False)
+        memory = psutil.virtual_memory()
+        mem = getattr(memory, 'total')
+        memory_bytes = int(mem)
+        gigabytes = float(1024 ** 3)
+        total_ram = ceil(memory_bytes/gigabytes)
+        info = {'cpu_count_logical' : cpu_count, 'cpu_count' : cpu_count, 'total_ram' : total_ram }
+        response = Response()
+        response.setResponse(True)
+        response.setBody(info)
+        return response.dictionary()
+
+
     def getAvailableBoxes(self):
         """
         Gets the available boxes in the Vagrant context
@@ -130,6 +148,40 @@ class VagrantManager():
         return {'current': 100, 'total': 100, 'message': message, 'result': message}
 
     @staticmethod
+
+    def createVagrantFiles(scenario_name):
+        """
+        Creates a vagrant file per machine in a scenario
+        :param scenario_json: String with the scenario name
+        :return: True if vagrant files were successfully created
+        """
+        response = Response()
+        scenario = db_manager.getScenario(scenario_name)
+        if scenario:
+            scenario_json = scenario[0]
+            file_manager.createScenarioFolders(scenario_name)
+            file_manager.createMachineFolders(scenario_json)
+            for machine_name in scenario_json["machines"]:
+                machine = scenario_json["machines"][machine_name]
+                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                '''
+                if scenario_json["machines"][machine_name]['shared_folders']:
+                    shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
+                    shared_folder_path = machine_path / shared_folder_name
+                    file_manager.createSharedFolders(shared_folder_path)
+                '''
+                shared_folder_path = machine_path / "host_shared_folder"
+                file_manager.createSharedFolders(shared_folder_path)
+                print(scenario_json)
+                print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path, scenario_name))
+            response.setResponse(True)
+        else:
+            response.setResponse(False)
+            response.setReason('Scenario doesn\'t exist')
+        return response.dictionary()
+
+    @staticmethod
+
     def vagrantStatus(machine_name, machine_path):
         """
         Determines the status of the given vm
@@ -159,6 +211,8 @@ class VagrantManager():
         :param machine_name: String with the machine name
         :return: Response object containing the status of the machine after execution of command
         """
+        machine_name = scenario_name + "_" + machine_name
+
         allowed_commands = ['suspend','halt','resume','status']
         if command not in allowed_commands:
             response = Response(False, "Given command not allowed")
@@ -236,6 +290,7 @@ class VagrantManager():
         machines_running = {}
         for machine_name in scenario_json["machines"]:
             machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            machine_name = scenario_name + "_" + machine_name
             machines_running[machine_name] = VagrantManager.vagrantStatus(machine_name, machine_path)
                
 
@@ -278,6 +333,7 @@ class VagrantManager():
         #First we need to move to the directory of the given machine
         machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
         #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
+        machine_name = scenario_name + "_" + machine_name
         connect_command = "vagrant ssh -c '{}' {}".format(command, machine_name)
         sshProcess = subprocess.Popen(connect_command,
                                     cwd=machine_path,
