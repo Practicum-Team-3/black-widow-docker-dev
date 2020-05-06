@@ -334,9 +334,8 @@ networks:
         driver: bridge
         ipam:
             driver: default
-                - subnet: 172.22.168.0/24
             config:
-
+                - subnet: 172.22.168.0/24
 
     nextcloud_net:
         driver: bridge
