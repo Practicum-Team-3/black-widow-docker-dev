@@ -115,18 +115,10 @@ class FileManager(object):
             for machine_name in machine_names:
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
                 machine_path = machines_path / machine_uuid
-                machine = scenario_json["machines"][machine_name]
                 if os.path.isdir(machine_path):
                     print("Folder already exists")
                 else:
                     os.makedirs(machine_path)
-                shared_folder = machine["shared_folders"][0]
-                shared_folder_path = machine_path / shared_folder
-                if os.path.isdir(shared_folder_path):
-                    print("Shared folder already exists")
-                else:
-                    os.makedirs(shared_folder_path)
-
         except KeyError as key_not_found:
             print("%s has not been defined" % key_not_found)
             response.setResponse(False)
@@ -154,7 +146,6 @@ class FileManager(object):
             machine_names = machines.keys()
             machines_path = self.getScenariosPath() / scenario_name / "Machines"
             for machine_name in machine_names:
-
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
                 saltstack_path = machines_path / machine_uuid / 'saltstack'
                 keys_path = machines_path / machine_uuid / 'saltstack' / 'keys'
@@ -210,14 +201,13 @@ class FileManager(object):
         for machine_name in scenario_json["machines"]:
             #Names
             scenario_name = scenario_json['scenario_name']
-            machine_uuid = machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-            minion_id = machine_uuid
+            machine_uuid = scenario_json["machines"][machine_name]["uuid"]
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             #Machine JSON
             machine = scenario_json["machines"][machine_name]
             #Generate vagrant files
-            print('Vagrant file created: ', self.vagrant_file.generateVagrantFile(machine, machine_path, minion_id))
+            print('Vagrant file created: ', self.vagrant_file.generateVagrantFile(machine, machine_path, machine_uuid))
         response.setResponse(True)
         return response.dictionary()
 
@@ -226,14 +216,13 @@ class FileManager(object):
         for machine_name in scenario_json["machines"]:
             # Names
             scenario_name = scenario_json['scenario_name']
-            machine_uuid = machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-            minion_id = machine_uuid
+            machine_uuid = scenario_json["machines"][machine_name]["uuid"]
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             keys_path = machine_path / 'saltstack' / 'keys'
             conf_path = machine_path / 'saltstack' / 'conf'
             #Generate salt files
-            self.salt_manager.generateKeys(keys_path, minion_id)
-            print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, minion_id))
+            self.salt_manager.generateKeys(keys_path, machine_uuid)
+            print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, machine_uuid))
         response.setResponse(True)
         return response.dictionary()

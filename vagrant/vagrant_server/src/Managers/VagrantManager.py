@@ -2,7 +2,6 @@ import os
 import subprocess
 import re
 import psutil
-import time
 from CeleryApp import celery
 from math import ceil
 from Managers.FileManager import FileManager
@@ -233,6 +232,7 @@ class VagrantManager():
             for machine_name in scenario_json["machines"]:
                 # Names
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+                print('Minion id been configures: ', machine_uuid)
                 safe_from_purge.append(machine_uuid)
                 scenario_name = scenario_json['scenario_name']
                 #Paths
@@ -256,13 +256,14 @@ class VagrantManager():
                                 'message': message})
                 #Accepting public keys for this virtual machine aka minion
                 salt_manager.acceptKeys(machine_uuid)
-                time.sleep(3)
+                '''
                 #Ping minion id
                 salt_manager.testPing(machine_uuid)
                 #Run beats salt formulas
                 salt_manager.runSaltHighstate(machine_uuid)
                 #Copying beats config files
                 salt_manager.copyingBeatsConfigFiles(machine_uuid)
+                '''
                 completed += 1 #For progress bar
             message = "Completed Vagrant Up"
             self.update_state(state='PROGRESS',
@@ -277,12 +278,10 @@ class VagrantManager():
             machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             machine_name = scenario_name + "_" + machine_name
             machines_running[machine_name] = VagrantManager.vagrantStatus(machine_name, machine_path)
-               
 
         self.update_state(state='COMPLETE',
                           meta={'current': completed, 'total': total,
                                 'message': message})
-
 
         VagrantManager._purgeMachines(scenario_name, safe_from_purge)        
         return {'current': total, 'total': total, 'message': message,

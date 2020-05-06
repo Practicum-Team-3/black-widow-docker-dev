@@ -1,6 +1,7 @@
 import subprocess
 import os
 import string
+import time
 from Entities.MinionConfigFile import MinionConfigFile
 
 
@@ -85,6 +86,7 @@ class SaltManager():
                 break
             if output:
                 print(output.strip())
+        time.sleep(1)
         return
 
     def _removeWhitespaces(self, s):
