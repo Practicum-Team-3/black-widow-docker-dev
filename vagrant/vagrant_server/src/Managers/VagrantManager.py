@@ -211,7 +211,7 @@ class VagrantManager():
         :param machine_name: String with the machine name
         :return: Response object containing the status of the machine after execution of command
         """
-        machine_name = scenario_name + "_" + machine_name
+        machine_uuid = scenario_json["machines"][machine_name]["uuid"]
 
         allowed_commands = ['suspend','halt','resume','status']
         if command not in allowed_commands:
@@ -220,11 +220,11 @@ class VagrantManager():
 
         else:
             try:
-                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
                 if command != 'status':
                     os.chdir(machine_path)
                     subprocess.run(['vagrant', command])
-                machine_state = VagrantManager.vagrantStatus(machine_name, machine_path)
+                machine_state = VagrantManager.vagrantStatus(machine_uuid, machine_path)
                 response = Response(True, body={machine_name: machine_state})
                 return response.dictionary() 
             except OSError:
@@ -243,6 +243,7 @@ class VagrantManager():
         """
         message = ""
         scenario = db_manager.getScenario(scenario_name)
+        safe_from_purge = list()
 
         if scenario:
             scenario_json = scenario[0]
@@ -256,10 +257,12 @@ class VagrantManager():
 
             for machine_name in scenario_json["machines"]:
                 # Names
+                machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+                safe_from_purge.append(machine_uuid)
                 scenario_name = scenario_json['scenario_name']
-                minion_id = salt_manager.generateMinionID(scenario_name, machine_name)
+                minion_id = salt_manager.generateMinionID(machine_uuid)
                 #Paths
-                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
                 os.chdir(machine_path)
                 process = subprocess.Popen(['vagrant', 'up'], stdout=subprocess.PIPE,
                                            universal_newlines=True)
@@ -289,7 +292,8 @@ class VagrantManager():
 
         machines_running = {}
         for machine_name in scenario_json["machines"]:
-            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+            machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             machine_name = scenario_name + "_" + machine_name
             machines_running[machine_name] = VagrantManager.vagrantStatus(machine_name, machine_path)
                
@@ -299,6 +303,7 @@ class VagrantManager():
                                 'message': message})
 
 
+        VagrantManager._purgeMachines(scenario_name, safe_from_purge)        
         return {'current': total, 'total': total, 'message': message,
             'result': machines_running}
 
@@ -328,13 +333,18 @@ class VagrantManager():
         file_manager.createVagrantFiles(scenario_json)
         file_manager.createSaltFiles(scenario_json)
         return
+    
+    @staticmethod
+    def _purgeMachines(scenario_name, safe_machines):
+        file_manager.purgeMachines(scenario_name, safe_machines)
+        return
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
         #First we need to move to the directory of the given machine
-        machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
+        machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+        machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
         #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
-        machine_name = scenario_name + "_" + machine_name
-        connect_command = "vagrant ssh -c '{}' {}".format(command, machine_name)
+        connect_command = "vagrant ssh -c '{}' {}".format(command, machine_uuid)
         sshProcess = subprocess.Popen(connect_command,
                                     cwd=machine_path,
                                     stdin=subprocess.PIPE, 

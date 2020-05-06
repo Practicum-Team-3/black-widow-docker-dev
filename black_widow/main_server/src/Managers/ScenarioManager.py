@@ -105,7 +105,7 @@ class ScenarioManager():
             if "machines" in scenario_json:
                 for machine in scenario_json["machines"]:
 
-                    if not "uuid" in scenario_json["machines"][machine]:
+                    if scenario_json["machines"][machine]["uuid"] == "":
                         new_uuid = uuid.uuid4()
                         new_uuid = str(new_uuid).replace('-', '')
                         print("Unique id: " , new_uuid)
