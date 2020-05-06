@@ -8,17 +8,17 @@ class SaltManager():
         self.m_conf_file = MinionConfigFile()
         return
 
-    def generateMinionID(self,scenario_name, machine_name):
-        minion_id = '_'.join([self._removeWhitespaces(scenario_name), self._removeWhitespaces(machine_name)])
+    def generateMinionID(self, machine_name):
+        minion_id = self._removeWhitespaces(machine_name)
         return minion_id
 
     def generateKeys(self, keys_path, minion_id):
         #Change directory to keys path
         os.chdir(keys_path)
         #Give permission to the salt user
-        #print("Giving permission to the salt user")
-        #command = ['sudo', 'chmod', 'a+rwx', '.']
-        #self._runCommandFromShell(command)
+        print("Giving permission to the salt user")
+        command = ['sudo', 'chmod', 'a+rwx', '.']
+        self._runCommandFromShell(command)
         #Generate keys
         print("Generating keys for minion id: ", minion_id)
         command = ['sudo', 'salt-key', ''.join(['--gen-keys=', minion_id])]
