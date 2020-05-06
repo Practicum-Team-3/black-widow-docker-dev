@@ -260,7 +260,7 @@ class VagrantManager():
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
                 safe_from_purge.append(machine_uuid)
                 scenario_name = scenario_json['scenario_name']
-                minion_id = salt_manager.generateMinionID(machine_uuid)
+                minion_id = machine_uuid
                 #Paths
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
                 os.chdir(machine_path)

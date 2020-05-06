@@ -77,9 +77,12 @@ class FileManager(object):
         return
 
     def purgeMachines(self, scenario_name, safe_machines):
+
+        also_safe = ["VagrantFile", "host_shared_folder", "saltstack"]
+        safe_machines.append(also_safe)
         path = self.getScenariosPath() / scenario_name / "Machines"
         list_subfolders = os.listdir(path)
-        for folder in list_subfolders_with_paths: 
+        for folder in list_subfolders: 
             if folder not in safe_machines:
                 try:
                     to_delete = path + "/"+ folder
@@ -208,7 +211,7 @@ class FileManager(object):
             #Names
             scenario_name = scenario_json['scenario_name']
             machine_uuid = machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-            minion_id = self.salt_manager.generateMinionID(machine_uuid)
+            minion_id = machine_uuid
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             #Machine JSON
@@ -224,7 +227,7 @@ class FileManager(object):
             # Names
             scenario_name = scenario_json['scenario_name']
             machine_uuid = machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-            minion_id = self.salt_manager.generateMinionID(machine_uuid)
+            minion_id = machine_uuid
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             keys_path = machine_path / 'saltstack' / 'keys'
