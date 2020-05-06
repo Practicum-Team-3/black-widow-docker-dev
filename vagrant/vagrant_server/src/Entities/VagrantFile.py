@@ -21,15 +21,15 @@ class VagrantFile():
     #Opening
     buffer += f"Vagrant.configure(\"2\") do |config|\n"
     #Machines
-    buffer += f'\tconfig.vm.define "{machine["name"]}" do |{machine["name"]}|\n'
+    buffer += f'\tconfig.vm.define "machine" do |machine|\n'
     #This will help identify the vm inside the vagrant environment
     #buffer += f'\t\t{machine["name"]}.vm.hostname = "{machine["name"]}"\n'
-    buffer += f'\t\t{machine["name"]}.vm.box = "{machine["box"]}"\n'
+    buffer += f'\t\tmachine.vm.box = "{machine["box"]}"\n'
 
     #setup static ip
     if machine["network_settings"]["ip_address"]:
         network_settings = machine["network_settings"]
-        buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", ip: \"{network_settings["ip_address"]}\"\n'#, virtualbox__intnet: true\n'
+        buffer += f'\t\tmachine.vm.network \"private_network\", ip: \"{network_settings["ip_address"]}\"\n'#, virtualbox__intnet: true\n'
         #buffer += f'\t\t{machine["name"]}.vm.network \"private_network\", type: \"dhcp\"\n'#, virtualbox__intnet: true\n'
 
     #setup synced folders
@@ -39,7 +39,7 @@ class VagrantFile():
       guest = machine["shared_folders"][1]
       buffer += f'\t\t{machine["name"]}.vm.synced_folder \"{host}\", \"{guest}\"\n'
     '''
-    buffer += f'\t\t{machine["name"]}.vm.synced_folder "./host_shared_folder", "/guest_shared_folder" \n'
+    buffer += f'\t\tmachine.vm.synced_folder "./host_shared_folder", "/guest_shared_folder" \n'
     '''
     #set provision
     if "provisions" in machine:

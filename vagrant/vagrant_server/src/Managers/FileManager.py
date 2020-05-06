@@ -76,6 +76,18 @@ class FileManager(object):
             print("Successfully created the directory %s" % scenario_path)
         return
 
+    def purgeMachines(self, scenario_name, safe_machines):
+        path = self.getScenariosPath() / scenario_name / "Machines"
+        list_subfolders = os.listdir(path)
+        for folder in list_subfolders_with_paths: 
+            if folder not in safe_machines:
+                try:
+                    to_delete = path + "/"+ folder
+                    shutil.rmtree(to_delete)
+                except OSError as e:
+                    print("Error: %s : %s" % (folder, e.strerror))
+        return
+
     def deleteScenariosFolder(self, scenario_name):
         scenario_path = self.getScenariosPath() / scenario_name
         try:
@@ -98,7 +110,8 @@ class FileManager(object):
             machine_names = machines.keys()
             machines_path = self.getScenariosPath() / scenario_name / "Machines"
             for machine_name in machine_names:
-                machine_path = machines_path / machine_name
+                machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+                machine_path = machines_path / machine_uuid
                 machine = scenario_json["machines"][machine_name]
                 if os.path.isdir(machine_path):
                     print("Folder already exists")
@@ -138,9 +151,11 @@ class FileManager(object):
             machine_names = machines.keys()
             machines_path = self.getScenariosPath() / scenario_name / "Machines"
             for machine_name in machine_names:
-                saltstack_path = machines_path / machine_name / 'saltstack'
-                keys_path = machines_path / machine_name / 'saltstack' / 'keys'
-                etc_path = machines_path / machine_name / 'saltstack' / 'conf'
+
+                machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+                saltstack_path = machines_path / machine_uuid / 'saltstack'
+                keys_path = machines_path / machine_uuid / 'saltstack' / 'keys'
+                etc_path = machines_path / machine_uuid / 'saltstack' / 'conf'
                 paths = [saltstack_path, keys_path, etc_path]
                 for path in paths:
                     if os.path.isdir(path):
@@ -168,7 +183,8 @@ class FileManager(object):
             machine_names = machines.keys()
             machines_path = self.getScenariosPath() / scenario_name / "Machines"
             for machine_name in machine_names:
-                shared_folder_path = machines_path / machine_name / "host_shared_folder"
+                machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+                shared_folder_path = machines_path / machine_uuid / "host_shared_folder"
                 if os.path.isdir(shared_folder_path):
                     print("Folder already exists: ", shared_folder_path)
                 else:
@@ -191,9 +207,10 @@ class FileManager(object):
         for machine_name in scenario_json["machines"]:
             #Names
             scenario_name = scenario_json['scenario_name']
-            minion_id = self.salt_manager.generateMinionID(scenario_name, machine_name)
+            machine_uuid = machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+            minion_id = self.salt_manager.generateMinionID(machine_uuid)
             #Paths
-            machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
+            machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             #Machine JSON
             machine = scenario_json["machines"][machine_name]
             #Generate vagrant files
@@ -206,9 +223,10 @@ class FileManager(object):
         for machine_name in scenario_json["machines"]:
             # Names
             scenario_name = scenario_json['scenario_name']
-            minion_id = self.salt_manager.generateMinionID(scenario_name, machine_name)
+            machine_uuid = machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+            minion_id = self.salt_manager.generateMinionID(machine_uuid)
             #Paths
-            machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_name
+            machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
             keys_path = machine_path / 'saltstack' / 'keys'
             conf_path = machine_path / 'saltstack' / 'conf'
             #Generate salt files
