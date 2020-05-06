@@ -92,7 +92,7 @@ services:
                 ipv4_address: ${REDIS_HOST}
 
     nextcloud:
-        image: nextcloud
+        build: ./nextcloud
         container_name: nextcloud
         hostname: nextcloud
         labels: 
@@ -100,8 +100,9 @@ services:
             - "traefik.http.routers.nextcloud.entrypoints=web"
             - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.localhost`)"
            
-        #ports: 
-        #    - 8081:80
+        ports: 
+            - "22"
+            #    - 8081:80
         volumes:
             - nextcloud:/var/www/html
         environment: 
@@ -115,11 +116,15 @@ services:
     
         depends_on:
             - nextcloud_db
+        tty: true
+
 
         networks: 
             traefik:
             nextcloud_net:
                 ipv4_address: "172.19.128.4"
+            salt_net:
+                ipv4_address: "172.23.128.3"
     
     nextcloud_db:
         image: postgres
@@ -192,6 +197,34 @@ services:
             traefik:
         ports:
             - 8085:8080/tcp
+    
+    saltstack:
+        build: ./salt
+        hostname: salt
+        container_name: salt
+        #command:
+            #- "salt-master -d"
+        #    - "/usr/bin/salt-ssh -i nextcloud state.apply bootstrap"
+        tty: true
+        # stdin_open: true
+        entrypoint: [ "/usr/sbin/entrypoint.sh", "/bin/bash"]
+        ports:
+            - "0.0.0.0:4505:4505"
+            - "0.0.0.0:4506:4506"
+            - "0.0.0.0:8000:8000"
+        depends_on: 
+            - nextcloud
+            - nextcloud_db
+        
+        volumes:
+            - ./salt/config/master:/etc/salt/master
+            - ./salt/config/top.sls:/srv/salt/top.sls
+            - ./salt/config/roster:/etc/salt/roster
+        networks:
+            salt_net:
+                ipv4_address: "172.23.128.2"
+            
+        
 
            
 volumes:
@@ -218,12 +251,17 @@ volumes:
 
 networks:
     traefik:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.21.128.0/24
+    
     widow_net:
         driver: bridge
         ipam:
             driver: default
             config:
-                - subnet: ${SUBNET_WIDOW}/24
+                - subnet: ${SUBNET_WIDOW}/24 #SUBNET_WIDOW=172.18.128.0
 
 
     nextcloud_net:
@@ -231,11 +269,24 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet: ${SUBNET_NEXTCLOUD}/24
+                - subnet: ${SUBNET_NEXTCLOUD}/24 #SUBNET_NEXTCLOUD=172.19.128.0
     
     guacnetwork_compose:
         driver: bridge
-
+        ipam:
+            driver: default
+            config:
+                - subnet: ${SUBNET_GUAC}/24 #SUBNET_GUAC=172.20.128.0
+    
+    salt_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.23.128.0/24 #SALT_NET=172.23.128.0
+    
+    
+    
 
             
         
