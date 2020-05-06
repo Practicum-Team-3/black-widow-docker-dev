@@ -2,6 +2,7 @@ import os
 import subprocess
 import re
 import psutil
+import time
 from CeleryApp import celery
 from math import ceil
 from Managers.FileManager import FileManager
@@ -110,7 +111,7 @@ class VagrantManager():
         ova_file = "".join([file_name, ".ova"])
         box_file = "".join([file_name, ".box"])
 
-        print("Hello FOlks")
+        print("Hello Folks")
         print(ova_file)
         VagrantManager._runCommandFromShell(['pwd'])
         # IMPORTING OVA FILE INTO VIRTUAL BOX
@@ -255,6 +256,9 @@ class VagrantManager():
                                 'message': message})
                 #Accepting public keys for this virtual machine aka minion
                 salt_manager.acceptKeys(machine_uuid)
+                time.sleep(3)
+                #Ping minion id
+                salt_manager.testPing(machine_uuid)
                 #Run beats salt formulas
                 salt_manager.runSaltHighstate(machine_uuid)
                 #Copying beats config files

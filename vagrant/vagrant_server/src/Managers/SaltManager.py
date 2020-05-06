@@ -3,6 +3,7 @@ import os
 import string
 from Entities.MinionConfigFile import MinionConfigFile
 
+
 class SaltManager():
     def __init__(self):
         self.m_conf_file = MinionConfigFile()
@@ -41,6 +42,13 @@ class SaltManager():
         self._runCommandFromShell(command)
         return
 
+    def testPing(self, minion_id):
+        print("Ping minion id: ", minion_id)
+        #Filebeat state
+        command = ['sudo', 'salt', minion_id, 'test.ping']
+        self._runCommandFromShell(command)
+        return
+
     def runSaltHighstate(self, minion_id):
         print("Running salt highstate: ", minion_id)
         command = ['sudo', 'salt', minion_id, 'state.apply']
@@ -55,11 +63,17 @@ class SaltManager():
         #Restart filebeat service
         command = ['sudo', 'salt', minion_id, 'cmd.run', 'sudo service filebeat restart']
         self._runCommandFromShell(command)
+        #Print filebeat version
+        command = ['sudo', 'salt', minion_id, 'cmd.run', 'filebeat version']
+        self._runCommandFromShell(command)
         #Metricbeat state
         command = ['sudo', 'salt', minion_id, 'cp.get_file', 'salt://conf/metricbeat.yml', '/etc/metricbeat/']
         self._runCommandFromShell(command)
         #Restart metricbeat service
         command = ['sudo', 'salt', minion_id, 'cmd.run', 'sudo service metricbeat restart']
+        self._runCommandFromShell(command)
+        #Print metricbeat version
+        command = ['sudo', 'salt', minion_id, 'cmd.run', 'metricbeat version']
         self._runCommandFromShell(command)
         return
 
