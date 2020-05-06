@@ -148,40 +148,6 @@ class VagrantManager():
         return {'current': 100, 'total': 100, 'message': message, 'result': message}
 
     @staticmethod
-
-    def createVagrantFiles(scenario_name):
-        """
-        Creates a vagrant file per machine in a scenario
-        :param scenario_json: String with the scenario name
-        :return: True if vagrant files were successfully created
-        """
-        response = Response()
-        scenario = db_manager.getScenario(scenario_name)
-        if scenario:
-            scenario_json = scenario[0]
-            file_manager.createScenarioFolders(scenario_name)
-            file_manager.createMachineFolders(scenario_json)
-            for machine_name in scenario_json["machines"]:
-                machine = scenario_json["machines"][machine_name]
-                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_name
-                '''
-                if scenario_json["machines"][machine_name]['shared_folders']:
-                    shared_folder_name = scenario_json["machines"][machine_name]['shared_folders'][0][2:]
-                    shared_folder_path = machine_path / shared_folder_name
-                    file_manager.createSharedFolders(shared_folder_path)
-                '''
-                shared_folder_path = machine_path / "host_shared_folder"
-                file_manager.createSharedFolders(shared_folder_path)
-                print(scenario_json)
-                print('Vagrant File created: ', vagrant_file.vagrantFilePerMachine(machine, machine_path, scenario_name))
-            response.setResponse(True)
-        else:
-            response.setResponse(False)
-            response.setReason('Scenario doesn\'t exist')
-        return response.dictionary()
-
-    @staticmethod
-
     def vagrantStatus(machine_name, machine_path):
         """
         Determines the status of the given vm
@@ -211,27 +177,35 @@ class VagrantManager():
         :param machine_name: String with the machine name
         :return: Response object containing the status of the machine after execution of command
         """
-        machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+        response = Response()
+        scenario = db_manager.getScenario(scenario_name)
+        if scenario:
+            scenario_json = scenario[0]
+            machine_uuid = scenario_json["machines"][machine_name]["uuid"]
 
-        allowed_commands = ['suspend','halt','resume','status']
-        if command not in allowed_commands:
-            response = Response(False, "Given command not allowed")
-            return response.dictionary()
-
-        else:
-            try:
-                machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
-                if command != 'status':
-                    os.chdir(machine_path)
-                    subprocess.run(['vagrant', command])
-                machine_state = VagrantManager.vagrantStatus(machine_uuid, machine_path)
-                response = Response(True, body={machine_name: machine_state})
-                return response.dictionary() 
-            except OSError:
-                error_message = "OS ERROR while running %s command on %s machine " % command, machine_name
-                print(error_message)
-                response = Response(False, error_message)
+            allowed_commands = ['suspend','halt','resume','status']
+            if command not in allowed_commands:
+                response = Response(False, "Given command not allowed")
                 return response.dictionary()
+
+            else:
+                try:
+                    machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
+                    if command != 'status':
+                        os.chdir(machine_path)
+                        subprocess.run(['vagrant', command])
+                    machine_state = VagrantManager.vagrantStatus(machine_uuid, machine_path)
+                    response = Response(True, body={machine_name: machine_state})
+                    return response.dictionary()
+                except OSError:
+                    error_message = "OS ERROR while running %s command on %s machine " % command, machine_name
+                    print(error_message)
+                    response = Response(False, error_message)
+                    return response.dictionary()
+        else:
+            response.setResponse(False)
+            response.setReason('Scenario doesn\'t exist')
+        return response.dictionary()
 
 
     @celery.task(name='VagrantManager.runVagrantUp', bind=True)
@@ -260,7 +234,6 @@ class VagrantManager():
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
                 safe_from_purge.append(machine_uuid)
                 scenario_name = scenario_json['scenario_name']
-                minion_id = machine_uuid
                 #Paths
                 machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
                 os.chdir(machine_path)
@@ -281,7 +254,11 @@ class VagrantManager():
                           meta={'current': completed, 'total': total,
                                 'message': message})
                 #Accepting public keys for this virtual machine aka minion
-                salt_manager.acceptKeys(minion_id)
+                salt_manager.acceptKeys(machine_uuid)
+                #Run beats salt formulas
+                salt_manager.runSaltHighstate(machine_uuid)
+                #Copying beats config files
+                salt_manager.copyingBeatsConfigFiles(machine_uuid)
                 completed += 1 #For progress bar
             message = "Completed Vagrant Up"
             self.update_state(state='PROGRESS',
@@ -340,33 +317,41 @@ class VagrantManager():
         return
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
-        #First we need to move to the directory of the given machine
-        machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-        machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
-        #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
-        connect_command = "vagrant ssh -c '{}' {}".format(command, machine_uuid)
-        sshProcess = subprocess.Popen(connect_command,
-                                    cwd=machine_path,
-                                    stdin=subprocess.PIPE, 
-                                    stdout = subprocess.PIPE,
-                                    universal_newlines=True,
-                                    shell=True,
-                                    bufsize=0)
-        #wait for the execution to finish, process running on different shell
-        sshProcess.wait()
-        sshProcess.stdin.close()
-        return_code = sshProcess.returncode
+        response = Response()
+        scenario = db_manager.getScenario(scenario_name)
+        return_code = ''
+        if scenario:
+            scenario_json = scenario[0]
+            #First we need to move to the directory of the given machine
+            machine_uuid = scenario_json["machines"][machine_name]["uuid"]
+            machine_path = file_manager.getScenariosPath() / scenario_name / "Machines" / machine_uuid
+            #using "vagrant ssh -c 'command' <machine>" will only try to execute that command and return, CHANGE THIS
+            connect_command = "vagrant ssh -c '{}' {}".format(command, machine_uuid)
+            sshProcess = subprocess.Popen(connect_command,
+                                        cwd=machine_path,
+                                        stdin=subprocess.PIPE,
+                                        stdout = subprocess.PIPE,
+                                        universal_newlines=True,
+                                        shell=True,
+                                        bufsize=0)
+            #wait for the execution to finish, process running on different shell
+            sshProcess.wait()
+            sshProcess.stdin.close()
+            return_code = sshProcess.returncode
 
-        if show_output:
-            for line in sshProcess.stdout:
-                if line == "END\n":
-                    break
-                print(line,end="")
+            if show_output:
+                for line in sshProcess.stdout:
+                    if line == "END\n":
+                        break
+                    print(line,end="")
 
-            for line in sshProcess.stdout:
-                if line == "END\n":
-                    break
-                print(line,end="")
+                for line in sshProcess.stdout:
+                    if line == "END\n":
+                        break
+                    print(line,end="")
+        else:
+            response.setResponse(False)
+            response.setReason('Scenario doesn\'t exist')
         return return_code
 
     def testNetworkPing(self, scenario_name, machine_name, destination_machine_name, count=1):

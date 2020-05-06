@@ -12,6 +12,10 @@ class SaltManager():
         minion_id = self._removeWhitespaces(machine_name)
         return minion_id
 
+    def generateMinionConfigFile(self, conf_path, minion_id):
+        print("Generating Minion config file")
+        return self.m_conf_file.generateMinionConfigFile(conf_path, minion_id)
+
     def generateKeys(self, keys_path, minion_id):
         #Change directory to keys path
         os.chdir(keys_path)
@@ -37,9 +41,27 @@ class SaltManager():
         self._runCommandFromShell(command)
         return
 
-    def generateMinionConfigFile(self, conf_path, minion_id):
-        print("Generating Minion config file")
-        return self.m_conf_file.generateMinionConfigFile(conf_path, minion_id)
+    def runSaltHighstate(self, minion_id):
+        print("Running salt highstate: ", minion_id)
+        command = ['sudo', 'salt', minion_id, 'state.apply']
+        self._runCommandFromShell(command)
+        return
+
+    def copyingBeatsConfigFiles(self, minion_id):
+        print("Copying beats config files: ", minion_id)
+        #Filebeat state
+        command = ['sudo', 'salt', minion_id, 'cp.get_file', 'salt://conf/filebeat.yml', '/etc/filebeat/']
+        self._runCommandFromShell(command)
+        #Restart filebeat service
+        command = ['sudo', 'salt', minion_id, 'cmd.run', 'sudo service filebeat restart']
+        self._runCommandFromShell(command)
+        #Metricbeat state
+        command = ['sudo', 'salt', minion_id, 'cp.get_file', 'salt://conf/metricbeat.yml', '/etc/metricbeat/']
+        self._runCommandFromShell(command)
+        #Restart metricbeat service
+        command = ['sudo', 'salt', minion_id, 'cmd.run', 'sudo service metricbeat restart']
+        self._runCommandFromShell(command)
+        return
 
     def _runCommandFromShell(self, command):
         process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True)
