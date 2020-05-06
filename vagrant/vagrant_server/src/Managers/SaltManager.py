@@ -79,6 +79,8 @@ class SaltManager():
         return
 
     def _runCommandFromShell(self, command):
+        print("Executing the following command: ")
+        print(' '.join(command))
         process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True)
         while True:
             output = process.stdout.readline()
