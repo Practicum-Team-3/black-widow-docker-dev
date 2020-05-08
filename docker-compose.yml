@@ -114,7 +114,7 @@ services:
             discovery.type: single-node
         networks:
             elk:
-                ipv4_address: "172.22.168.15"
+                ipv4_address: "172.25.128.15"
             
     
     logstash:
@@ -136,7 +136,7 @@ services:
             LS_JAVA_OPTS: "-Xmx256m -Xms256m"
         networks:
             elk:
-                ipv4_address: "172.22.168.5"
+                ipv4_address: "172.25.128.5"
         depends_on:
             - elasticsearch
 
@@ -157,7 +157,7 @@ services:
             - "5601"
         networks:
             elk:
-                ipv4_address: "172.22.168.10"
+                ipv4_address: "172.25.128.10"
         depends_on:
             - elasticsearch
                 
@@ -297,7 +297,7 @@ networks:
         ipam:
             driver: default
             config:
-                - subnet: 172.22.168.0/24
+                - subnet: 172.25.128.0/24
                 
 
 
