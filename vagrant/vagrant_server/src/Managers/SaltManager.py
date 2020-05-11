@@ -1,13 +1,12 @@
-import subprocess
 import os
 import string
-import time
 from Entities.MinionConfigFile import MinionConfigFile
-
+from Managers.ConsoleManager import ConsoleManager
 
 class SaltManager():
     def __init__(self):
         self.m_conf_file = MinionConfigFile()
+        self.console_manager = ConsoleManager()
         return
 
     def generateMinionID(self, machine_name):
@@ -15,80 +14,70 @@ class SaltManager():
         return minion_id
 
     def generateMinionConfigFile(self, conf_path, minion_id):
-        print("Generating Minion config file")
+        self.console_manager.printRed("Generating minion config file")
         return self.m_conf_file.generateMinionConfigFile(conf_path, minion_id)
 
     def generateKeys(self, keys_path, minion_id):
         #Change directory to keys path
         os.chdir(keys_path)
         #Give permission to the salt user
-        print("Giving permission to the salt user")
+        self.console_manager.printRed("Giving permission to the salt user")
         command = ['sudo', 'chmod', 'a+rwx', '.']
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
         #Generate keys
-        print("Generating keys for minion id: ", minion_id)
+        self.console_manager.printRed(''.join(["Generating keys for minion id: ", minion_id]))
         command = ['sudo', 'salt-key', ''.join(['--gen-keys=', minion_id])]
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
+        #Give permission to the salt user
+        self.console_manager.printRed("Allowing vagrant to handle private keys")
+        command = ['sudo', 'chmod', 'a+rwx', ''.join([minion_id, '.pub']), ''.join([minion_id, '.pem'])]
+        self.console_manager.runCommandFromShell(command)
         #Add public key to the accepted minion folder
-        #print("Copying the minion public key to the salt master public keys folder")
-        #command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/var/lib/salt/pki/master/minions/', minion_id])]
-        #self._runCommandFromShell(command)
-        #command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/etc/salt/pki/master/minions/', minion_id])]
-        #self._runCommandFromShell(command)
+        self.console_manager.printRed("Copying the minion public key to the salt master public keys folder")
+        command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/var/lib/salt/pki/master/minions/', minion_id])]
+        self.console_manager.runCommandFromShell(command)
+        command = ['sudo', 'cp', ''.join([minion_id, '.pub']), ''.join(['/etc/salt/pki/master/minions/', minion_id])]
+        self.console_manager.runCommandFromShell(command)
         return
 
     def acceptKeys(self, minion_id):
-        print("Accepting key for minion id: ", minion_id)
+        self.console_manager.printRed(''.join(["Accepting key for minion id: ", minion_id]))
         command = ['sudo', 'salt-key', '-a', minion_id, '-y']
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
         return
 
     def testPing(self, minion_id):
-        print("Ping minion id: ", minion_id)
-        #Filebeat state
+        self.console_manager.printRed(''.join(["Ping minion id: ", minion_id]))
         command = ['sudo', 'salt', minion_id, 'test.ping']
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
         return
 
     def runSaltHighstate(self, minion_id):
-        print("Running salt highstate: ", minion_id)
+        self.console_manager.printRed(''.join(["Running salt highstate: ", minion_id]))
         command = ['sudo', 'salt', minion_id, 'state.apply']
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
         return
 
     def copyingBeatsConfigFiles(self, minion_id):
-        print("Copying beats config files: ", minion_id)
+        self.console_manager.printRed(''.join(["Copying beats config files: ", minion_id]))
         #Filebeat state
         command = ['sudo', 'salt', minion_id, 'cp.get_file', 'salt://conf/filebeat.yml', '/etc/filebeat/']
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
         #Restart filebeat service
-        command = ['sudo', 'salt', minion_id, 'cmd.run', 'sudo service filebeat restart']
-        self._runCommandFromShell(command)
+        command = ['sudo', 'salt', minion_id, 'cmd.run', '\"sudo service filebeat restart\"']
+        self.console_manager.runCommandFromShell(command)
         #Print filebeat version
-        command = ['sudo', 'salt', minion_id, 'cmd.run', 'filebeat version']
-        self._runCommandFromShell(command)
+        command = ['sudo', 'salt', minion_id, 'cmd.run', '\"filebeat version\"']
+        self.console_manager.runCommandFromShell(command)
         #Metricbeat state
         command = ['sudo', 'salt', minion_id, 'cp.get_file', 'salt://conf/metricbeat.yml', '/etc/metricbeat/']
-        self._runCommandFromShell(command)
+        self.console_manager.runCommandFromShell(command)
         #Restart metricbeat service
-        command = ['sudo', 'salt', minion_id, 'cmd.run', 'sudo service metricbeat restart']
-        self._runCommandFromShell(command)
+        command = ['sudo', 'salt', minion_id, 'cmd.run', '\"sudo service metricbeat restart\"']
+        self.console_manager.runCommandFromShell(command)
         #Print metricbeat version
-        command = ['sudo', 'salt', minion_id, 'cmd.run', 'metricbeat version']
-        self._runCommandFromShell(command)
-        return
-
-    def _runCommandFromShell(self, command):
-        print("Executing the following command: ")
-        print(' '.join(command))
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True)
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                print(output.strip())
-        time.sleep(1)
+        command = ['sudo', 'salt', minion_id, 'cmd.run', '\"metricbeat version\"']
+        self.console_manager.runCommandFromShell(command)
         return
 
     def _removeWhitespaces(self, s):

@@ -70,9 +70,10 @@ class VagrantFile():
 
     #Salt provisioner
     buffer += f"\tconfig.vm.provision :salt do |salt|\n"
-    buffer += f'\t\tsalt.minion_config = \"saltstack/conf/{minion_id}\"\n'
-    buffer += f'\t\tsalt.minion_key = \"saltstack/keys/{minion_id}.pem\"\n'
-    buffer += f'\t\tsalt.minion_key = \"saltstack/keys/{minion_id}.pub\"\n'
+    buffer += f'\t\tsalt.minion_config = \"salt/conf/{minion_id}\"\n'
+    buffer += f'\t\tsalt.minion_key = \"salt/keys/{minion_id}.pem\"\n'
+    buffer += f'\t\tsalt.minion_pub = \"salt/keys/{minion_id}.pub\"\n'
+    buffer += f'\t\tsalt.run_highstate = true\n'
     buffer += f'\t\tsalt.install_type = \"stable\"\n'
     buffer += f'\t\tsalt.verbose = true\n'
     buffer += f'\t\tsalt.colorize = true\n'

@@ -78,7 +78,7 @@ class FileManager(object):
 
     def purgeMachines(self, scenario_name, safe_machines):
 
-        also_safe = ["VagrantFile", "host_shared_folder", "saltstack"]
+        also_safe = ["VagrantFile", "host_shared_folder", "salt"]
         safe_machines.append(also_safe)
         path = self.getScenariosPath() / scenario_name / "Machines"
         list_subfolders = os.listdir(path)
@@ -147,9 +147,9 @@ class FileManager(object):
             machines_path = self.getScenariosPath() / scenario_name / "Machines"
             for machine_name in machine_names:
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-                saltstack_path = machines_path / machine_uuid / 'saltstack'
-                keys_path = machines_path / machine_uuid / 'saltstack' / 'keys'
-                etc_path = machines_path / machine_uuid / 'saltstack' / 'conf'
+                saltstack_path = machines_path / machine_uuid / 'salt'
+                keys_path = saltstack_path / 'keys'
+                etc_path = saltstack_path / 'conf'
                 paths = [saltstack_path, keys_path, etc_path]
                 for path in paths:
                     if os.path.isdir(path):
@@ -219,8 +219,8 @@ class FileManager(object):
             machine_uuid = scenario_json["machines"][machine_name]["uuid"]
             #Paths
             machine_path = self.getScenariosPath() / scenario_name / "Machines" / machine_uuid
-            keys_path = machine_path / 'saltstack' / 'keys'
-            conf_path = machine_path / 'saltstack' / 'conf'
+            keys_path = machine_path / 'salt' / 'keys'
+            conf_path = machine_path / 'salt' / 'conf'
             #Generate salt files
             self.salt_manager.generateKeys(keys_path, machine_uuid)
             print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, machine_uuid))

@@ -8,10 +8,12 @@ from Managers.FileManager import FileManager
 from Managers.DatabaseManager import DatabaseManager
 from Managers.SaltManager import SaltManager
 from Entities.Response import Response
+from Managers.ConsoleManager import ConsoleManager
 
 file_manager = FileManager()
 db_manager = DatabaseManager()
 salt_manager = SaltManager()
+console_manager = ConsoleManager()
 
 class VagrantManager():
 
@@ -112,10 +114,10 @@ class VagrantManager():
 
         print("Hello Folks")
         print(ova_file)
-        VagrantManager._runCommandFromShell(['pwd'])
+        console_manager.runCommandFromShell(['pwd'])
         # IMPORTING OVA FILE INTO VIRTUAL BOX
         print('IMPORTING OVA FILE INTO VIRTUAL BOX')
-        VagrantManager._runCommandFromShell(['vboxmanage', 'import', ova_file])
+        console_manager.runCommandFromShell(['vboxmanage', 'import', ova_file])
 
         # GETTING VIRTUAL MACHINE ID
         print('GETTING VIRTUAL MACHINE ID')
@@ -137,12 +139,12 @@ class VagrantManager():
 
         # PACKAGING VIRTUAL MACHINE INTO A BOX
         print('PACKAGING VIRTUAL MACHINE INTO A BOX')
-        VagrantManager._runCommandFromShell(['vagrant', 'package', '--base', box_id, '--output', box_file])
+        console_manager.runCommandFromShell(['vagrant', 'package', '--base', box_id, '--output', box_file])
 
         # ADDING BOX BY NAME
         # vagrant add box cumulus.box --name cumulus
         print('ADDING BOX TO VAGRANT')
-        VagrantManager._runCommandFromShell(['vagrant', 'box', 'add', box_file, '--name', file_name])
+        console_manager.runCommandFromShell(['vagrant', 'box', 'add', box_file, '--name', file_name])
 
         message = "Box added using OVA file."
         return {'current': 100, 'total': 100, 'message': message, 'result': message}
@@ -232,7 +234,7 @@ class VagrantManager():
             for machine_name in scenario_json["machines"]:
                 # Names
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
-                print('Minion id been configures: ', machine_uuid)
+                console_manager.printRed(''.join(['Running vagrant up command for minion id: ', machine_uuid]))
                 safe_from_purge.append(machine_uuid)
                 scenario_name = scenario_json['scenario_name']
                 #Paths
@@ -249,13 +251,13 @@ class VagrantManager():
                     if output == '' and process.poll() is not None:
                         break
                     if output:
-                        print(output.strip())
+                        console_manager.printGreen(output.strip())
                         message = output.strip()
                         self.update_state(state='PROGRESS',
                           meta={'current': completed, 'total': total,
                                 'message': message})
                 #Accepting public keys for this virtual machine aka minion
-                salt_manager.acceptKeys(machine_uuid)
+                #salt_manager.acceptKeys(machine_uuid)
                 '''
                 #Ping minion id
                 salt_manager.testPing(machine_uuid)
@@ -370,17 +372,17 @@ class VagrantManager():
                 ping_command = "ping -c {} {}".format(count, destination_ip)
                 return_code = self.sendCommand(scenario_name, machine_name, ping_command)
                 if return_code == 0:
-                    print("Ping Succesful")
+                    print("Ping Successfully")
                     response.setResponse(True)
-                    response.setReason("Ping Succesful")
+                    response.setReason("Ping Successfully")
                 elif return_code == 1:
                     print("No answer from %s" % destination_machine_name)
                     response.setResponse(False)
                     response.setReason("No answer from %s" % destination_machine_name)
                 else:
-                    print("Another error as ocurred")
+                    print("Another error has occurred")
                     response.setResponse(False)
-                    response.setReason("Another error as ocurred")
+                    response.setReason("Another error has occurred")
             except KeyError:
                 print("Machines not defined for this Scenario")
                 response.setResponse(False)
@@ -390,16 +392,3 @@ class VagrantManager():
             response.setResponse(False)
             response.setReason("Scenario %s not found" % scenario_name)
         return response.dictionary()
-
-    @staticmethod
-    def _runCommandFromShell(command):
-        print("Executing the following command: ")
-        print(' '.join(command))
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True)
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                print(output.strip())
-        return
