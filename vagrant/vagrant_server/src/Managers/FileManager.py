@@ -5,6 +5,7 @@ import shutil
 from Entities.Response import Response
 from Entities.VagrantFile import VagrantFile
 from Managers.SaltManager import SaltManager
+from Managers.ConsoleManager import ConsoleManager
 
 class FileManager(object):
     def __init__(self):
@@ -15,6 +16,8 @@ class FileManager(object):
         self.vulnerabilities_path = self.current_path / "vulnerabilities"
         self.vagrant_file = VagrantFile()
         self.salt_manager = SaltManager()
+        self.console_manager = ConsoleManager()
+        return
 
     def getCurrentPath(self):
         """
@@ -52,6 +55,7 @@ class FileManager(object):
         :param scenario_json: String with the scenario name
         :return: True if the scenario is created successfully
         """
+        self.console_manager.printRed('Creating scenario folders: ')
         # Variables
         folders = ["Machines"]
         scenario_name = scenario_json['scenario_name']
@@ -63,17 +67,17 @@ class FileManager(object):
                 try:
                     os.makedirs(path)
                 except OSError:
-                    print("Creation of the directory %s failed" % path)
+                    self.console_manager.printGreen(''.join(["Creation of the directory ", str(path), " failed."]))
                 except FileExistsError:
-                    print("Directory ", path, " already exists")
+                    self.console_manager.printGreen(''.join(["Directory ", str(path), " already exists"]))
                 else:
-                    print("Successfully created the directory %s" % path)
+                    self.console_manager.printGreen(''.join(["Successfully created the directory ", str(path)]))
         except OSError:
-            print("Creation of the directory %s failed" % scenario_path)
+            self.console_manager.printGreen(''.join(["Creation of the directory ", str(scenario_path), " failed."]))
         except FileExistsError:
-            print("Directory ", scenario_path," already exists")
+            self.console_manager.printGreen(''.join(["Directory ", str(scenario_path), " already exists"]))
         else:
-            print("Successfully created the directory %s" % scenario_path)
+            self.console_manager.printGreen(''.join(["Successfully created the directory ", str(scenario_path)]))
         return
 
     def purgeMachines(self, scenario_name, safe_machines):
@@ -107,6 +111,7 @@ class FileManager(object):
         """
         # Response message for the requester
         response = Response()
+        self.console_manager.printRed('Creating machine folders: ')
         try:
             machines = scenario_json['machines']
             scenario_name = scenario_json['scenario_name']
@@ -116,19 +121,19 @@ class FileManager(object):
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
                 machine_path = machines_path / machine_uuid
                 if os.path.isdir(machine_path):
-                    print("Folder already exists")
+                    self.console_manager.printGreen("Folder already exists")
                 else:
                     os.makedirs(machine_path)
         except KeyError as key_not_found:
-            print("%s has not been defined" % key_not_found)
+            self.console_manager.printGreen(''.join([key_not_found, " has not been defined"]))
             response.setResponse(False)
             response.setReason(key_not_found, " has not been defined")
         except OSError:
-            print("OS Error")
+            self.console_manager.printGreen("OS Error")
             response.setResponse(False)
             response.setReason("OS Error")
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            self.console_manager.printGreen(''.join(["Unexpected error:", sys.exc_info()[0]]))
         response.setResponse(True)
         return response.dictionary()
 
@@ -140,6 +145,7 @@ class FileManager(object):
         """
         # Response message for the requester
         response = Response()
+        self.console_manager.printRed('Creating saltstack folders: ')
         try:
             machines = scenario_json['machines']
             scenario_name = scenario_json['scenario_name']
@@ -153,24 +159,25 @@ class FileManager(object):
                 paths = [saltstack_path, keys_path, etc_path]
                 for path in paths:
                     if os.path.isdir(path):
-                        print("Folder already exists: ", path)
+                        self.console_manager.printGreen("Folder already exists")
                     else:
                         os.makedirs(path)
         except KeyError as key_not_found:
-            print("%s has not been defined" % key_not_found)
+            self.console_manager.printGreen(''.join([key_not_found, " has not been defined"]))
             response.setResponse(False)
             response.setReason(key_not_found, " has not been defined")
         except OSError:
-            print("OS Error")
+            self.console_manager.printGreen("OS Error")
             response.setResponse(False)
             response.setReason("OS Error")
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            self.console_manager.printGreen(''.join(["Unexpected error:", sys.exc_info()[0]]))
         response.setResponse(True)
         return response.dictionary()
 
     def createSharedFolders(self, scenario_json):
         response = Response()
+        self.console_manager.printRed('Creating shared folders: ')
         try:
             machines = scenario_json['machines']
             scenario_name = scenario_json['scenario_name']
@@ -180,24 +187,25 @@ class FileManager(object):
                 machine_uuid = scenario_json["machines"][machine_name]["uuid"]
                 shared_folder_path = machines_path / machine_uuid / "host_shared_folder"
                 if os.path.isdir(shared_folder_path):
-                    print("Folder already exists: ", shared_folder_path)
+                    self.console_manager.printGreen("Folder already exists")
                 else:
                     os.makedirs(shared_folder_path)
         except KeyError as key_not_found:
-            print("%s has not been defined" % key_not_found)
+            self.console_manager.printGreen(''.join([key_not_found, " has not been defined"]))
             response.setResponse(False)
             response.setReason(key_not_found, " has not been defined")
         except OSError:
-            print("OS Error")
+            self.console_manager.printGreen("OS Error")
             response.setResponse(False)
             response.setReason("OS Error")
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            self.console_manager.printGreen(''.join(["Unexpected error:", sys.exc_info()[0]]))
         response.setResponse(True)
         return response.dictionary()
 
     def createVagrantFiles(self, scenario_json):
         response = Response()
+        self.console_manager.printRed('Creating vagrant file')
         for machine_name in scenario_json["machines"]:
             #Names
             scenario_name = scenario_json['scenario_name']
@@ -207,12 +215,13 @@ class FileManager(object):
             #Machine JSON
             machine = scenario_json["machines"][machine_name]
             #Generate vagrant files
-            print('Vagrant file created: ', self.vagrant_file.generateVagrantFile(machine, machine_path, machine_uuid))
+            self.console_manager.printBlue(self.vagrant_file.generateVagrantFile(machine, machine_path, machine_uuid))
         response.setResponse(True)
         return response.dictionary()
 
     def createSaltFiles(self, scenario_json):
         response = Response()
+        self.console_manager.printRed('Creating saltstack files')
         for machine_name in scenario_json["machines"]:
             # Names
             scenario_name = scenario_json['scenario_name']
@@ -223,6 +232,6 @@ class FileManager(object):
             conf_path = machine_path / 'salt' / 'conf'
             #Generate salt files
             self.salt_manager.generateKeys(keys_path, machine_uuid)
-            print('Minion config file created: ', self.salt_manager.generateMinionConfigFile(conf_path, machine_uuid))
+            self.console_manager.printBlue(self.salt_manager.generateMinionConfigFile(conf_path, machine_uuid))
         response.setResponse(True)
         return response.dictionary()

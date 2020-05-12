@@ -256,16 +256,10 @@ class VagrantManager():
                         self.update_state(state='PROGRESS',
                           meta={'current': completed, 'total': total,
                                 'message': message})
-                #Accepting public keys for this virtual machine aka minion
-                #salt_manager.acceptKeys(machine_uuid)
-                '''
                 #Ping minion id
                 salt_manager.testPing(machine_uuid)
-                #Run beats salt formulas
-                salt_manager.runSaltHighstate(machine_uuid)
                 #Copying beats config files
                 salt_manager.copyingBeatsConfigFiles(machine_uuid)
-                '''
                 completed += 1 #For progress bar
             message = "Completed Vagrant Up"
             self.update_state(state='PROGRESS',

@@ -20,3 +20,7 @@ class ConsoleManager():
     def printGreen(self, command):
         print(''.join(["\033[1;32;40m", command]))
         return
+
+    def printBlue(self, command):
+        print(''.join(["\033[1;34;40m", command]))
+        return
