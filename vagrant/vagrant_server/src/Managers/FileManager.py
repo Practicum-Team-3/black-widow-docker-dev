@@ -21,6 +21,7 @@ class FileManager(object):
 
     def getCurrentPath(self):
         """
+        test
         Gets the project folder path
         :return: String with the project path
         """
