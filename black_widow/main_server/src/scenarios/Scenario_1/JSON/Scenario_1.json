@@ -1,88 +1,90 @@
 {
-  "scenario_name": "Scenario_1",
-  "scenario_id": "dTRN{P)C",
-  "creation_date": "02/03/2020 21:22:38",
-  "last_accessed": "02/03/2020 21:22:38",
-  "description": "description",
-  "exploit": {
-    "name": "test_name",
-    "type": "test_type",
-    "download_link": "test_download_link"
-  },
-  "vulnerability": {
-    "name": "test_name",
-    "type": "test_type",
-    "cve_link": "test_cve_link",
-    "download_link": "test_download_link"
-  },
-  "machines": {
-    "attacker": {
-      "name": "attacker",
-      "box": "generic/alpine37",
-      "os": "linux",
-      "base_memory": "1024",
-      "processors": "2",
-      "is_attacker": true,
-      "shared_folders": [
-        "./attackerfiles",
-        "/sharedfolder"
-      ],
-      "network_settings": {
-        "network_name": "Network Name",
-        "network_type": "Network Type",
-        "ip_address": "192.168.50.5",
-        "auto_config": true
-      },
-      "provisions": [
-        {
-          "name": "pingVictim",
-          "provision_type": "shell",
-          "commands": [
-            "pip install unique-id"
-          ]
-        }
-      ],
-      "gui": false,
-      "programs": [
-        {
-          "name": "e0",
-          "location": "/bin"
-        }
-      ]
+  "body": {
+    "creation_date": "02/03/2020 21:22:38",
+    "description": "description",
+    "exploit": {
+      "download_link": "test_download_link",
+      "name": "test_name",
+      "type": "test_type"
     },
-    "victim": {
-      "name": "victim",
-      "box": "generic/alpine37",
-      "os": "linux",
-      "base_memory": "1024",
-      "processors": "2",
-      "is_attacker": false,
-      "shared_folders": [
-        "./victimfiles",
-        "/sharedfolder"
-      ],
-      "network_settings": {
-        "network_name": "Network Name",
-        "network_type": "Network Type",
-        "ip_address": "192.168.50.6",
-        "auto_config": true
+    "last_accessed": "02/03/2020 21:22:38",
+    "machines": {
+      "attacker": {
+        "base_memory": "400",
+        "box": "bento/ubuntu-18.04",
+        "gui": false,
+        "is_attacker": true,
+        "name": "attacker",
+        "network_settings": {
+          "auto_config": true,
+          "ip_address": "192.168.50.5",
+          "network_name": "Network Name",
+          "network_type": "Network Type"
+        },
+        "os": "linux",
+        "processors": "1",
+        "programs": [
+          {
+            "location": "/bin",
+            "name": "e0"
+          }
+        ],
+        "provisions": [
+          {
+            "commands": [
+              "pip install unique-id"
+            ],
+            "name": "pingVictim",
+            "provision_type": "shell"
+          }
+        ],
+        "shared_folders": [],
+        "uuid": "a0f6dbe920774c73aeffbb8a34ae607a"
       },
-      "provisions": [
-        {
-          "name": "pingVictim",
-          "provision_type": "shell",
-          "commands": [
-            "pip install unique-id"
-          ]
-        }
-      ],
-      "gui": false,
-      "programs": [
-        {
-          "name": "e0",
-          "location": "/bin"
-        }
-      ]
+      "victim": {
+        "base_memory": "400",
+        "box": "bento/ubuntu-18.04",
+        "gui": false,
+        "is_attacker": false,
+        "name": "victim",
+        "network_settings": {
+          "auto_config": true,
+          "ip_address": "192.168.50.6",
+          "network_name": "Network Name",
+          "network_type": "Network Type"
+        },
+        "os": "linux",
+        "processors": "1",
+        "programs": [
+          {
+            "location": "/bin",
+            "name": "e0"
+          }
+        ],
+        "provisions": [
+          {
+            "commands": [
+              "pip install unique-id"
+            ],
+            "name": "pingVictim",
+            "provision_type": "shell"
+          }
+        ],
+        "shared_folders": [],
+        "uuid": "78da06364ca94b8ebfc6ee258ef4b26d"
+      }
+    },
+    "scenario_id": "dTRN{P)C",
+    "scenario_name": "Scenario_1",
+    "vulnerability": {
+      "cve_link": "test_cve_link",
+      "download_link": "test_download_link",
+      "name": "test_name",
+      "type": "test_type"
     }
-  }
+  },
+  "reason": "",
+  "response": true,
+  "status": "",
+  "task_id": ""
 }
