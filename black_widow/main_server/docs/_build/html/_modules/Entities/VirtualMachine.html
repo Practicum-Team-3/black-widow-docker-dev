@@ -8,7 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Entities.VirtualMachine &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>Entities.VirtualMachine &mdash; Automated Malware and Exploit Data Collection Tool
+Main server 1 documentation</title>
   
 
   
@@ -49,6 +50,7 @@
 
           
             <a href="../../index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Main server
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.3
+                1.0
               </div>
             
           
@@ -99,7 +101,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool
+Main server</a>
         
       </nav>
 
@@ -150,18 +153,31 @@
   <h1>Source code for Entities.VirtualMachine</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">Entities.NetworkSettings</span> <span class="kn">import</span> <span class="n">NetworkSettings</span>
 <span class="kn">from</span> <span class="nn">Entities.Provision</span> <span class="kn">import</span> <span class="n">Provision</span>
+<span class="kn">from</span> <span class="nn">Entities.Program</span> <span class="kn">import</span> <span class="n">Program</span>
 <span class="kn">from</span> <span class="nn">Entities.Entity</span> <span class="kn">import</span> <span class="n">Entity</span>
 
 
 <div class="viewcode-block" id="VirtualMachine"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine">[docs]</a><span class="k">class</span> <span class="nc">VirtualMachine</span><span class="p">(</span><span class="n">Entity</span><span class="p">):</span>
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">is_attacker</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="s2">&quot;generic/alpine37&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">base_memory</span> <span class="o">=</span> <span class="s2">&quot;1024&quot;</span><span class="p">,</span> <span class="n">processors</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="n">is_attacker</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shared_folders</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;./vmfiles&#39;</span><span class="p">,</span> <span class="s1">&#39;/sharedfolder&#39;</span><span class="p">),</span> <span class="n">uuid</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="n">box</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">os</span> <span class="o">=</span> <span class="n">os</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">is_attacker</span> <span class="o">=</span> <span class="n">is_attacker</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">shared_folders</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>  <span class="c1"># tuples of (hostPath, guestPath)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">base_memory</span> <span class="o">=</span> <span class="n">base_memory</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">processors</span> <span class="o">=</span> <span class="n">processors</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">shared_folders</span> <span class="o">=</span>  <span class="n">shared_folders</span>     <span class="c1"># tuples of (hostPath, guestPath)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">network_settings</span> <span class="o">=</span> <span class="n">NetworkSettings</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">provision</span> <span class="o">=</span> <span class="n">Provision</span><span class="p">(</span><span class="s2">&quot;pingVictim&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">provision</span> <span class="o">=</span> <span class="p">[</span><span class="n">Provision</span><span class="p">(</span><span class="s2">&quot;pingVictim&quot;</span><span class="p">)]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">gui</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">programs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Program</span><span class="p">()]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">uuid</span>
+
+<div class="viewcode-block" id="VirtualMachine.setName"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.setName">[docs]</a>  <span class="k">def</span> <span class="nf">setName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets the name for this virtual machine</span>
+<span class="sd">    :param name: String with the virtual machine name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
 
 <div class="viewcode-block" id="VirtualMachine.setOS"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.setOS">[docs]</a>  <span class="k">def</span> <span class="nf">setOS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">os</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -170,12 +186,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">os</span> <span class="o">=</span> <span class="n">os</span></div>
 
-<div class="viewcode-block" id="VirtualMachine.setName"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.setName">[docs]</a>  <span class="k">def</span> <span class="nf">setName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Sets the name for this virtual machine</span>
-<span class="sd">    :param name: String with the virtual machine name</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+<div class="viewcode-block" id="VirtualMachine.setBaseMemory"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.setBaseMemory">[docs]</a>  <span class="k">def</span> <span class="nf">setBaseMemory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_memory</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">base_memory</span> <span class="o">=</span> <span class="n">base_memory</span></div>
 
 <div class="viewcode-block" id="VirtualMachine.addSharedFolder"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.addSharedFolder">[docs]</a>  <span class="k">def</span> <span class="nf">addSharedFolder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostPath</span><span class="p">,</span> <span class="n">guestPath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -199,12 +211,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">gui</span> <span class="o">=</span> <span class="n">isVisible</span></div>
 
-<div class="viewcode-block" id="VirtualMachine.setProvision"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.setProvision">[docs]</a>  <span class="k">def</span> <span class="nf">setProvision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">provision</span><span class="p">):</span>
+<div class="viewcode-block" id="VirtualMachine.setProvision"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.setProvision">[docs]</a>  <span class="k">def</span> <span class="nf">setProvision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">provision</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sets the provision for this virtual machine</span>
 <span class="sd">    :param provision: Object which carries the provision data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">provision</span> <span class="o">=</span> <span class="n">provision</span></div>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">provision</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">provision</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">provision</span></div>
 
 <div class="viewcode-block" id="VirtualMachine.dictionary"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.dictionary">[docs]</a>  <span class="k">def</span> <span class="nf">dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -212,23 +225,38 @@
 <span class="sd">    :return: A dictionary with Virtual Machine data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dicti</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;os&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">os</span>
     <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;box&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;os&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">os</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;base_memory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_memory</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;processors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processors</span>
     <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;is_attacker&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_attacker</span>
     <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;shared_folders&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_folders</span>
     <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;network_settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_settings</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
-    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;provisions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">provision</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;provisions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">prov</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span> <span class="k">for</span> <span class="n">prov</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">provision</span><span class="p">]</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;programs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">prog</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span> <span class="k">for</span> <span class="n">prog</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">programs</span><span class="p">]</span>
     <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;gui&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gui</span>
+    <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;uuid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span>
     <span class="k">return</span> <span class="n">dicti</span></div>
 
 <div class="viewcode-block" id="VirtualMachine.objectFromDictionary"><a class="viewcode-back" href="../../Entities.html#Entities.VirtualMachine.VirtualMachine.objectFromDictionary">[docs]</a>  <span class="k">def</span> <span class="nf">objectFromDictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">os</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;os&quot;</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a VirtualMachine object from a dictionary.</span>
+<span class="sd">    :param dict: A dictionary containing the VirtualMachine&#39;s data</span>
+<span class="sd">    :return: A VirtualMachine object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;box&quot;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">os</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;os&quot;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">base_memory</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;base_memory&quot;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">processors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;processors&quot;</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">is_attacker</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;is_attacker&quot;</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">shared_folders</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;shared_folders&quot;</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">network_settings</span> <span class="o">=</span> <span class="n">NetworkSettings</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;network_settings&quot;</span><span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">provision</span> <span class="o">=</span> <span class="n">Provision</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;provisions&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">provision</span> <span class="o">=</span> <span class="p">[</span><span class="n">Provision</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="n">prov</span><span class="p">)</span> <span class="k">for</span> <span class="n">prov</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;provisions&quot;</span><span class="p">]]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">programs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Program</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="n">prog</span><span class="p">)</span> <span class="k">for</span> <span class="n">prog</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;programs&quot;</span><span class="p">]]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">gui</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;gui&quot;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;uuid&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="bp">self</span></div></div>
 </pre></div>
 

@@ -8,7 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MainServer module &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>MainServer module &mdash; Automated Malware and Exploit Data Collection Tool
+Main server 1 documentation</title>
   
 
   
@@ -35,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Entities package" href="Entities.html" />
-    <link rel="prev" title="src" href="modules.html" /> 
+    <link rel="next" title="Managers package" href="Managers.html" />
+    <link rel="prev" title="Entities package" href="Entities.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -51,6 +52,7 @@
 
           
             <a href="index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Main server
           
 
           
@@ -60,7 +62,7 @@
             
             
               <div class="version">
-                0.3
+                1.0
               </div>
             
           
@@ -87,8 +89,8 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">MainServer module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Entities.html">Entities package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MainServer module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Managers.html">Managers package</a></li>
 </ul>
 </li>
@@ -106,7 +108,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="index.html">Automated Malware and Exploit Data Collection Tool
+Main server</a>
         
       </nav>
 
@@ -160,28 +163,78 @@
             
   <div class="section" id="module-MainServer">
 <span id="mainserver-module"></span><h1>MainServer module<a class="headerlink" href="#module-MainServer" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="MainServer.createScenario">
-<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">createScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#createScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.createScenario" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt id="MainServer.addBoxByName">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">addBoxByName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#addBoxByName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.addBoxByName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.addBoxByOVAFile">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">addBoxByOVAFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#addBoxByOVAFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.addBoxByOVAFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.createExploit">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">createExploit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">exploit_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#createExploit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.createExploit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new scenario which includes the folders and the scenario JSON file
 :param scenario_name: String with the scenario name
 :return: True if the new scenario was successfully created</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
+<dt id="MainServer.createScenario">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">createScenario</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#createScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.createScenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new scenario which includes the folders and the scenario JSON file
+:param scenario_name: String with the scenario name
+:return: True if the new scenario was successfully created</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.createVulnerability">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">createVulnerability</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vulnerability_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#createVulnerability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.createVulnerability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new scenario which includes the folders and the scenario JSON file
+:param scenario_name: String with the scenario name
+:return: True if the new scenario was successfully created</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.deleteExploit">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">deleteExploit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">exploit_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#deleteExploit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.deleteExploit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits a current scenario with a JSON file
+:param exploit_name: String with the scenario name
+:return: True if the scenario has been successfully edited, otherwise False</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MainServer.deleteFile">
-<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">deleteFile</code><span class="sig-paren">(</span><em class="sig-param">file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#deleteFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.deleteFile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">deleteFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#deleteFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.deleteFile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="MainServer.deleteScenario">
-<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">deleteScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#deleteScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.deleteScenario" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">deleteScenario</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#deleteScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.deleteScenario" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edits a current scenario with a JSON file
 :param scenario_name: String with the scenario name
 :return: True if the scenario has been successfully edited, otherwise False</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
+<dt id="MainServer.deleteVulnerability">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">deleteVulnerability</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vulnerability_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#deleteVulnerability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.deleteVulnerability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits a current scenario with a JSON file
+:param vulnerability_name: String with the scenario name
+:return: True if the scenario has been successfully edited, otherwise False</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.editExploit">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">editExploit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#editExploit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.editExploit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits a current scenario with a JSON file
+:param scenario_name: String with the scenario name
+:return: True if the scenario has been successfully edited, otherwise False</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MainServer.editScenario">
 <code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">editScenario</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#editScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.editScenario" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edits a current scenario with a JSON file
@@ -189,44 +242,100 @@
 :return: True if the scenario has been successfully edited, otherwise False</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
+<dt id="MainServer.editVulnearbility">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">editVulnearbility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#editVulnearbility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.editVulnearbility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits a current scenario with a JSON file
+:param scenario_name: String with the scenario name
+:return: True if the scenario has been successfully edited, otherwise False</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MainServer.getAvailableBoxes">
 <code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getAvailableBoxes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getAvailableBoxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getAvailableBoxes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the available boxes in the Vagrant context
 :return: A list of string with the available boxes</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
+<dt id="MainServer.getExploit">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getExploit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">exploit_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getExploit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getExploit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the scenario as a JSON file
+:param exploit_name: String with the scenario name
+:return: JSON file with the scenario info</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.getExploits">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getExploits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getExploits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getExploits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the available scenarios
+:return: A list of strings with the available scenarios</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="MainServer.getFileList">
 <code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getFileList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getFileList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getFileList" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="MainServer.getScenario">
-<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getScenario</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getScenario" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getScenario</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getScenario" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the scenario as a JSON file
 :param scenario_name: String with the scenario name
 :return: JSON file with the scenario info</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="MainServer.getScenarios">
 <code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getScenarios</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getScenarios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getScenarios" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the available scenarios
 :return: A list of strings with the available scenarios</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
+<dt id="MainServer.getSystemInfo">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getSystemInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getSystemInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getSystemInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.getTaskStatus">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getTaskStatus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getTaskStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getTaskStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requests the status of an ongoing task from the VagranServer
+:param task_id: Task ID given by Celery
+:return: a json response that denotes the status of the task</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.getVulnerabilities">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getVulnerabilities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getVulnerabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getVulnerabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the available scenarios
+:return: A list of strings with the available scenarios</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.getVulnerability">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">getVulnerability</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vulnerability_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#getVulnerability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.getVulnerability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the scenario as a JSON file
+:param vulnerability_name: String with the scenario name
+:return: JSON file with the scenario info</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.removeBoxByName">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">removeBoxByName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#removeBoxByName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.removeBoxByName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt id="MainServer.runVagrantUp">
-<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">runVagrantUp</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#runVagrantUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.runVagrantUp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">runVagrantUp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#runVagrantUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.runVagrantUp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the vagrant up command for each machine in the scenario
 :param scenario_name: String with the scenario name
 :return: True if the vagrant up commands were successfully executed</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="MainServer.testPing">
-<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">testPing</code><span class="sig-paren">(</span><em class="sig-param">scenario_name</em>, <em class="sig-param">source</em>, <em class="sig-param">destination</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#testPing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.testPing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">testPing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_name</span></em>, <em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">destination</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#testPing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.testPing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests network connectivity between two virtual machines
 :param scenario_name: String with the scenario name
 :param source: Source virtual machine
@@ -234,9 +343,14 @@
 :return:</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="MainServer.uploadFile">
 <code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">uploadFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#uploadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.uploadFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="MainServer.vagrantCommand">
+<code class="sig-prename descclassname">MainServer.</code><code class="sig-name descname">vagrantCommand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_name</span></em>, <em class="sig-param"><span class="n">machine_name</span></em>, <em class="sig-param"><span class="n">command</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/MainServer.html#vagrantCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MainServer.vagrantCommand" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -249,10 +363,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Entities.html" class="btn btn-neutral float-right" title="Entities package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Managers.html" class="btn btn-neutral float-right" title="Managers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="modules.html" class="btn btn-neutral float-left" title="src" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Entities.html" class="btn btn-neutral float-left" title="Entities package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

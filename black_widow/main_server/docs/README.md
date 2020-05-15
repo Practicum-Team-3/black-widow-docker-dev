@@ -9,7 +9,7 @@
 
 ## Steps to generate documentation:
 1. Clean the build folder: <br/>
-`Make clean` <br/>
+`make clean` <br/>
 2. Generate rst file: <br/>
 `sphinx-apidoc -o . ../src` <br/>
 3. Generate HTML page: <br/>

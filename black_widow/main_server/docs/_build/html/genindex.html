@@ -9,7 +9,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>Index &mdash; Automated Malware and Exploit Data Collection Tool
+Main server 1 documentation</title>
   
 
   
@@ -50,6 +51,7 @@
 
           
             <a href="index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Main server
           
 
           
@@ -59,7 +61,7 @@
             
             
               <div class="version">
-                0.3
+                1.0
               </div>
             
           
@@ -100,7 +102,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="index.html">Automated Malware and Exploit Data Collection Tool
+Main server</a>
         
       </nav>
 
@@ -158,7 +161,6 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -174,11 +176,21 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.addSharedFolder">addSharedFolder() (Entities.VirtualMachine.VirtualMachine method)</a>
+      <li><a href="MainServer.html#MainServer.addBoxByName">addBoxByName() (in module MainServer)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.addBoxByOVAFile">addBoxByOVAFile() (in module MainServer)</a>
+</li>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.addExploitsToDB">addExploitsToDB() (Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.addScenariosToDB">addScenariosToDB() (Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.addSharedFolder">addSharedFolder() (Entities.VirtualMachine.VirtualMachine method)</a>
+</li>
       <li><a href="Entities.html#Entities.Scenario.Scenario.addVM">addVM() (Entities.Scenario.Scenario method)</a>
+</li>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.addVulnerabilitiesToDB">addVulnerabilitiesToDB() (Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -186,15 +198,27 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Managers.html#Managers.ConfigManager.ConfigManager">ConfigManager (class in Managers.ConfigManager)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.createExploit">createExploit() (in module MainServer)</a>
+</li>
       <li><a href="Managers.html#Managers.FileManager.FileManager.createMachineFolders">createMachineFolders() (Managers.FileManager.FileManager method)</a>
 </li>
-      <li><a href="MainServer.html#MainServer.createScenario">createScenario() (in module MainServer)</a>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.createSaltFiles">createSaltFiles() (Managers.FileManager.FileManager method)</a>
+</li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.createSaltStackFolder">createSaltStackFolder() (Managers.FileManager.FileManager method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="MainServer.html#MainServer.createScenario">createScenario() (in module MainServer)</a>
+</li>
       <li><a href="Managers.html#Managers.FileManager.FileManager.createScenarioFolders">createScenarioFolders() (Managers.FileManager.FileManager method)</a>
 </li>
-      <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.createVagrantFiles">createVagrantFiles() (Managers.VagrantManager.VagrantManager method)</a>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.createSharedFolders">createSharedFolders() (Managers.FileManager.FileManager method)</a>
+</li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.createVagrantFiles">createVagrantFiles() (Managers.FileManager.FileManager method)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.createVulnerability">createVulnerability() (in module MainServer)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -204,22 +228,46 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager">DatabaseManager (class in Managers.DatabaseManager)</a>
 </li>
+      <li><a href="MainServer.html#MainServer.deleteExploit">deleteExploit() (in module MainServer)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.deleteExploit">(Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      </ul></li>
       <li><a href="MainServer.html#MainServer.deleteFile">deleteFile() (in module MainServer)</a>
 </li>
+      <li><a href="Managers.html#Managers.ExploitManager.ExploitManager.deleteOne">deleteOne() (Managers.ExploitManager.ExploitManager method)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.deleteOne">(Managers.ScenarioManager.ScenarioManager method)</a>
+</li>
+        <li><a href="Managers.html#Managers.VulnerabilityManager.VulnerabilityManager.deleteOne">(Managers.VulnerabilityManager.VulnerabilityManager method)</a>
+</li>
+      </ul></li>
       <li><a href="MainServer.html#MainServer.deleteScenario">deleteScenario() (in module MainServer)</a>
 
       <ul>
         <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.deleteScenario">(Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
-        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.deleteScenario">(Managers.ScenarioManager.ScenarioManager method)</a>
+      </ul></li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.deleteScenariosFolder">deleteScenariosFolder() (Managers.FileManager.FileManager method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="MainServer.html#MainServer.deleteVulnerability">deleteVulnerability() (in module MainServer)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.deleteVulnerability">(Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
       </ul></li>
       <li><a href="Entities.html#Entities.Entity.Entity.dictionary">dictionary() (Entities.Entity.Entity method)</a>
 
       <ul>
-        <li><a href="Entities.html#Entities.ExploitInfo.ExploitInfo.dictionary">(Entities.ExploitInfo.ExploitInfo method)</a>
+        <li><a href="Entities.html#Entities.Exploit.Exploit.dictionary">(Entities.Exploit.Exploit method)</a>
 </li>
         <li><a href="Entities.html#Entities.NetworkSettings.NetworkSettings.dictionary">(Entities.NetworkSettings.NetworkSettings method)</a>
+</li>
+        <li><a href="Entities.html#Entities.Program.Program.dictionary">(Entities.Program.Program method)</a>
 </li>
         <li><a href="Entities.html#Entities.Provision.Provision.dictionary">(Entities.Provision.Provision method)</a>
 </li>
@@ -229,7 +277,7 @@
 </li>
         <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.dictionary">(Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
-        <li><a href="Entities.html#Entities.VulnerabilityInfo.VulnerabilityInfo.dictionary">(Entities.VulnerabilityInfo.VulnerabilityInfo method)</a>
+        <li><a href="Entities.html#Entities.Vulnerability.Vulnerability.dictionary">(Entities.Vulnerability.Vulnerability method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -238,41 +286,109 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="MainServer.html#MainServer.editExploit">editExploit() (in module MainServer)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.editExploit">(Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="Managers.html#Managers.ExploitManager.ExploitManager.editOne">editOne() (Managers.ExploitManager.ExploitManager method)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.editOne">(Managers.ScenarioManager.ScenarioManager method)</a>
+</li>
+        <li><a href="Managers.html#Managers.VulnerabilityManager.VulnerabilityManager.editOne">(Managers.VulnerabilityManager.VulnerabilityManager method)</a>
+</li>
+      </ul></li>
       <li><a href="MainServer.html#MainServer.editScenario">editScenario() (in module MainServer)</a>
 
       <ul>
         <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.editScenario">(Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
-        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.editScenario">(Managers.ScenarioManager.ScenarioManager method)</a>
-</li>
       </ul></li>
+      <li><a href="MainServer.html#MainServer.editVulnearbility">editVulnearbility() (in module MainServer)</a>
+</li>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.editVulnerability">editVulnerability() (Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
       <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.enableGUI">enableGUI() (Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
-      <li><a href="Entities.html#module-Entities">Entities (module)</a>
+      <li>
+    Entities
+
+      <ul>
+        <li><a href="Entities.html#module-Entities">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.Entity">Entities.Entity (module)</a>
+      </ul></li>
+      <li>
+    Entities.Entity
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Entity">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.ExploitInfo">Entities.ExploitInfo (module)</a>
+      </ul></li>
+      <li>
+    Entities.Exploit
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Exploit">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.NetworkSettings">Entities.NetworkSettings (module)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Entities.html#module-Entities.Provision">Entities.Provision (module)</a>
+      <li>
+    Entities.NetworkSettings
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.NetworkSettings">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.Response">Entities.Response (module)</a>
+      </ul></li>
+      <li>
+    Entities.Program
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Program">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.Scenario">Entities.Scenario (module)</a>
+      </ul></li>
+      <li>
+    Entities.Provision
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Provision">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.VagrantFile">Entities.VagrantFile (module)</a>
+      </ul></li>
+      <li>
+    Entities.Response
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Response">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.VirtualMachine">Entities.VirtualMachine (module)</a>
+      </ul></li>
+      <li>
+    Entities.Scenario
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Scenario">module</a>
 </li>
-      <li><a href="Entities.html#module-Entities.VulnerabilityInfo">Entities.VulnerabilityInfo (module)</a>
+      </ul></li>
+      <li>
+    Entities.VirtualMachine
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.VirtualMachine">module</a>
 </li>
+      </ul></li>
+      <li>
+    Entities.Vulnerability
+
+      <ul>
+        <li><a href="Entities.html#module-Entities.Vulnerability">module</a>
+</li>
+      </ul></li>
       <li><a href="Entities.html#Entities.Entity.Entity">Entity (class in Entities.Entity)</a>
 </li>
-      <li><a href="Entities.html#Entities.ExploitInfo.ExploitInfo">ExploitInfo (class in Entities.ExploitInfo)</a>
+      <li><a href="Entities.html#Entities.Exploit.Exploit">Exploit (class in Entities.Exploit)</a>
+</li>
+      <li><a href="Managers.html#Managers.ExploitManager.ExploitManager">ExploitManager (class in Managers.ExploitManager)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -288,28 +404,56 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="MainServer.html#MainServer.getAvailableBoxes">getAvailableBoxes() (in module MainServer)</a>
+      <li><a href="Managers.html#Managers.ExploitManager.ExploitManager.getAll">getAll() (Managers.ExploitManager.ExploitManager method)</a>
 
       <ul>
-        <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.getAvailableBoxes">(Managers.VagrantManager.VagrantManager method)</a>
+        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.getAll">(Managers.ScenarioManager.ScenarioManager method)</a>
+</li>
+        <li><a href="Managers.html#Managers.VulnerabilityManager.VulnerabilityManager.getAll">(Managers.VulnerabilityManager.VulnerabilityManager method)</a>
 </li>
       </ul></li>
+      <li><a href="MainServer.html#MainServer.getAvailableBoxes">getAvailableBoxes() (in module MainServer)</a>
+</li>
       <li><a href="Managers.html#Managers.FileManager.FileManager.getCurrentPath">getCurrentPath() (Managers.FileManager.FileManager method)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.getExploit">getExploit() (in module MainServer)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getExploit">(Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.getExploitJSONPath">getExploitJSONPath() (Managers.FileManager.FileManager method)</a>
+</li>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getExploitNames">getExploitNames() (Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.getExploits">getExploits() (in module MainServer)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getExploits">(Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.getExploitsPath">getExploitsPath() (Managers.FileManager.FileManager method)</a>
 </li>
       <li><a href="MainServer.html#MainServer.getFileList">getFileList() (in module MainServer)</a>
 </li>
-      <li><a href="Managers.html#Managers.FileManager.FileManager.getJSONPath">getJSONPath() (Managers.FileManager.FileManager method)</a>
+      <li><a href="Managers.html#Managers.ExploitManager.ExploitManager.getOne">getOne() (Managers.ExploitManager.ExploitManager method)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.getOne">(Managers.ScenarioManager.ScenarioManager method)</a>
 </li>
+        <li><a href="Managers.html#Managers.VulnerabilityManager.VulnerabilityManager.getOne">(Managers.VulnerabilityManager.VulnerabilityManager method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="MainServer.html#MainServer.getScenario">getScenario() (in module MainServer)</a>
 
       <ul>
         <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getScenario">(Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
-        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.getScenario">(Managers.ScenarioManager.ScenarioManager method)</a>
-</li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.getScenarioJSONPath">getScenarioJSONPath() (Managers.FileManager.FileManager method)</a>
+</li>
       <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getScenarioNames">getScenarioNames() (Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
       <li><a href="MainServer.html#MainServer.getScenarios">getScenarios() (in module MainServer)</a>
@@ -317,18 +461,28 @@
       <ul>
         <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getScenarios">(Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
-        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.getScenarios">(Managers.ScenarioManager.ScenarioManager method)</a>
-</li>
       </ul></li>
       <li><a href="Managers.html#Managers.FileManager.FileManager.getScenariosPath">getScenariosPath() (Managers.FileManager.FileManager method)</a>
 </li>
-  </ul></td>
-</tr></table>
+      <li><a href="MainServer.html#MainServer.getSystemInfo">getSystemInfo() (in module MainServer)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.getTaskStatus">getTaskStatus() (in module MainServer)</a>
+</li>
+      <li><a href="MainServer.html#MainServer.getVulnerabilities">getVulnerabilities() (in module MainServer)</a>
 
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.haltVM">haltVM() (Managers.VagrantManager.VagrantManager method)</a>
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getVulnerabilities">(Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="MainServer.html#MainServer.getVulnerability">getVulnerability() (in module MainServer)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getVulnerability">(Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.getVulnerabilityJSONPath">getVulnerabilityJSONPath() (Managers.FileManager.FileManager method)</a>
+</li>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.getVulnerabilityNames">getVulnerabilityNames() (Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -336,7 +490,13 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.insertExploit">insertExploit() (Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.insertScenario">insertScenario() (Managers.DatabaseManager.DatabaseManager method)</a>
+</li>
+      <li><a href="Managers.html#Managers.DatabaseManager.DatabaseManager.insertVulnerability">insertVulnerability() (Managers.DatabaseManager.DatabaseManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -344,19 +504,106 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="MainServer.html#module-MainServer">MainServer (module)</a>
+      <li>
+    MainServer
+
+      <ul>
+        <li><a href="MainServer.html#module-MainServer">module</a>
 </li>
-      <li><a href="Managers.html#module-Managers">Managers (module)</a>
+      </ul></li>
+      <li>
+    Managers
+
+      <ul>
+        <li><a href="Managers.html#module-Managers">module</a>
 </li>
-      <li><a href="Managers.html#module-Managers.DatabaseManager">Managers.DatabaseManager (module)</a>
+      </ul></li>
+      <li>
+    Managers.ConfigManager
+
+      <ul>
+        <li><a href="Managers.html#module-Managers.ConfigManager">module</a>
 </li>
+      </ul></li>
+      <li>
+    Managers.DatabaseManager
+
+      <ul>
+        <li><a href="Managers.html#module-Managers.DatabaseManager">module</a>
+</li>
+      </ul></li>
+      <li>
+    Managers.ExploitManager
+
+      <ul>
+        <li><a href="Managers.html#module-Managers.ExploitManager">module</a>
+</li>
+      </ul></li>
+      <li>
+    Managers.FileManager
+
+      <ul>
+        <li><a href="Managers.html#module-Managers.FileManager">module</a>
+</li>
+      </ul></li>
+      <li>
+    Managers.ScenarioManager
+
+      <ul>
+        <li><a href="Managers.html#module-Managers.ScenarioManager">module</a>
+</li>
+      </ul></li>
+      <li>
+    Managers.VulnerabilityManager
+
+      <ul>
+        <li><a href="Managers.html#module-Managers.VulnerabilityManager">module</a>
+</li>
+      </ul></li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="Entities.html#module-Entities">Entities</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Entity">Entities.Entity</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Exploit">Entities.Exploit</a>
+</li>
+        <li><a href="Entities.html#module-Entities.NetworkSettings">Entities.NetworkSettings</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Program">Entities.Program</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Provision">Entities.Provision</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Response">Entities.Response</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Scenario">Entities.Scenario</a>
+</li>
+        <li><a href="Entities.html#module-Entities.VirtualMachine">Entities.VirtualMachine</a>
+</li>
+        <li><a href="Entities.html#module-Entities.Vulnerability">Entities.Vulnerability</a>
+</li>
+        <li><a href="MainServer.html#module-MainServer">MainServer</a>
+</li>
+        <li><a href="Managers.html#module-Managers">Managers</a>
+</li>
+        <li><a href="Managers.html#module-Managers.ConfigManager">Managers.ConfigManager</a>
+</li>
+        <li><a href="Managers.html#module-Managers.DatabaseManager">Managers.DatabaseManager</a>
+</li>
+        <li><a href="Managers.html#module-Managers.ExploitManager">Managers.ExploitManager</a>
+</li>
+        <li><a href="Managers.html#module-Managers.FileManager">Managers.FileManager</a>
+</li>
+        <li><a href="Managers.html#module-Managers.ScenarioManager">Managers.ScenarioManager</a>
+</li>
+        <li><a href="Managers.html#module-Managers.VulnerabilityManager">Managers.VulnerabilityManager</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Managers.html#module-Managers.FileManager">Managers.FileManager (module)</a>
-</li>
-      <li><a href="Managers.html#module-Managers.ScenarioManager">Managers.ScenarioManager (module)</a>
-</li>
-      <li><a href="Managers.html#module-Managers.VagrantManager">Managers.VagrantManager (module)</a>
+      <li><a href="Managers.html#Managers.ConfigManager.ConfigManager.mongoURL">mongoURL() (Managers.ConfigManager.ConfigManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -366,10 +613,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Entities.html#Entities.NetworkSettings.NetworkSettings">NetworkSettings (class in Entities.NetworkSettings)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.newEmptyScenario">newEmptyScenario() (Managers.ScenarioManager.ScenarioManager method)</a>
+      <li><a href="Managers.html#Managers.ExploitManager.ExploitManager.newEmpty">newEmpty() (Managers.ExploitManager.ExploitManager method)</a>
+
+      <ul>
+        <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.newEmpty">(Managers.ScenarioManager.ScenarioManager method)</a>
 </li>
+        <li><a href="Managers.html#Managers.VulnerabilityManager.VulnerabilityManager.newEmpty">(Managers.VulnerabilityManager.VulnerabilityManager method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -379,9 +630,11 @@
       <li><a href="Entities.html#Entities.Entity.Entity.objectFromDictionary">objectFromDictionary() (Entities.Entity.Entity method)</a>
 
       <ul>
-        <li><a href="Entities.html#Entities.ExploitInfo.ExploitInfo.objectFromDictionary">(Entities.ExploitInfo.ExploitInfo method)</a>
+        <li><a href="Entities.html#Entities.Exploit.Exploit.objectFromDictionary">(Entities.Exploit.Exploit method)</a>
 </li>
         <li><a href="Entities.html#Entities.NetworkSettings.NetworkSettings.objectFromDictionary">(Entities.NetworkSettings.NetworkSettings method)</a>
+</li>
+        <li><a href="Entities.html#Entities.Program.Program.objectFromDictionary">(Entities.Program.Program method)</a>
 </li>
         <li><a href="Entities.html#Entities.Provision.Provision.objectFromDictionary">(Entities.Provision.Provision method)</a>
 </li>
@@ -391,7 +644,7 @@
 </li>
         <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.objectFromDictionary">(Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
-        <li><a href="Entities.html#Entities.VulnerabilityInfo.VulnerabilityInfo.objectFromDictionary">(Entities.VulnerabilityInfo.VulnerabilityInfo method)</a>
+        <li><a href="Entities.html#Entities.Vulnerability.Vulnerability.objectFromDictionary">(Entities.Vulnerability.Vulnerability method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -400,7 +653,13 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Entities.html#Entities.Program.Program">Program (class in Entities.Program)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Entities.html#Entities.Provision.Provision">Provision (class in Entities.Provision)</a>
+</li>
+      <li><a href="Managers.html#Managers.FileManager.FileManager.purgeMachines">purgeMachines() (Managers.FileManager.FileManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -408,18 +667,16 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Entities.html#Entities.Response.Response">Response (class in Entities.Response)</a>
+      <li><a href="Managers.html#Managers.ConfigManager.ConfigManager.redisURL">redisURL() (Managers.ConfigManager.ConfigManager method)</a>
 </li>
-      <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.restartVM">restartVM() (Managers.VagrantManager.VagrantManager method)</a>
+      <li><a href="MainServer.html#MainServer.removeBoxByName">removeBoxByName() (in module MainServer)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="MainServer.html#MainServer.runVagrantUp">runVagrantUp() (in module MainServer)</a>
-
-      <ul>
-        <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.runVagrantUp">(Managers.VagrantManager.VagrantManager method)</a>
+      <li><a href="Entities.html#Entities.Response.Response">Response (class in Entities.Response)</a>
 </li>
-      </ul></li>
+      <li><a href="MainServer.html#MainServer.runVagrantUp">runVagrantUp() (in module MainServer)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -432,23 +689,23 @@
 </li>
       <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager">ScenarioManager (class in Managers.ScenarioManager)</a>
 </li>
-      <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.sendCommand">sendCommand() (Managers.VagrantManager.VagrantManager method)</a>
+      <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.setBaseMemory">setBaseMemory() (Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
       <li><a href="Entities.html#Entities.Response.Response.setBody">setBody() (Entities.Response.Response method)</a>
 </li>
-      <li><a href="Entities.html#Entities.Response.Response.setCode">setCode() (Entities.Response.Response method)</a>
-</li>
-      <li><a href="Entities.html#Entities.Scenario.Scenario.setExploitInfo">setExploitInfo() (Entities.Scenario.Scenario method)</a>
+      <li><a href="Entities.html#Entities.Scenario.Scenario.setExploit">setExploit() (Entities.Scenario.Scenario method)</a>
 </li>
       <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.setName">setName() (Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.setNetworkSettings">setNetworkSettings() (Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.setOS">setOS() (Entities.VirtualMachine.VirtualMachine method)</a>
 </li>
       <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine.setProvision">setProvision() (Entities.VirtualMachine.VirtualMachine method)</a>
+</li>
+      <li><a href="Entities.html#Entities.Response.Response.setReason">setReason() (Entities.Response.Response method)</a>
 </li>
       <li><a href="Entities.html#Entities.Response.Response.setResponse">setResponse() (Entities.Response.Response method)</a>
 </li>
@@ -456,9 +713,9 @@
 </li>
       <li><a href="Entities.html#Entities.Response.Response.setStatus">setStatus() (Entities.Response.Response method)</a>
 </li>
-      <li><a href="Entities.html#Entities.Response.Response.setTask_id">setTask_id() (Entities.Response.Response method)</a>
+      <li><a href="Entities.html#Entities.Response.Response.setTaskID">setTaskID() (Entities.Response.Response method)</a>
 </li>
-      <li><a href="Entities.html#Entities.Scenario.Scenario.setVulnerabilityInfo">setVulnerabilityInfo() (Entities.Scenario.Scenario method)</a>
+      <li><a href="Entities.html#Entities.Scenario.Scenario.setVulnerability">setVulnerability() (Entities.Scenario.Scenario method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -466,14 +723,6 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.testDB">testDB() (Managers.ScenarioManager.ScenarioManager method)</a>
-</li>
-      <li><a href="Managers.html#Managers.ScenarioManager.ScenarioManager.testDB2">testDB2() (Managers.ScenarioManager.ScenarioManager method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Managers.html#Managers.VagrantManager.VagrantManager.testNetworkPing">testNetworkPing() (Managers.VagrantManager.VagrantManager method)</a>
-</li>
       <li><a href="MainServer.html#MainServer.testPing">testPing() (in module MainServer)</a>
 </li>
   </ul></td>
@@ -485,22 +734,26 @@
       <li><a href="MainServer.html#MainServer.uploadFile">uploadFile() (in module MainServer)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Managers.html#Managers.ConfigManager.ConfigManager.uploadURL">uploadURL() (Managers.ConfigManager.ConfigManager method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Entities.html#Entities.VagrantFile.VagrantFile">VagrantFile (class in Entities.VagrantFile)</a>
+      <li><a href="MainServer.html#MainServer.vagrantCommand">vagrantCommand() (in module MainServer)</a>
 </li>
-      <li><a href="Entities.html#Entities.VagrantFile.VagrantFile.vagrantFilePerMachine">vagrantFilePerMachine() (Entities.VagrantFile.VagrantFile method)</a>
+      <li><a href="Managers.html#Managers.ConfigManager.ConfigManager.vagrantURL">vagrantURL() (Managers.ConfigManager.ConfigManager method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Managers.html#Managers.VagrantManager.VagrantManager">VagrantManager (class in Managers.VagrantManager)</a>
-</li>
       <li><a href="Entities.html#Entities.VirtualMachine.VirtualMachine">VirtualMachine (class in Entities.VirtualMachine)</a>
 </li>
-      <li><a href="Entities.html#Entities.VulnerabilityInfo.VulnerabilityInfo">VulnerabilityInfo (class in Entities.VulnerabilityInfo)</a>
+      <li><a href="Entities.html#Entities.Vulnerability.Vulnerability">Vulnerability (class in Entities.Vulnerability)</a>
+</li>
+      <li><a href="Managers.html#Managers.VulnerabilityManager.VulnerabilityManager">VulnerabilityManager (class in Managers.VulnerabilityManager)</a>
 </li>
   </ul></td>
 </tr></table>

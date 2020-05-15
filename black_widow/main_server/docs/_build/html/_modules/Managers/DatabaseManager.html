@@ -8,7 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Managers.DatabaseManager &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>Managers.DatabaseManager &mdash; Automated Malware and Exploit Data Collection Tool
+Main server 1 documentation</title>
   
 
   
@@ -49,6 +50,7 @@
 
           
             <a href="../../index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Main server
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.3
+                1.0
               </div>
             
           
@@ -99,7 +101,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool
+Main server</a>
         
       </nav>
 
@@ -148,53 +151,265 @@
            <div itemprop="articleBody">
             
   <h1>Source code for Managers.DatabaseManager</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">  Run mongoDB server:</span>
-<span class="sd">    - cd C:\Program Files\MongoDB\Server\4.2\bin</span>
-<span class="sd">    - mongod</span>
-
-<span class="sd">  Create database:</span>
-<span class="sd">    - use soft_prac</span>
-
-<span class="sd">  Create collections:</span>
-<span class="sd">    - db.createCollection(&#39;scenarios&#39;)</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="kn">import</span> <span class="nn">pymongo</span>
-<span class="kn">import</span> <span class="nn">settings</span>
+<span></span><span class="kn">import</span> <span class="nn">pymongo</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">Managers.FileManager</span> <span class="kn">import</span> <span class="n">FileManager</span>
+<span class="kn">from</span> <span class="nn">Managers.ConfigManager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
+<span class="kn">from</span> <span class="nn">Entities.Scenario</span> <span class="kn">import</span> <span class="n">Scenario</span>
+<span class="kn">from</span> <span class="nn">Entities.Scenario</span> <span class="kn">import</span> <span class="n">Exploit</span>
+<span class="kn">from</span> <span class="nn">Entities.Vulnerability</span> <span class="kn">import</span> <span class="n">Vulnerability</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <div class="viewcode-block" id="DatabaseManager"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager">[docs]</a><span class="k">class</span> <span class="nc">DatabaseManager</span><span class="p">():</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_manager</span> <span class="o">=</span> <span class="n">FileManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">()</span><span class="o">.</span><span class="n">mongoURL</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="s2">&quot;soft_prac&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col_name</span> <span class="o">=</span> <span class="s1">&#39;scenarios&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col_name</span> <span class="o">=</span> <span class="s1">&#39;exploits&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col_name</span> <span class="o">=</span> <span class="s1">&#39;vulnerabilities&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">MongoClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col_name</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">exploits_col_name</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col_name</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addScenariosToDB</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addExploitsToDB</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addVulnerabilitiesToDB</span><span class="p">()</span>
 
+    <span class="k">def</span> <span class="nf">_initializeScenariosFromDirectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the scenario&#39;s runtime objects using data from the host folders.</span>
+<span class="sd">        :return: Dictionary containing scenario&#39;s data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Variables</span>
+        <span class="n">scenarios_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">scenarios</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_manager</span><span class="o">.</span><span class="n">getScenariosPath</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">scenario_name</span> <span class="ow">in</span> <span class="n">scenarios</span><span class="p">:</span>
+            <span class="n">json_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">scenario_name</span> <span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">])</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_manager</span><span class="o">.</span><span class="n">getScenarioJSONPath</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">)</span> <span class="o">/</span> <span class="n">json_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+                <span class="n">scenario_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+            <span class="n">scenario</span> <span class="o">=</span> <span class="n">Scenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">)</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="n">scenario_dict</span><span class="p">)</span>
+            <span class="n">scenarios_dict</span><span class="p">[</span><span class="n">scenario_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">scenario</span>
+        <span class="k">return</span> <span class="n">scenarios_dict</span>
+
+<div class="viewcode-block" id="DatabaseManager.addScenariosToDB"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.addScenariosToDB">[docs]</a>    <span class="k">def</span> <span class="nf">addScenariosToDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pre-populates the database with scenarios.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scenarios_to_add</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Scenario_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Scenario_3&#39;</span><span class="p">]</span>
+        <span class="n">currentScenarios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getScenarios</span><span class="p">()</span>
+        <span class="n">scenarios_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">scenario</span><span class="p">[</span><span class="s1">&#39;scenario_name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">scenario</span> <span class="ow">in</span> <span class="n">currentScenarios</span><span class="p">]</span>
+        <span class="n">scenarios_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">scenarios_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">scenario_name</span> <span class="ow">in</span> <span class="n">scenarios_to_add</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">scenario_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scenarios_set</span><span class="p">:</span>
+                <span class="n">json_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">scenario_name</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">])</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_manager</span><span class="o">.</span><span class="n">getScenarioJSONPath</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">)</span> <span class="o">/</span> <span class="n">json_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+                    <span class="n">scenario_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+                <span class="n">scenario</span> <span class="o">=</span> <span class="n">Scenario</span><span class="p">(</span><span class="n">scenario_name</span><span class="p">)</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="n">scenario_dict</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">insertScenario</span><span class="p">(</span><span class="n">scenario</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.addExploitsToDB"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.addExploitsToDB">[docs]</a>    <span class="k">def</span> <span class="nf">addExploitsToDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pre-populates the database with exploits.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exploits_to_add</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Django_3_0_Cross-Site_Request_Forgery_Token_Bypass&#39;</span><span class="p">]</span>
+        <span class="n">currentExploits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getExploits</span><span class="p">()</span>
+        <span class="n">exploits_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">exploit</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">exploit</span> <span class="ow">in</span> <span class="n">currentExploits</span><span class="p">]</span>
+        <span class="n">exploits_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">exploits_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">exploit_name</span> <span class="ow">in</span> <span class="n">exploits_to_add</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">exploit_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exploits_set</span><span class="p">:</span>
+                <span class="n">json_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">exploit_name</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">])</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_manager</span><span class="o">.</span><span class="n">getExploitJSONPath</span><span class="p">(</span><span class="n">exploit_name</span><span class="p">)</span> <span class="o">/</span> <span class="n">json_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+                    <span class="n">exploit_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+                <span class="n">exploit</span> <span class="o">=</span> <span class="n">Exploit</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="n">exploit_dict</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">insertExploit</span><span class="p">(</span><span class="n">exploit</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.addVulnerabilitiesToDB"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.addVulnerabilitiesToDB">[docs]</a>    <span class="k">def</span> <span class="nf">addVulnerabilitiesToDB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pre-populates the database with vulnerabilities.</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vulnerabilities_to_add</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rConfig_3_9_searchColumn_SQL_Injection&#39;</span><span class="p">]</span>
+        <span class="n">currentVulnerabilities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getVulnerabilities</span><span class="p">()</span>
+        <span class="n">vulnerabilities_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">vulnerability</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">vulnerability</span> <span class="ow">in</span> <span class="n">currentVulnerabilities</span><span class="p">]</span>
+        <span class="n">vulnerabilities_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">vulnerabilities_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">vulnerability_name</span> <span class="ow">in</span> <span class="n">vulnerabilities_to_add</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">vulnerability_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vulnerabilities_set</span><span class="p">:</span>
+                <span class="n">json_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">vulnerability_name</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">])</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_manager</span><span class="o">.</span><span class="n">getVulnerabilityJSONPath</span><span class="p">(</span><span class="n">vulnerability_name</span><span class="p">)</span> <span class="o">/</span> <span class="n">json_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+                    <span class="n">vulnerability_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+                <span class="n">vulnerability</span> <span class="o">=</span> <span class="n">Vulnerability</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="n">vulnerability_dict</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">insertVulnerability</span><span class="p">(</span><span class="n">vulnerability</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span></div>
+
+    <span class="c1">#CRUD: CREATE, READ, UPDATE and DELETE</span>
+
+    <span class="c1">#Scenarios</span>
 <div class="viewcode-block" id="DatabaseManager.insertScenario"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.insertScenario">[docs]</a>    <span class="k">def</span> <span class="nf">insertScenario</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_json</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inserts a scenario into the database.</span>
+<span class="sd">        :param scenario_json: Scenario&#39;s JSON file to be inserted</span>
+<span class="sd">        :return: Inserted document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">scenario_json</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">inserted_id</span></div>
 
 <div class="viewcode-block" id="DatabaseManager.getScenarioNames"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getScenarioNames">[docs]</a>    <span class="k">def</span> <span class="nf">getScenarioNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the scenario&#39;s names.</span>
+<span class="sd">        :return: A list containing the scenarios names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;scenario_name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span><span class="o">.</span><span class="n">find</span><span class="p">()]</span></div>
 
 <div class="viewcode-block" id="DatabaseManager.getScenarios"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getScenarios">[docs]</a>    <span class="k">def</span> <span class="nf">getScenarios</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the scenarios from the databases.</span>
+<span class="sd">        :return: A list containing scenarios in the database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span><span class="o">.</span><span class="n">find</span><span class="p">()]</span></div>
 
 <div class="viewcode-block" id="DatabaseManager.getScenario"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getScenario">[docs]</a>    <span class="k">def</span> <span class="nf">getScenario</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a specific scenario from the database.</span>
+<span class="sd">        :param scenario_name: Scenario&#39;s name string</span>
+<span class="sd">        :return: A list containing the scenario retrieved from the database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;scenario_name&#39;</span><span class="p">:</span> <span class="n">scenario_name</span><span class="p">}</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)]</span></div>
 
 <div class="viewcode-block" id="DatabaseManager.editScenario"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.editScenario">[docs]</a>    <span class="k">def</span> <span class="nf">editScenario</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_json</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Edits a scenario in the database.</span>
+<span class="sd">        :param scenario_json: JSON file containing scenario&#39;s data</span>
+<span class="sd">        :return: Modified document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;scenario_name&#39;</span><span class="p">:</span> <span class="n">scenario_json</span><span class="p">[</span><span class="s1">&#39;scenario_name&#39;</span><span class="p">]}</span>
         <span class="n">new_doc</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">scenario_json</span> <span class="p">}</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">new_doc</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">modified_count</span></div>
 
 <div class="viewcode-block" id="DatabaseManager.deleteScenario"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.deleteScenario">[docs]</a>    <span class="k">def</span> <span class="nf">deleteScenario</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenario_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes a scenario from the database.</span>
+<span class="sd">        :param scenario_name: Scenario&#39;s name string</span>
+<span class="sd">        :return: Deleted document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;scenario_name&#39;</span><span class="p">:</span> <span class="n">scenario_name</span><span class="p">}</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenarios_col</span><span class="o">.</span><span class="n">delete_one</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">deleted_count</span></div>
+
+    <span class="c1">#Exploits</span>
+<div class="viewcode-block" id="DatabaseManager.insertExploit"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.insertExploit">[docs]</a>    <span class="k">def</span> <span class="nf">insertExploit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exploit_json</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inserts a scenario in the database.</span>
+<span class="sd">        :param exploit_json: JSON file containing the exploit&#39;s data</span>
+<span class="sd">        :return: Inserted document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">exploit_json</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">inserted_id</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.getExploitNames"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getExploitNames">[docs]</a>    <span class="k">def</span> <span class="nf">getExploitNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the exploits names from the database.</span>
+<span class="sd">        :return: A list containing the exploits&#39; names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span><span class="o">.</span><span class="n">find</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.getExploits"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getExploits">[docs]</a>    <span class="k">def</span> <span class="nf">getExploits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the exploits stored in the database.</span>
+<span class="sd">        :return: A list containing the stored exploits&#39; data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span><span class="o">.</span><span class="n">find</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.getExploit"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getExploit">[docs]</a>    <span class="k">def</span> <span class="nf">getExploit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exploit_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets an exploit from the database.</span>
+<span class="sd">        :param exploit_name: Exploit&#39;s name string</span>
+<span class="sd">        :return: A list containing the exploit data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">exploit_name</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.editExploit"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.editExploit">[docs]</a>    <span class="k">def</span> <span class="nf">editExploit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exploit_json</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Edits an exploit in the database.</span>
+<span class="sd">        :param exploit_json: JSON file containing the exploit&#39;s data</span>
+<span class="sd">        :return: Modified document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">exploit_json</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]}</span>
+        <span class="n">new_doc</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">exploit_json</span> <span class="p">}</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">new_doc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">modified_count</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.deleteExploit"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.deleteExploit">[docs]</a>    <span class="k">def</span> <span class="nf">deleteExploit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exploit_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes a exploit from the database.</span>
+<span class="sd">        :param exploit_name: Exploit&#39;s name string</span>
+<span class="sd">        :return: Deleted document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">exploit_name</span><span class="p">}</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploits_col</span><span class="o">.</span><span class="n">delete_one</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">deleted_count</span></div>
+
+    <span class="c1">#Vulnerabilities</span>
+<div class="viewcode-block" id="DatabaseManager.insertVulnerability"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.insertVulnerability">[docs]</a>    <span class="k">def</span> <span class="nf">insertVulnerability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vulnerability_json</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inserts a vulnerability in the database.</span>
+<span class="sd">        :param vulnerability_json: JSON file containing the vulnerability&#39;s data</span>
+<span class="sd">        :return: Inserted document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">vulnerability_json</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">inserted_id</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.getVulnerabilityNames"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getVulnerabilityNames">[docs]</a>    <span class="k">def</span> <span class="nf">getVulnerabilityNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the vulnerabilities names from the database.</span>
+<span class="sd">        :return: A list containing the vulnerability&#39;s names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span><span class="o">.</span><span class="n">find</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.getVulnerabilities"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getVulnerabilities">[docs]</a>    <span class="k">def</span> <span class="nf">getVulnerabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the vulnerabilities stored in the database.</span>
+<span class="sd">        :return: A list containing the stored vulnerabilities&#39; data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span><span class="o">.</span><span class="n">find</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.getVulnerability"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.getVulnerability">[docs]</a>    <span class="k">def</span> <span class="nf">getVulnerability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vulnerability_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a vulnerability from the database.</span>
+<span class="sd">        :param vulnerability_name: Vulnerability&#39;s name string</span>
+<span class="sd">        :return: A list containing the vulnerability&#39;s data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">vulnerability_name</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.editVulnerability"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.editVulnerability">[docs]</a>    <span class="k">def</span> <span class="nf">editVulnerability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vulnerability_json</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Edits a vulnerability in the database.</span>
+<span class="sd">        :param vulnerability_json: JSON file containing the vulnerability&#39;s data</span>
+<span class="sd">        :return: Modified document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">vulnerability_json</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]}</span>
+        <span class="n">new_doc</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">vulnerability_json</span> <span class="p">}</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">new_doc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">modified_count</span></div>
+
+<div class="viewcode-block" id="DatabaseManager.deleteVulnerability"><a class="viewcode-back" href="../../Managers.html#Managers.DatabaseManager.DatabaseManager.deleteVulnerability">[docs]</a>    <span class="k">def</span> <span class="nf">deleteVulnerability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vulnerability_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes a vulnerability from the database.</span>
+<span class="sd">        :param vulnerability_name: Vulnerability&#39;s name string</span>
+<span class="sd">        :return: Deleted document&#39;s id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">vulnerability_name</span><span class="p">}</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerabilities_col</span><span class="o">.</span><span class="n">delete_one</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">doc</span><span class="o">.</span><span class="n">deleted_count</span></div></div>
 </pre></div>
 

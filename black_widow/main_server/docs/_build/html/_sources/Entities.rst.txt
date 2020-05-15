@@ -12,10 +12,10 @@ Entities.Entity module
    :undoc-members:
    :show-inheritance:
 
-Entities.ExploitInfo module
----------------------------
+Entities.Exploit module
+-----------------------
 
-.. automodule:: Entities.ExploitInfo
+.. automodule:: Entities.Exploit
    :members:
    :undoc-members:
    :show-inheritance:
@@ -24,6 +24,14 @@ Entities.NetworkSettings module
 -------------------------------
 
 .. automodule:: Entities.NetworkSettings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Entities.Program module
+-----------------------
+
+.. automodule:: Entities.Program
    :members:
    :undoc-members:
    :show-inheritance:
@@ -52,14 +60,6 @@ Entities.Scenario module
    :undoc-members:
    :show-inheritance:
 
-Entities.VagrantFile module
----------------------------
-
-.. automodule:: Entities.VagrantFile
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Entities.VirtualMachine module
 ------------------------------
 
@@ -68,10 +68,10 @@ Entities.VirtualMachine module
    :undoc-members:
    :show-inheritance:
 
-Entities.VulnerabilityInfo module
----------------------------------
+Entities.Vulnerability module
+-----------------------------
 
-.. automodule:: Entities.VulnerabilityInfo
+.. automodule:: Entities.Vulnerability
    :members:
    :undoc-members:
    :show-inheritance:

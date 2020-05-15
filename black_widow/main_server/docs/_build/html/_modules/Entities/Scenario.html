@@ -8,7 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Entities.Scenario &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>Entities.Scenario &mdash; Automated Malware and Exploit Data Collection Tool
+Main server 1 documentation</title>
   
 
   
@@ -49,6 +50,7 @@
 
           
             <a href="../../index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Main server
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.3
+                1.0
               </div>
             
           
@@ -99,7 +101,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool
+Main server</a>
         
       </nav>
 
@@ -151,8 +154,8 @@
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">unique_id</span> <span class="kn">import</span> <span class="n">get_unique_id</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">Entities.ExploitInfo</span> <span class="kn">import</span> <span class="n">ExploitInfo</span>
-<span class="kn">from</span> <span class="nn">Entities.VulnerabilityInfo</span> <span class="kn">import</span> <span class="n">VulnerabilityInfo</span>
+<span class="kn">from</span> <span class="nn">Entities.Exploit</span> <span class="kn">import</span> <span class="n">Exploit</span>
+<span class="kn">from</span> <span class="nn">Entities.Vulnerability</span> <span class="kn">import</span> <span class="n">Vulnerability</span>
 <span class="kn">from</span> <span class="nn">Entities.VirtualMachine</span> <span class="kn">import</span> <span class="n">VirtualMachine</span>
 <span class="kn">from</span> <span class="nn">Entities.Entity</span> <span class="kn">import</span> <span class="n">Entity</span>
 
@@ -166,23 +169,24 @@
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span><span class="p">[:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">exploit_info</span> <span class="o">=</span> <span class="n">ExploitInfo</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability_info</span> <span class="o">=</span> <span class="n">VulnerabilityInfo</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exploit</span> <span class="o">=</span> <span class="n">Exploit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability</span> <span class="o">=</span> <span class="n">Vulnerability</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">machines</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Scenario.setExploitInfo"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.setExploitInfo">[docs]</a>    <span class="k">def</span> <span class="nf">setExploitInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exploit_info</span><span class="p">):</span>
+<div class="viewcode-block" id="Scenario.setExploit"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.setExploit">[docs]</a>    <span class="k">def</span> <span class="nf">setExploit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exploit</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the exploit info for this scenario</span>
-<span class="sd">        :param exploit_info: Object which carries the exploit info</span>
+<span class="sd">        :param exploit: Object which carries the exploit info</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">exploit_info</span> <span class="o">=</span> <span class="n">exploit_info</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exploit</span> <span class="o">=</span> <span class="n">exploit</span></div>
 
-<div class="viewcode-block" id="Scenario.setVulnerabilityInfo"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.setVulnerabilityInfo">[docs]</a>    <span class="k">def</span> <span class="nf">setVulnerabilityInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vulnerability_info</span><span class="p">):</span>
+<div class="viewcode-block" id="Scenario.setVulnerability"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.setVulnerability">[docs]</a>    <span class="k">def</span> <span class="nf">setVulnerability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vulnerability</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the vulnerability info for this scenario</span>
-<span class="sd">        :param vulnerability_info: Object which carries the vulnerability info</span>
+<span class="sd">        :param vulnerability: Object which carries the vulnerability info</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability_info</span> <span class="o">=</span> <span class="n">vulnerability_info</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability</span> <span class="o">=</span> <span class="n">vulnerability</span></div>
 
 <div class="viewcode-block" id="Scenario.addVM"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.addVM">[docs]</a>    <span class="k">def</span> <span class="nf">addVM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vm</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -194,26 +198,33 @@
 <div class="viewcode-block" id="Scenario.dictionary"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.dictionary">[docs]</a>    <span class="k">def</span> <span class="nf">dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a dictionary for the Scenario object</span>
-<span class="sd">        :return: A dictionary with Scenario data</span>
+<span class="sd">        :return: A dictionary with Scenario&#39;s data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">scenario_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;scenario_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenario_name</span>
         <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;scenario_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scenario_id</span>
         <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;creation_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span>
         <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;last_accessed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span>
-        <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;exploit_info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploit_info</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
-        <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;vulnerability_info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability_info</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
+        <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span>
+        <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;exploit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exploit</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
+        <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;vulnerability&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
         <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;machines&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">machines</span><span class="p">:</span>
             <span class="n">scenario_dict</span><span class="p">[</span><span class="s2">&quot;machines&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">machines</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">dictionary</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">scenario_dict</span></div>
 
 <div class="viewcode-block" id="Scenario.objectFromDictionary"><a class="viewcode-back" href="../../Entities.html#Entities.Scenario.Scenario.objectFromDictionary">[docs]</a>    <span class="k">def</span> <span class="nf">objectFromDictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a Scenario object from a dictionary.</span>
+<span class="sd">        :param dict: A dictionary containing the Scenario&#39;s data</span>
+<span class="sd">        :return: A Scenario object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scenario_id</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;scenario_id&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;creation_date&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_accessed</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;last_accessed&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">exploit_info</span> <span class="o">=</span> <span class="n">ExploitInfo</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;exploit_info&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability_info</span> <span class="o">=</span> <span class="n">VulnerabilityInfo</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;vulnerability_info&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exploit</span> <span class="o">=</span> <span class="n">Exploit</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;exploit&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vulnerability</span> <span class="o">=</span> <span class="n">Vulnerability</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;vulnerability&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;machines&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">machines</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">VirtualMachine</span><span class="p">()</span><span class="o">.</span><span class="n">objectFromDictionary</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;machines&quot;</span><span class="p">][</span><span class="n">m</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>

@@ -8,7 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Entities.Provision &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>Entities.Provision &mdash; Automated Malware and Exploit Data Collection Tool
+Main server 1 documentation</title>
   
 
   
@@ -49,6 +50,7 @@
 
           
             <a href="../../index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Main server
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.3
+                1.0
               </div>
             
           
@@ -99,7 +101,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="../../index.html">Automated Malware and Exploit Data Collection Tool
+Main server</a>
         
       </nav>
 
@@ -167,7 +170,7 @@
 <div class="viewcode-block" id="Provision.dictionary"><a class="viewcode-back" href="../../Entities.html#Entities.Provision.Provision.dictionary">[docs]</a>    <span class="k">def</span> <span class="nf">dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a dictionary for the Provision object</span>
-<span class="sd">        :return: A dictionary with Provision data</span>
+<span class="sd">        :return: A dictionary with Provision&#39;s data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dicti</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">dicti</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
@@ -176,6 +179,11 @@
         <span class="k">return</span> <span class="n">dicti</span></div>
 
 <div class="viewcode-block" id="Provision.objectFromDictionary"><a class="viewcode-back" href="../../Entities.html#Entities.Provision.Provision.objectFromDictionary">[docs]</a>    <span class="k">def</span> <span class="nf">objectFromDictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a Provision object from a dictionary.</span>
+<span class="sd">        :param dict: A dictionary containing the Provision&#39;s data</span>
+<span class="sd">        :return: A Provision object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">provision_type</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;provision_type&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commands</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;commands&quot;</span><span class="p">]</span>

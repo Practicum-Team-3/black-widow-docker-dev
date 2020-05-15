@@ -4,10 +4,26 @@ Managers package
 Submodules
 ----------
 
+Managers.ConfigManager module
+-----------------------------
+
+.. automodule:: Managers.ConfigManager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Managers.DatabaseManager module
 -------------------------------
 
 .. automodule:: Managers.DatabaseManager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Managers.ExploitManager module
+------------------------------
+
+.. automodule:: Managers.ExploitManager
    :members:
    :undoc-members:
    :show-inheritance:
@@ -28,10 +44,10 @@ Managers.ScenarioManager module
    :undoc-members:
    :show-inheritance:
 
-Managers.VagrantManager module
-------------------------------
+Managers.VulnerabilityManager module
+------------------------------------
 
-.. automodule:: Managers.VagrantManager
+.. automodule:: Managers.VulnerabilityManager
    :members:
    :undoc-members:
    :show-inheritance:
