@@ -42,12 +42,27 @@ class FileManager(object):
         return self.exploits_path
 
     def getScenarioJSONPath(self, scenario_name):
+        """
+        Gets scenario JSON path inside a machine.
+        :param scenario_name: Scenario name string
+        :return: JSON path folder
+        """
         return self.scenarios_path / scenario_name / "JSON"
 
     def getExploitJSONPath(self, exploit_name):
+        """
+        Gets exploit JSON path.
+        :param exploit_name: Exploit name to search
+        :return: Exploit path
+        """
         return self.exploits_path / exploit_name
 
     def getVulnerabilityJSONPath(self, vulnerability_name):
+        """
+        Gets vulnerability JSON path.
+        :param vulnerability_name: Vulnerability name to search
+        :return: Vulnerability path
+        """
         return self.vulnerabilities_path / vulnerability_name
 
     def createScenarioFolders(self, scenario_json):
@@ -82,7 +97,12 @@ class FileManager(object):
         return
 
     def purgeMachines(self, scenario_name, safe_machines):
-
+        """
+        Deletes machines that no longer exist within the scenario.
+        :param scenario_name: Scenario name as a string
+        :param safe_machines: Collection containing machines that must remain within the scenario
+        :return: None
+        """
         also_safe = ["VagrantFile", "host_shared_folder", "salt"]
         safe_machines.append(also_safe)
         path = self.getScenariosPath() / scenario_name / "Machines"
@@ -97,6 +117,11 @@ class FileManager(object):
         return
 
     def deleteScenariosFolder(self, scenario_name):
+        """
+        Deletes not used scenario folders.
+        :param scenario_name: Scenario name as a string
+        :return: None
+        """
         scenario_path = self.getScenariosPath() / scenario_name
         try:
             shutil.rmtree(scenario_path)
@@ -177,6 +202,11 @@ class FileManager(object):
         return response.dictionary()
 
     def createSharedFolders(self, scenario_json):
+        """
+        Creates the shared folder within a scenario.
+        :param scenario_json: JSON containing the scenario data
+        :return: Response object containing request info
+        """
         response = Response()
         self.console_manager.printRed('Creating shared folders: ')
         try:
@@ -205,6 +235,11 @@ class FileManager(object):
         return response.dictionary()
 
     def createVagrantFiles(self, scenario_json):
+        """
+        Creates a vagrant file per machine in a scenario.
+        :param scenario_json: JSON containing the scenario data
+        :return: Response object containing request info
+        """
         response = Response()
         self.console_manager.printRed('Creating vagrant file')
         for machine_name in scenario_json["machines"]:
@@ -221,6 +256,11 @@ class FileManager(object):
         return response.dictionary()
 
     def createSaltFiles(self, scenario_json):
+        """
+        Creates the salt files per each machine in a scenario.
+        :param scenario_json: JSON containing the scenario data
+        :return: Response object containing request info
+        """
         response = Response()
         self.console_manager.printRed('Creating saltstack files')
         for machine_name in scenario_json["machines"]:
