@@ -87,6 +87,11 @@ class VirtualMachine(Entity):
     return dicti
 
   def objectFromDictionary(self, dict):
+    """
+    Creates a VirtualMachine object from a dictionary.
+    :param dict: A dictionary containing the VirtualMachine's data
+    :return: A VirtualMachine object
+    """
     self.name = dict["name"]
     self.box = dict["box"]
     self.os = dict["os"]

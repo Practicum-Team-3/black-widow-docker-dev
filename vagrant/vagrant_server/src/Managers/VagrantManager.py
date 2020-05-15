@@ -17,7 +17,11 @@ console_manager = ConsoleManager()
 
 class VagrantManager():
 
-    def getSystemInfo(self): 
+    def getSystemInfo(self):
+        """
+        Gets the system info.
+        :return: Response object containing request info
+        """
         cpu_count_logical = psutil.cpu_count(logical=True)
         cpu_count = psutil.cpu_count(logical=False)
         memory = psutil.virtual_memory()
@@ -59,6 +63,11 @@ class VagrantManager():
 
     @celery.task(name='VagrantManager.addBoxByName', bind=True)
     def addBoxByName(self, box_name):
+        """
+        Adds a box into vagrant using its name.
+        :param box_name:  Box's name string
+        :return: Response object containing request info
+        """
         process = subprocess.Popen(['vagrant', 'box', 'add', box_name, '--provider', 'virtualbox'], stdout=subprocess.PIPE,
                                    universal_newlines=True)
 
@@ -88,7 +97,11 @@ class VagrantManager():
 
     @celery.task(name='VagrantManager.removeBoxByName', bind=True)
     def removeBoxByName(self, box_name):
-
+        """
+        Removes a box from vagrant using its name.
+        :param box_name:  Box's name string
+        :return: Response object containing request info
+        """
         message = "Removing %s box..." % box_name
         self.update_state(state='PROGRESS',
                           meta={'current': 0, 'total': 100,
@@ -109,6 +122,11 @@ class VagrantManager():
 
     @celery.task(name='VagrantManager.addBoxByOVAFile', bind=True)
     def addBoxByOVAFile(self, file_name):
+        """
+        Adds a box into vagrant using an OVA file.
+        :param file_name:  File's name string
+        :return: Response object containing request info
+        """
         ova_file = "".join([file_name, ".ova"])
         box_file = "".join([file_name, ".box"])
 
@@ -177,7 +195,7 @@ class VagrantManager():
         Runs the given vagrant command on the desired machine, if allowed. 
         :param scenario_name: Name of scenario containing the machine
         :param machine_name: String with the machine name
-        :return: Response object containing the status of the machine after execution of command
+        :return: Response object containing the status of the request
         """
         response = Response()
         scenario = db_manager.getScenario(scenario_name)
@@ -298,6 +316,11 @@ class VagrantManager():
 
     @staticmethod
     def _createFolders(scenario_json):
+        """
+        Creates folders for each machine in a scenario.
+        :param scenario_json: JSON file containing scenario's data
+        :return: None
+        """
         file_manager.createScenarioFolders(scenario_json)
         file_manager.createMachineFolders(scenario_json)
         file_manager.createSharedFolders(scenario_json)
@@ -306,16 +329,36 @@ class VagrantManager():
 
     @staticmethod
     def _createFiles(scenario_json):
+        """
+        Creates files for each machine in a scenario.
+        :param scenario_json: JSON file containing scenario's data
+        :return: None
+        """
         file_manager.createVagrantFiles(scenario_json)
         file_manager.createSaltFiles(scenario_json)
         return
     
     @staticmethod
     def _purgeMachines(scenario_name, safe_machines):
+        """
+        Purges machine folders in a scenario.
+        :param scenario_name: Scenario's name string
+        :param safe_machines: Collection containing machines to be kept in a scenario
+        :return: None
+        """
         file_manager.purgeMachines(scenario_name, safe_machines)
         return
 
     def sendCommand(self, scenario_name, machine_name, command, default_timeout = 5, show_output = True):
+        """
+        Sends a command to a virtual machine.
+        :param scenario_name: Scenario's name string
+        :param machine_name: Machine's name string
+        :param command: Command to be executed
+        :param default_timeout: Timeout for executing the command
+        :param show_output: Boolean to show an output
+        :return: Response object containing the status of the request
+        """
         response = Response()
         scenario = db_manager.getScenario(scenario_name)
         return_code = ''
@@ -354,6 +397,14 @@ class VagrantManager():
         return return_code
 
     def testNetworkPing(self, scenario_name, machine_name, destination_machine_name, count=1):
+        """
+        Tests connection between the host and a virtual machine.
+        :param scenario_name: Scenario's name string
+        :param machine_name: Machine's name string
+        :param destination_machine_name: Machine's to be pinged
+        :param count: Counter used in the ping command
+        :return: Response object containing the status of the request
+        """
         response = Response()
         scenario = db_manager.getOne(scenario_name)
         if scenario:

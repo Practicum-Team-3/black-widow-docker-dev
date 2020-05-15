@@ -24,14 +24,14 @@ class Scenario(Entity):
     def setExploit(self, exploit):
         """
         Sets the exploit info for this scenario
-        :param exploit_info: Object which carries the exploit info
+        :param exploit: Object which carries the exploit info
         """
         self.exploit = exploit
 
     def setVulnerability(self, vulnerability):
         """
         Sets the vulnerability info for this scenario
-        :param vulnerability_info: Object which carries the vulnerability info
+        :param vulnerability: Object which carries the vulnerability info
         """
         self.vulnerability = vulnerability
 
@@ -45,7 +45,7 @@ class Scenario(Entity):
     def dictionary(self):
         """
         Generates a dictionary for the Scenario object
-        :return: A dictionary with Scenario data
+        :return: A dictionary with Scenario's data
         """
         scenario_dict = dict()
         scenario_dict["scenario_name"] = self.scenario_name
@@ -61,6 +61,11 @@ class Scenario(Entity):
         return scenario_dict
 
     def objectFromDictionary(self, dict):
+        """
+        Creates a Scenario object from a dictionary.
+        :param dict: A dictionary containing the Scenario's data
+        :return: A Scenario object
+        """
         self.scenario_id = dict["scenario_id"]
         self.creation_date = dict["creation_date"]
         self.last_accessed = dict["last_accessed"]
