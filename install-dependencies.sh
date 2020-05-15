@@ -14,10 +14,6 @@ function aptInstall() {
 	done
 }
 
-declare -a primary_binary=( "python3" "tcl" "python3-pip" "git" "docker-ce" "docker-ce-cli" "containerd.io" )
-
-sudo apt-get update
-aptInstall "${primary_binary[$@]}"
 
 
 # Add Docker's official GPG key
@@ -27,8 +23,15 @@ add-apt-repository \
     $(lsb_release -cs) \
     stable"
 
+
 dock_comp_v="docker-compose --version"
 dock_comp="docker-compose"
+
+
+declare -a primary_binary=( "python3" "tcl" "python3-pip" "git" "docker-ce" "docker-ce-cli" "containerd.io" )
+
+sudo apt-get update
+aptInstall "${primary_binary[$@]}"
 
 
 $dock_comp_v &> /dev/null
