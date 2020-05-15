@@ -268,31 +268,31 @@ services:
         ports:
             - 8085:8080/tcp
     
-    saltstack:
-        build: ./salt
-        hostname: salt
-        container_name: salt
-        #command:
-            #- "salt-master -d"
-        #    - "/usr/bin/salt-ssh -i nextcloud state.apply bootstrap"
-        tty: true
-        # stdin_open: true
-        entrypoint: [ "/usr/sbin/entrypoint.sh", "/bin/bash"]
-        ports:
-            - "0.0.0.0:4505:4505"
-            - "0.0.0.0:4506:4506"
-            - "0.0.0.0:8000:8000"
-        depends_on: 
-            - nextcloud
-            - nextcloud_db
+    # saltstack:
+    #     build: ./salt
+    #     hostname: salt
+    #     container_name: salt
+    #     #command:
+    #         #- "salt-master -d"
+    #     #    - "/usr/bin/salt-ssh -i nextcloud state.apply bootstrap"
+    #     tty: true
+    #     # stdin_open: true
+    #     entrypoint: [ "/usr/sbin/entrypoint.sh", "/bin/bash"]
+    #     ports:
+    #         - "0.0.0.0:4505:4505"
+    #         - "0.0.0.0:4506:4506"
+    #         - "0.0.0.0:8000:8000"
+    #     depends_on: 
+    #         - nextcloud
+    #         - nextcloud_db
         
-        volumes:
-            - ./salt/config/master:/etc/salt/master
-            - ./salt/config/top.sls:/srv/salt/top.sls
-            - ./salt/config/roster:/etc/salt/roster
-        networks:
-            salt_net:
-                ipv4_address: "172.23.128.2"
+    #     volumes:
+    #         - ./salt/config/master:/etc/salt/master
+    #         - ./salt/config/top.sls:/srv/salt/top.sls
+    #         - ./salt/config/roster:/etc/salt/roster
+    #     networks:
+    #         salt_net:
+    #             ipv4_address: "172.23.128.2"
             
         
 
