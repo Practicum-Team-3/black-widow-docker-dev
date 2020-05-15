@@ -8,7 +8,7 @@ function aptInstall() {
 		then
 
 			echo ""$i" not installed"
-			apt-get install -y "$i"
+			sudo apt-get install -y "$i"
 		else
 			echo ""$i" is already installed"
 		fi
@@ -18,11 +18,21 @@ function aptInstall() {
 
 
 # Add Docker's official GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository \
 	"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) \
     stable"
+
+
+wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -
+add-apt-repository \
+	"deb [arch=amd64] http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest \
+    $(lsb_release -cs) \
+    main"
+
+#echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" >> /etc/apt/sources.list.d/saltstack.list
+
 
 
 dock_comp_v="docker-compose --version"
@@ -31,7 +41,7 @@ dock_comp="docker-compose"
 
 declare -a primary_binary=("docker-ce" "docker-ce-cli" "containerd.io" "python3" "tcl" "python3-pip" "git" )
 
-apt-get update
+sudo apt-get update
 
 aptInstall "${primary_binary[$@]}"
 
@@ -53,9 +63,10 @@ then
 	# Post Installation set up for Docker
 	# Manage Docker as a non root user
 	# Create the docker group
-	groupadd docker
+	sudo groupadd docker
 	# Add vagrant user to the docker group
-	usermod -aG docker vagrant
+	sudo usermod -aG docker $(whoami)
+
 else
 	echo ""$dock_comp" is already installed"
 fi
@@ -78,9 +89,6 @@ rm -f ./$vagrant.deb
 
 
 # Installing Saltstack on Hostmachine
-wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
 
-echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" >> /etc/apt/sources.list.d/saltstack.list
-apt-get update
-apt-get -y install salt-master
 
+systemctl start docker.service
