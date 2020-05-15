@@ -12,7 +12,7 @@ class NetworkSettings(Entity):
     def dictionary(self):
         """
         Generates a dictionary for the NetworkSettings object
-        :return: A dictionary with NetworkSettings data
+        :return: A dictionary with NetworkSettings' data
         """
         dicti = dict()
         dicti["network_name"] = self.network_name
@@ -22,6 +22,11 @@ class NetworkSettings(Entity):
         return dicti
 
     def objectFromDictionary(self, dict):
+        """
+        Creates an NetworkSettings object from a dictionary.
+        :param dict: A dictionary containing the NetworkSettings' data
+        :return: A NetworkSettings object
+        """
         self.network_name = dict["network_name"]
         self.network_type = dict["network_type"]
         self.ip_address = dict["ip_address"]

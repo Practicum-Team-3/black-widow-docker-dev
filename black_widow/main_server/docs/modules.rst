@@ -4,6 +4,6 @@ src
 .. toctree::
    :maxdepth: 4
 
-   MainServer
    Entities
+   MainServer
    Managers
