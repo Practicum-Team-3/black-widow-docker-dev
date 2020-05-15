@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 #!/usr/bin/env bash
 
 function aptInstall() {
@@ -19,7 +16,7 @@ function aptInstall() {
 
 declare -a primary_binary=( "python3" "tcl" "python3-pip" "git" "docker-ce" "docker-ce-cli" "containerd.io" )
 
-apt-get update
+sudo apt-get update
 aptInstall "${primary_binary[$@]}"
 
 
