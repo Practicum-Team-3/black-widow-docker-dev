@@ -6,6 +6,7 @@ function aptInstall() {
 		dpkg -s "$i" &> /dev/null
 		if [ "$?" -ne 0 ] 
 		then
+
 			echo ""$i" not installed"
 			apt-get install -y "$i"
 		else
@@ -28,9 +29,10 @@ dock_comp_v="docker-compose --version"
 dock_comp="docker-compose"
 
 
-declare -a primary_binary=( "python3" "tcl" "python3-pip" "git" "docker-ce" "docker-ce-cli" "containerd.io" )
+declare -a primary_binary=("docker-ce" "docker-ce-cli" "containerd.io" "python3" "tcl" "python3-pip" "git" )
 
 apt-get update
+
 aptInstall "${primary_binary[$@]}"
 
 
@@ -80,4 +82,5 @@ wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG
 
 echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" >> /etc/apt/sources.list.d/saltstack.list
 apt-get update
-apt-get install salt-master
+apt-get -y install salt-master
+
