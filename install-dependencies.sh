@@ -7,7 +7,7 @@ function aptInstall() {
 		if [ "$?" -ne 0 ] 
 		then
 			echo ""$i" not installed"
-			sudo apt-get install -y "$i"
+			apt-get install -y "$i"
 		else
 			echo ""$i" is already installed"
 		fi
@@ -17,7 +17,7 @@ function aptInstall() {
 
 
 # Add Docker's official GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository \
 	"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) \
@@ -30,7 +30,7 @@ dock_comp="docker-compose"
 
 declare -a primary_binary=( "python3" "tcl" "python3-pip" "git" "docker-ce" "docker-ce-cli" "containerd.io" )
 
-sudo apt-get update
+apt-get update
 aptInstall "${primary_binary[$@]}"
 
 
@@ -76,8 +76,8 @@ rm -f ./$vagrant.deb
 
 
 # Installing Saltstack on Hostmachine
-wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -
+wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
 
 echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" >> /etc/apt/sources.list.d/saltstack.list
 apt-get update
-sudo apt-get install salt-master
+apt-get install salt-master

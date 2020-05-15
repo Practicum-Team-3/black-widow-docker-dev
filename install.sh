@@ -1,6 +1,7 @@
-bash install-dependencies.sh
-bash pip-install.sh
-bash salt-setup.sh
-bash prepare.sh
-bash auto-setup.sh
-bash build.sh
+sudo sh install-dependencies.sh
+sh pip-install.sh
+sh salt-setup.sh
+sh prepare.sh
+sh auto-setup.sh
+sh build.sh
+
