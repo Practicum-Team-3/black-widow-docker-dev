@@ -17,7 +17,7 @@ class Provision(Entity):
     def dictionary(self):
         """
         Generates a dictionary for the Provision object
-        :return: A dictionary with Provision data
+        :return: A dictionary with Provision's data
         """
         dicti = dict()
         dicti["name"] = self.name
@@ -26,6 +26,11 @@ class Provision(Entity):
         return dicti
 
     def objectFromDictionary(self, dict):
+        """
+        Creates a Provision object from a dictionary.
+        :param dict: A dictionary containing the Provision's data
+        :return: A Provision object
+        """
         self.name = dict["name"]
         self.provision_type = dict["provision_type"]
         self.commands = dict["commands"]

@@ -8,7 +8,7 @@ class Program(Entity):
     def dictionary(self):
         """
         Generates a dictionary for the Program object
-        :return: A dictionary with Program data
+        :return: A dictionary with Program's data
         """
         dicti = dict()
         dicti["name"] = self.name
@@ -16,6 +16,11 @@ class Program(Entity):
         return dicti
 
     def objectFromDictionary(self, dict):
+        """
+        Creates an Program object from a dictionary.
+        :param dict: A dictionary containing the Program's data
+        :return: A Program object
+        """
         self.name = dict["name"]
         self.location = dict["location"]
         return self

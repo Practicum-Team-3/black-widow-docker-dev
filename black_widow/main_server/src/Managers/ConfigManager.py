@@ -26,20 +26,35 @@ class ConfigManager():
         self.mongodb_root_password = os.getenv("MONGODB_ROOT_PASSWORD")
 
     def vagrantURL(self):
+        """
+        Sets the machine's url running vagrant.
+        :return: Vagrant's URL string
+        """
         vagrant_url = "http://" + self.vagrant_host_ip + ":" + self.vagrant_app_port
         return vagrant_url
 
     def mongoURL(self):
+        """
+        Sets the machine's URL running the MongoDB database.
+        :return: MongoDB's URL string
+        """
         mongodb_url = "mongodb://" + self.mongodb_root_username + ":" + self.mongodb_root_password + "@" + self.mongodb_ip + ":" + self.mongodb_port
         return mongodb_url
 
     def uploadURL(self):
+        """
+        Sets the machine's URL running the upload cloud.
+        :return: Upload's URL string
+        """
         upload_url = 'http://' + self.upload_ip + ':' + self.upload_port
         return upload_url
 
     def redisURL(self):
+        """
+        Sets the machine's URL running Redis.
+        :return: Redis' URL string
+        """
         redis_url = 'redis://' + self.redis_host + ':' + self.redis_port + '/0'
         return redis_url
-
 
 

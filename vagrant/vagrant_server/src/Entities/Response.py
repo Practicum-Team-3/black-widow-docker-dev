@@ -46,7 +46,7 @@ class Response(Entity):
     def dictionary(self):
         """
         Generates a dictionary for the Response object
-        :return: A dictionary with Response data
+        :return: A dictionary with Response's data
         """
         dicti = dict()
         dicti["response"] = self.response
