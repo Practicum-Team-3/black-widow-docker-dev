@@ -6,7 +6,6 @@ function aptInstall() {
 		dpkg -s "$i" &> /dev/null
 		if [ "$?" -ne 0 ] 
 		then
-
 			echo ""$i" not installed"
 			sudo apt-get install -y "$i"
 		else
@@ -39,11 +38,12 @@ dock_comp_v="docker-compose --version"
 dock_comp="docker-compose"
 
 
-declare -a primary_binary=("docker-ce" "docker-ce-cli" "containerd.io" "python3" "tcl" "python3-pip" "git" )
+#declare -a primary_binary=("docker-ce" "docker-ce-cli" "containerd.io" "python3" "tcl" "python3-pip" "git" "" "" "")
 
 sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io python3 tcl python3-pip git
 
-aptInstall "${primary_binary[$@]}"
+#aptInstall "${primary_binary[$@]}"
 
 
 $dock_comp_v &> /dev/null

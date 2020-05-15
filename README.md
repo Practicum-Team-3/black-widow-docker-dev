@@ -1,5 +1,24 @@
 # Docker Development Environment
+
 ## Steps to follow:
+
+This environment has been tested on Ubuntu 18.04
+
+1. Run the following script to install the dependencies of the project: <br/>
+`sudo ./install-dependencies.sh`
+
+2. Run this script to set up the environment: <br/>
+`./setup.sh`
+
+3. Run the following script to run the project: <br/>
+`./run.sh` <br/>
+
+
+
+****** THE INSTRUCTIONS BELOW ARE DEPRECATED BUT ARE STILL RELEVANT *******
+
+
+
 1. Run the following script: <br/>
 `./auto-setup.sh` <br/>
 **Note:** 
