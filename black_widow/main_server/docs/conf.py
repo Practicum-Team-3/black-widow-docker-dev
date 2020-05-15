@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.abspath('../src/'))
 project = u'Automated Malware and Exploit Data Collection Tool\nMain server'
 copyright = u'2020, Software Practicum Team 3'
 author = u'Software Practicum Team 3'
+today = 'May 14th, 2020'
 
 # The short X.Y version
 version = u'1.0'

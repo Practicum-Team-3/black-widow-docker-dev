@@ -4,5 +4,9 @@ src
 .. toctree::
    :maxdepth: 4
 
-   model
-   server
+   CeleryApp
+   CeleryWorker
+   Entities
+   Managers
+   VagrantServer
+

@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Entities package &mdash; Automated Malware and Exploit Data Collection Tool
+Vagrant server 1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Managers package" href="Managers.html" />
+    <link rel="prev" title="CeleryWorker module" href="CeleryWorker.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Vagrant server
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CeleryApp.html">CeleryApp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CeleryWorker.html">CeleryWorker module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Entities package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.Entity">Entities.Entity module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.MinionConfigFile">Entities.MinionConfigFile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.Response">Entities.Response module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities.VagrantFile">Entities.VagrantFile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-Entities">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html">Managers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VagrantServer.html">VagrantServer module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Automated Malware and Exploit Data Collection Tool
+Vagrant server</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+      <li>Entities package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Entities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="entities-package">
+<h1>Entities package<a class="headerlink" href="#entities-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Entities.Entity">
+<span id="entities-entity-module"></span><h2>Entities.Entity module<a class="headerlink" href="#module-Entities.Entity" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Entities.Entity.Entity">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.Entity.</code><code class="sig-name descname">Entity</code><a class="reference internal" href="_modules/Entities/Entity.html#Entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Entity.Entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="Entities.Entity.Entity.dictionary">
+<em class="property">abstract </em><code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Entity.html#Entity.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Entity.Entity.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an entity object to a dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Entity.Entity.objectFromDictionary">
+<em class="property">abstract </em><code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Entity.html#Entity.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Entity.Entity.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an object from a dictionary.
+:param dict: Dictionary containing the object information</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.MinionConfigFile">
+<span id="entities-minionconfigfile-module"></span><h2>Entities.MinionConfigFile module<a class="headerlink" href="#module-Entities.MinionConfigFile" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Entities.MinionConfigFile.MinionConfigFile">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.MinionConfigFile.</code><code class="sig-name descname">MinionConfigFile</code><a class="reference internal" href="_modules/Entities/MinionConfigFile.html#MinionConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.MinionConfigFile.MinionConfigFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="Entities.MinionConfigFile.MinionConfigFile.generateMinionConfigFile">
+<code class="sig-name descname">generateMinionConfigFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conf_path</span></em>, <em class="sig-param"><span class="n">minion_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/MinionConfigFile.html#MinionConfigFile.generateMinionConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.MinionConfigFile.MinionConfigFile.generateMinionConfigFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the minion config file.
+:param conf_path: Path where the minion config file is saved
+:param minion_id: Minion id string
+:return: String containing the minion config file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.Response">
+<span id="entities-response-module"></span><h2>Entities.Response module<a class="headerlink" href="#module-Entities.Response" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Entities.Response.Response">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.Response.</code><code class="sig-name descname">Response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">reason</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">status</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">task_id</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">body</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Entities.Entity.Entity" title="Entities.Entity.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entities.Entity.Entity</span></code></a></p>
+<dl class="py method">
+<dt id="Entities.Response.Response.dictionary">
+<code class="sig-name descname">dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary for the Response object
+:return: A dictionary with Response’s data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Response.Response.objectFromDictionary">
+<code class="sig-name descname">objectFromDictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.objectFromDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.objectFromDictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Response object from a dictionary.
+:param dict: A dictionary containing the Response data
+:return: A Response object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Response.Response.setBody">
+<code class="sig-name descname">setBody</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">body</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setBody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the body of a request.
+:param: String containing the request’s body</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Response.Response.setReason">
+<code class="sig-name descname">setReason</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reason</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setReason"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setReason" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets success/fail reason of a request.
+:param reason: String containing the request’s reason</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Response.Response.setResponse">
+<code class="sig-name descname">setResponse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the response of a request.
+:param response: String containing the request’s response</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Response.Response.setStatus">
+<code class="sig-name descname">setStatus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">status</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the status of a request.
+:param status: String containing the request’s status</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Entities.Response.Response.setTaskID">
+<code class="sig-name descname">setTaskID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/Response.html#Response.setTaskID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.Response.Response.setTaskID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the task ID of a request.
+:param task_id: String containing the request’s task id</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities.VagrantFile">
+<span id="entities-vagrantfile-module"></span><h2>Entities.VagrantFile module<a class="headerlink" href="#module-Entities.VagrantFile" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="Entities.VagrantFile.VagrantFile">
+<em class="property">class </em><code class="sig-prename descclassname">Entities.VagrantFile.</code><code class="sig-name descname">VagrantFile</code><a class="reference internal" href="_modules/Entities/VagrantFile.html#VagrantFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VagrantFile.VagrantFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="Entities.VagrantFile.VagrantFile.generateVagrantFile">
+<code class="sig-name descname">generateVagrantFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">machine</span></em>, <em class="sig-param"><span class="n">machine_path</span></em>, <em class="sig-param"><span class="n">minion_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Entities/VagrantFile.html#VagrantFile.generateVagrantFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Entities.VagrantFile.VagrantFile.generateVagrantFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a vagrant file for this machine
+:param machine: Object which carries the virtual machine data
+:param machine_path: Folder path to this machine
+:param minion_id: Minion ID assigned to this virtual machine
+:return: String used to write the vagrant file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Entities">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Entities" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Managers.html" class="btn btn-neutral float-right" title="Managers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CeleryWorker.html" class="btn btn-neutral float-left" title="CeleryWorker module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Software Practicum Team 3
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

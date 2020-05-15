@@ -8,7 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src &mdash; Automated Malware and Exploit Data Collection Tool 1 documentation</title>
+  <title>src &mdash; Automated Malware and Exploit Data Collection Tool
+Vagrant server 1 documentation</title>
   
 
   
@@ -35,7 +36,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="model package" href="model.html" />
+    <link rel="next" title="CeleryApp module" href="CeleryApp.html" />
     <link rel="prev" title="Welcome to Automated Malware and Exploit Data Collection Tool’s documentation!" href="index.html" /> 
 </head>
 
@@ -51,6 +52,7 @@
 
           
             <a href="index.html" class="icon icon-home"> Automated Malware and Exploit Data Collection Tool
+Vagrant server
           
 
           
@@ -58,6 +60,10 @@
 
           
             
+            
+              <div class="version">
+                1.0
+              </div>
             
           
 
@@ -83,8 +89,11 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">src</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="model.html">model package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server.html">server module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CeleryApp.html">CeleryApp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CeleryWorker.html">CeleryWorker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html">Entities package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html">Managers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VagrantServer.html">VagrantServer module</a></li>
 </ul>
 </li>
 </ul>
@@ -101,7 +110,8 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Automated Malware and Exploit Data Collection Tool</a>
+          <a href="index.html">Automated Malware and Exploit Data Collection Tool
+Vagrant server</a>
         
       </nav>
 
@@ -155,22 +165,29 @@
 <h1>src<a class="headerlink" href="#src" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="model.html">model package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="model.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.ExploitInfo">model.ExploitInfo module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.FileManager">model.FileManager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.NetworkSettings">model.NetworkSettings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.Provision">model.Provision module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.Scenario">model.Scenario module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.ScenarioManager">model.ScenarioManager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.VagrantFile">model.VagrantFile module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.VagrantManager">model.VagrantManager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.VirtualMachine">model.VirtualMachine module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model.VulnerabilityInfo">model.VulnerabilityInfo module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#module-model">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CeleryApp.html">CeleryApp module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CeleryWorker.html">CeleryWorker module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Entities.html">Entities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html#module-Entities.Entity">Entities.Entity module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html#module-Entities.MinionConfigFile">Entities.MinionConfigFile module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html#module-Entities.Response">Entities.Response module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html#module-Entities.VagrantFile">Entities.VagrantFile module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Entities.html#module-Entities">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="server.html">server module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Managers.html">Managers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers.ConfigManager">Managers.ConfigManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers.ConsoleManager">Managers.ConsoleManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers.DatabaseManager">Managers.DatabaseManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers.FileManager">Managers.FileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers.SaltManager">Managers.SaltManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers.VagrantManager">Managers.VagrantManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Managers.html#module-Managers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="VagrantServer.html">VagrantServer module</a></li>
 </ul>
 </div>
 </div>
@@ -183,7 +200,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="model.html" class="btn btn-neutral float-right" title="model package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="CeleryApp.html" class="btn btn-neutral float-right" title="CeleryApp module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Automated Malware and Exploit Data Collection Tool’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
